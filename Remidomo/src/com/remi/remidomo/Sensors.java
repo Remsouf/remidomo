@@ -1,0 +1,294 @@
+package com.remi.remidomo;
+
+import java.io.OutputStreamWriter;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+class Sensors {
+	
+	private final static String TAG = RDService.class.getSimpleName();
+
+	// Hard-coded values
+	public final static String ID_EXT_T = "th2_0x9b05-temp";
+	public final static String ID_EXT_H = "th2_0x9b05-humidity";
+	public final static String ID_POOL_T = "temp3_0x1202-temp";
+	public final static String ID_VERANDA_T = "th1_0xe902-temp";
+	public final static String ID_VERANDA_H = "th1_0xe902-humidity";
+
+	public final static ArrayList<String> IGNORED =
+			new ArrayList<String>(Arrays.asList("temp4_0xc01-temp"));
+
+    private ArrayList<SensorData> sensors = new ArrayList<SensorData>();
+
+    private final RDService service;
+    
+    private boolean readyForUpdates;
+
+    private SharedPreferences prefs;
+    private NotificationManager notificationMgr;
+
+    // Unique Identification Number for the Notification.
+    private final int NOTIFICATION_RESTORE = 2;
+    
+	public Sensors(RDService service) {
+		this.service = service;
+		
+		prefs = PreferenceManager.getDefaultSharedPreferences(service);
+		
+        notificationMgr = (NotificationManager)service.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationMgr == null) {
+            Log.e(TAG, "Failed to get Notification Manager");
+        }
+
+		// Fetch data for all sensors
+		// (threaded)
+        this.service.addLog("Lecture des données capteurs locales");
+        new Thread(new Runnable() {
+        	public synchronized void run() {
+        		readyForUpdates = false;
+        		// (Update view everytime a new temp file was read)
+                sensors.add(new SensorData(ID_POOL_T, Sensors.this.service, true));
+                if (Sensors.this.service.callback != null) {
+                	Sensors.this.service.callback.updateThermo();
+        		}
+                sensors.add(new SensorData(ID_EXT_T, Sensors.this.service, true));
+                sensors.add(new SensorData(ID_EXT_H, Sensors.this.service, true));
+                if (Sensors.this.service.callback != null) {
+                	Sensors.this.service.callback.updateThermo();
+        		}
+                sensors.add(new SensorData(ID_VERANDA_T, Sensors.this.service, true));
+                sensors.add(new SensorData(ID_VERANDA_H, Sensors.this.service, true));
+                if (Sensors.this.service.callback != null) {
+                	Sensors.this.service.callback.updateThermo();
+        		}
+                Sensors.this.service.addLog("Lecture terminée");
+                readyForUpdates = true;
+                
+                /* Check if all data empty */
+                boolean allEmpty = true;
+                for (SensorData i: sensors) {
+                	if (i.size() > 0) {
+                		allEmpty =false;
+                	}
+                }
+                if (allEmpty) {
+                	
+                	CharSequence text = Sensors.this.service.getText(R.string.sensors_restore);
+
+                    // Set the icon, scrolling text and timestamp
+                    Notification notification = new Notification(R.drawable.app_icon, text,
+                            System.currentTimeMillis());
+
+                    // The PendingIntent to launch our activity if the user selects this notification
+                    Intent intent = new Intent(Sensors.this.service, RDService.class);
+                    intent.setAction(RDService.ACTION_RESTORE_DATA);
+                    PendingIntent contentIntent = PendingIntent.getService(Sensors.this.service, 0,
+                            												intent, 0);
+
+                    // Set the info for the views that show in the notification panel.
+                    notification.setLatestEventInfo(Sensors.this.service,
+                    								Sensors.this.service.getText(R.string.sensors_empty),
+                    								text, contentIntent);
+
+                    // Auto-cancel the notification when clicked
+                    notification.flags |= Notification.FLAG_AUTO_CANCEL;
+                    
+                    // Send the notification.
+                    notificationMgr.notify(NOTIFICATION_RESTORE, notification);
+                }
+        	};
+        }).start();
+	}
+	
+    public SensorData getData(String name) {
+    	for (SensorData i: sensors) {
+    		if (i.getTitle().equals(name)) {
+    			return i;
+    		}
+    	}
+    	return null;
+    }
+    
+    public void updateDataChunk(String name, SensorData newData) {
+		for (int i=0; i<sensors.size(); i++) {
+			if (sensors.get(i).getTitle().equals(name)) {
+				sensors.get(i).addValuesChunk(newData);
+				return;
+			}
+		}
+		
+		// New sensor
+		sensors.add(newData);
+    }
+
+    public void updateData(RDService service, xPLMessage msg) {
+    	// Ignore msg if we're still reading values from files
+    	if (!readyForUpdates) {
+    		return;
+    	}
+    	
+    	String device = msg.getNamedValue("device");
+    	device = device.replace(' ', '_');
+    	device = device + "-" + msg.getNamedValue("type");
+    	
+    	if (IGNORED.contains(device)) {
+    		// Device ignored
+    		return;
+    	}
+
+    	if (service != null) {
+    		service.blinkLeds();
+    	}
+
+    	SensorData data = null;
+    	for (SensorData i: sensors) {
+    		if (i.getTitle().equals(device)) {
+    			data = i;
+    		}
+    	}
+    	if (data == null) {
+    		data = new SensorData(device, service, true);
+    		sensors.add(data);
+    	}
+
+    	data.addValue(msg.getFloatNamedValue("current"));
+
+    	String unit = msg.getNamedValue("units");
+    	assert (unit.equals("c"));
+    	String type = msg.getNamedValue("type");
+    	assert (type.equals("temp"));
+    	
+    	data.writeFile(SensorData.DirType.INTERNAL,
+    				   SensorData.FileFormat.BINARY);
+    }
+
+    public void dumpData(OutputStreamWriter writer, long lastTstamp) throws java.io.IOException {
+    	try {
+    		JSONObject object = new JSONObject();
+    		for (SensorData sensor: sensors) {
+    			JSONArray array = sensor.getJSONArray(lastTstamp);
+    			if (array != null) {
+    				object.put(sensor.getTitle(), array);
+    			}
+    		}
+    		writer.write(object.toString());
+    	} catch (org.json.JSONException ignored) {}
+    }
+
+    public void dumpCSV(OutputStreamWriter writer) {
+    	for (SensorData sensor: sensors) {
+			sensor.writeCSV(writer);
+		}
+    }
+  
+    public Date getLastUpdate() {
+    	Date tstamp = null;
+    
+    	for (SensorData i: sensors) {
+    		if (i.lastUpdate != null) {
+    			if (tstamp == null || (i.lastUpdate.getTime() > tstamp.getTime())) {
+    				tstamp = i.lastUpdate;
+    			}
+    		}
+    	}
+
+    	return tstamp;
+    }
+    
+    public synchronized void syncWithServer() {
+		int port = Integer.parseInt(prefs.getString("port", Preferences.DEFAULT_PORT));
+		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
+		Log.d(TAG, "Client Thread connecting to " + ipAddr + ":" + port);
+		service.addLog("Connexion au serveur " + ipAddr + ":" + port + " (MAJ sondes)");
+
+		try {
+			HttpClient client = new DefaultHttpClient();
+			HttpGet request = new HttpGet();
+
+			String uri = "http://"+ipAddr+":"+port+"/sensors";
+			Date lastTstamp = service.getSensors().getLastUpdate();
+			if (lastTstamp != null) {
+				uri = uri + "?last="+lastTstamp.getTime();
+			}
+			request.setURI(new URI(uri));
+			String content = client.execute(request, new BasicResponseHandler());
+			JSONObject entries = new JSONObject(content);
+			Iterator<?> iter = entries.keys();
+			while (iter.hasNext()) {
+				String name = (String) iter.next();
+				JSONArray table = entries.getJSONArray(name);
+				SensorData newData = new SensorData(name, service, false);
+				newData.readJSON(table);
+
+				updateDataChunk(name, newData);
+				service.addLog("Mise à jour des données de '" + name + "' depuis le serveur (" + newData.size() + " nvx points)");
+			}
+			for (SensorData sensor: sensors) {
+    			sensor.writeFile(SensorData.DirType.INTERNAL,
+    							 SensorData.FileFormat.BINARY);
+    		}
+			if (service.callback != null) {
+				service.callback.updateThermo();
+			}
+		} catch (java.net.URISyntaxException e) {
+			service.addLog("Erreur URI serveur: " + e.getLocalizedMessage());
+			Log.e(TAG, "Bad server URI");
+		} catch (org.apache.http.conn.HttpHostConnectException e) {
+			service.addLog("Impossible de se connecter au serveur: " + e.getLocalizedMessage());
+			Log.e(TAG, "HostConnectException with server: " + e);
+		} catch (org.apache.http.client.ClientProtocolException e) {
+			service.addLog("Erreur protocole serveur");
+			Log.e(TAG, "ClientProtocolException with server: " + e);
+		} catch (java.net.SocketException e) {
+			service.addLog("Serveur non joignable: " + e.getLocalizedMessage());
+			Log.e(TAG, "SocketException with client: " + e);
+		} catch (java.io.IOException e) {
+			service.addLog("Erreur I/O client: " + e.getLocalizedMessage());
+			Log.e(TAG, "IOException with client: " + e);
+		} catch (org.json.JSONException e) {
+			service.addLog("Erreur JSON serveur");
+			Log.e(TAG, "JSON error with server: " + e);
+		}
+    }
+    
+    public void saveToSdcard() {
+    	new Thread(new Runnable() {
+        	public synchronized void run() {
+        		for (SensorData sensor: sensors) {
+        			sensor.writeFile(SensorData.DirType.SDCARD, SensorData.FileFormat.ASCII);
+        		}
+        		Sensors.this.service.postToast(Sensors.this.service.getString(R.string.save_complete));
+        	}
+        }).start();
+    }
+    
+    public void readFromSdcard() {
+    	new Thread(new Runnable() {
+        	public synchronized void run() {
+        		for (SensorData sensor: sensors) {
+        			sensor.readFile(SensorData.DirType.SDCARD);
+        		}
+        		Sensors.this.service.postToast(Sensors.this.service.getString(R.string.load_complete));
+        	}
+    	}).start();
+    }
+}

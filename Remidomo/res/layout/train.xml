@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" >
+            	
+       	<TextView
+            	android:id="@+id/heure"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:layout_centerVertical="true"
+            	android:textSize="34px"
+            	android:text="" />
+
+        <ImageView
+            	android:id="@+id/train_ok"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:src="@drawable/check"
+            	android:paddingRight="50px"
+            	android:layout_toRightOf="@id/heure"
+            	android:layout_centerVertical="true"
+            	android:paddingLeft="10px" />
+        
+        <TextView
+            	android:id="@+id/train_info"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:textSize="20px"
+            	android:textStyle="italic"
+            	android:text=""
+            	android:layout_below="@id/heure"
+            	android:layout_alignRight="@id/heure" />
+
+</RelativeLayout>

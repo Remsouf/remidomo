@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+        
+        <RelativeLayout
+            android:id="@+id/icons"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" >
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:background="@drawable/gradient"
+                    android:orientation="horizontal" >
+
+                    <ImageButton
+            			android:id="@+id/dashboardButton"
+            			android:layout_width="wrap_content"
+            			android:layout_height="wrap_content"
+            			android:background="@null"
+            			android:layout_marginLeft="20px"
+            			android:src="@drawable/dashboard_button" />
+
+                    <ImageButton
+            			android:id="@+id/tempButton"
+            			android:layout_width="wrap_content"
+            			android:layout_height="wrap_content"
+            			android:background="@null"
+            			android:layout_marginLeft="20px"
+            			android:src="@drawable/temp_button" />
+                                        
+                    <ImageButton
+            			android:id="@+id/poolButton"
+            			android:layout_width="wrap_content"
+            			android:layout_height="wrap_content"
+            			android:background="@null"
+            			android:layout_marginLeft="20px"
+            			android:src="@drawable/pool_button" />
+
+                    <ImageButton
+            			android:id="@+id/switchButton"
+            			android:layout_width="wrap_content"
+            			android:layout_height="wrap_content"
+            			android:background="@null"
+            			android:layout_marginLeft="20px"
+            			android:src="@drawable/inter_button" />
+                                        
+                    <ImageButton
+            			android:id="@+id/logButton"
+            			android:layout_width="wrap_content"
+            			android:layout_height="wrap_content"
+            			android:background="@null"
+            			android:layout_marginLeft="20px"
+            			android:src="@drawable/log_button" />
+                                        
+                    <ImageButton
+            			android:id="@+id/settingsButton"
+            			android:layout_width="wrap_content"
+            			android:layout_height="wrap_content"
+            			android:background="@null"
+            			android:layout_marginLeft="20px"
+            			android:src="@drawable/settings_button" />
+
+            </LinearLayout>
+
+            <ImageButton
+            	android:id="@+id/refreshButton"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:background="@null"
+            	android:src="@drawable/refresh_button"
+            	android:layout_alignParentRight="true" />
+                  
+            <ImageButton
+            	android:id="@+id/redLed"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:background="@null"
+            	android:src="@drawable/red_led"
+            	android:layout_alignParentLeft="true"
+            	android:visibility="gone" />
+
+            <ImageButton
+            	android:id="@+id/blueLed"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:background="@null"
+            	android:src="@drawable/blue_led"
+            	android:layout_alignParentLeft="true"
+            	android:layout_above="@id/redLed" />
+
+        </RelativeLayout>
+
+        <ViewFlipper
+            android:id="@+id/viewFlipper"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/icons"
+            android:layout_alignParentTop="true" >
+            
+			<include layout="@layout/dashboard" />
+			<include layout="@layout/thermo" />
+			<include layout="@layout/pool" />
+			<include layout="@layout/switches" />
+			<include layout="@layout/log" />
+			
+        </ViewFlipper>
+</RelativeLayout>

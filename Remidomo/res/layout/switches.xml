@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/switchesView" >
+    
+    <TextView
+    	android:text="@string/switches"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="34px"
+        android:gravity="center" />
+
+    <TableLayout
+        android:layout_width="fill_parent" 
+    	android:layout_height="fill_parent"
+    	android:stretchColumns="1,3"
+    	android:gravity="center" >
+
+        <TableRow
+            android:paddingBottom="10dp">
+            
+            <ImageButton
+            	android:id="@+id/switch1_cmd"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:src="@drawable/inter_button"
+            	android:background="@drawable/switched_off" />
+           
+            <TextView
+    			android:text="@string/switch1_text"
+        		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:textSize="24px"
+        		android:paddingLeft="20px"
+        		android:layout_gravity="center_vertical" />
+			<!--
+            <ImageButton
+            	android:id="@+id/switch2_cmd"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:src="@drawable/inter"
+            	android:background="@drawable/switched_off" />
+            
+            <TextView
+    			android:text="@string/switch2_text"
+        		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:textSize="24px"
+        		android:paddingLeft="20px"
+        		android:layout_gravity="center_vertical" />
+            -->
+
+        </TableRow>
+        
+        <LinearLayout
+    		android:layout_width="fill_parent"
+    		android:layout_height="1dp"
+    		android:paddingBottom="2dp"
+    		android:paddingTop="2dp"
+    		android:layout_marginLeft="15dp"
+    		android:layout_marginRight="15dp"
+    		android:scaleType="fitXY"
+    		android:background="#333333"
+    		android:orientation="horizontal" />
+            
+        <TableRow
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+          
+            <ImageButton
+            	android:id="@+id/garage_status"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:src="@drawable/meteo_unknown"
+            	android:background="@null" />
+
+            <TextView
+    			android:text="@string/portail_text"
+        		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:textSize="24px"
+        		android:paddingLeft="20px"
+        		android:layout_gravity="center_vertical" />
+           
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

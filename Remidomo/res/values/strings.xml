@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Activity -->
+    <string name="app_name">Remidomo</string>
+    <string name="cmd_sent">Commande envoyée</string>
+    <string name="sdcard">Sauver sur carte SD</string>
+    <string name="settings">Paramètres</string>
+
+    <!-- Service -->
+    <string name="service_started">Remidomo: service démarré</string>
+    <string name="service_label">Service Remidomo</string>
+    <string name="service_alert">Alerte Remidomo</string>
+    <string name="no_network">Pas de réseau !</string>
+    <string name="sensors_empty">Aucune donnée capteurs</string>
+    <string name="sensors_restore">Tenter une récupération depuis la carte SD ?</string>
+    <string name="save_complete">Sauvegarde terminée</string>
+	<string name="load_complete">Lecture terminée</string>
+
+    <!-- Preferences -->
+    <string name="pref_mode_title">Mode</string>
+    <string name="pref_mode_summary">Sélectionner le mode réseau</string>
+    <string name="pref_ip_title">Adresse IP serveur</string>
+    <string name="pref_ip_summary">Adresse IP du serveur</string>
+    <string name="pref_ip_dialog">Adresse IP du serveur</string>    
+    <string name="pref_port_serveur">Port serveur</string>
+    <string name="pref_port_rfxlan">Port RFX-Lan</string>
+    <string name="pref_port_summary">Numéro de port</string>
+    <string name="pref_reseau">Réseau</string>
+    <string name="pref_general">Général</string>
+    <string name="pref_storelimit_title">Historique des données</string>
+    <string name="pref_storelimit_summary">Données conservées pendant %1$d jours</string>
+    <string name="pref_storelimit_dialog">Nombre de jours</string>
+    <string name="pref_poll_title">Période de mise à jour</string>
+    <string name="pref_poll_summary">Données mises à jour toutes les %1$d minutes</string>
+    <string name="pref_poll_dialog">Nombre de minutes</string>
+    <string name="pref_client_poll_title">Période de mise à jour client</string>
+    <string name="pref_sncf">SNCF</string>
+    <string name="pref_gare_title">Gare</string>
+    <string name="pref_gare_summary">Gare pour prochains départs</string>
+    <string name="pref_meteo">Météo</string>
+    <string name="pref_meteo_title">Période de mise à jour</string>
+    <string name="pref_meteo_summary">Données mises à jour toutes les %1$d heures</string>
+    <string name="pref_meteo_dialog">Nombre d\'heures</string>
+    <string name="pref_plots">Graphiques</string>
+    <string name="pref_reset_title">Redémarrer le service</string>
+    <string name="pref_reset_summary">Redémarre le service en quittant les préférences</string>
+    <string name="pref_night_title">Griser les nuits</string>
+    <string name="pref_night_summary">Grise la courbe entre 20h et 8h</string>
+    <string name="pref_dots_title">Afficher les points</string>
+    <string name="pref_dots_summary">Affiche un point pour chaque mesure</string>
+    <string name="pref_days_title">Afficher les jours</string>
+    <string name="pref_days_summary">Affiche une lettre pour chaque jour</string>
+    <string name="pref_plotlimit_title">Historique des courbes</string>
+    <string name="pref_plotlimit_summary">Tracé des courbes %1$d jours en arrière</string>
+    <string name="pref_plotlimit_dialog">Nombre de jours</string>
+    <string name="pref_notifications">Notifications</string>
+	<string name="pref_sound_title">Son</string>
+	<string name="pref_sound_summary">Joue un son à chaque notification</string>
+	<string name="pref_c2dm_account_title">Compte C2DM</string>
+    <string name="pref_c2dm_account_summary">Nom du compte C2DM</string>
+    <string name="pref_c2dm_account_dialog">Login</string>
+	<string name="pref_c2dm_password_title">Mot de passe C2DM</string>
+    <string name="pref_c2dm_password_summary">Mot de passe du compte C2DM</string>
+    <string name="pref_c2dm_password_dialog">Mot de passe</string>
+      
+    <!-- Vues -->
+    <string name="pool">Piscine</string>
+    <string name="outside">Extérieur</string>
+    <string name="veranda">Véranda</string>
+    <string name="log">Messages</string>
+    <string name="switches">Etats</string>
+    <string name="degC">°C</string>
+    <string name="switch1_text">Prise 1</string>
+    <string name="switch2_text">Inconnu</string>
+    <string name="portail_text">Porte garage</string>
+
+    <!-- Trains -->
+    <string name="ilya">Il y a %1$s</string>
+    <string name="supprime">SUPPR.</string>
+
+    <!-- Etats -->
+    <string name="garage_opened">Garage ouvert</string>
+    <string name="garage_closed">Garage fermé</string>
+    <string name="garage_moving">Garage bloqué en cours de manoeuvre</string>
+    <string name="low_bat">Batterie du serveur faible</string>
+
+</resources>

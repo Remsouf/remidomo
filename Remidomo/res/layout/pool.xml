@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.remi.remidomo"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/poolView"
+    android:orientation="vertical" >
+
+    <com.remi.remidomo.SensorPlot
+    	android:id="@+id/poolTempPlot"
+    	android:layout_width="fill_parent"
+    	android:layout_height="350px"
+    	android:layout_marginTop="0dp"
+    	android:layout_marginLeft="0dp"
+    	android:layout_marginRight="0dp"
+    	title="Température"
+    	app:curve_color="#0000FF"
+    	app:axes_color="#80000000"
+        app:grid_color="#400000FF"
+        app:nights_color="#5A505080"
+		app:dots_color="#00FFFF"
+		app:auto_range="true"
+        app:tap_enabled="true"
+    	android:background="@drawable/water_background" />
+        
+</LinearLayout>

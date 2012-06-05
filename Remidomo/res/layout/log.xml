@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/logView" >
+    
+    <TextView
+        android:id="@+id/log_title"
+    	android:text="@string/log"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="34px"
+        android:gravity="center" />
+    
+    <ScrollView
+        android:id="@+id/logscroller"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+        
+        <TextView
+            android:id="@+id/logtext"
+    		android:text=""
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:textSize="16px" />
+        
+    </ScrollView>
+    
+</LinearLayout>
