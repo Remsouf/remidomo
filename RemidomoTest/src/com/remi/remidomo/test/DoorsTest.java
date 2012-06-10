@@ -28,50 +28,50 @@ public class DoorsTest extends ServiceTestCase<RDService> {
     }
 
 	public void testxPLSequence() throws xPLParseException {
-		final String CLOSED = "0x0680a12";
-		final String OPENED = "0x068176a";
-		final String XPL_PATTERN = "xpl-trig\n{\nhop=1\nsource=*\ntarget=*\n}\nac.basic\n{\naddress=%1$s\nunit=10\ncommand=%2$s\n}\n";
+		final String CLOSED = "0xb5baf7";
+		final String OPENED = "0x0f00d9";
+		final String XPL_PATTERN = "xpl-trig\n{\nhop=1\nsource=*\ntarget=*\n}\nx10.security\n{\ndevice=%1$s\ncommand=%2$s\n}\n";
 		xPLMessage msg;
 
 		start();
 		RDService service = getService();
 
-		msg = new xPLMessage(String.format(XPL_PATTERN, CLOSED, "on"));
+		msg = new xPLMessage(String.format(XPL_PATTERN, CLOSED, "alert"));
 		service.getDoors().syncWithHardware(msg);
-		msg = new xPLMessage(String.format(XPL_PATTERN, OPENED, "on"));
+		msg = new xPLMessage(String.format(XPL_PATTERN, OPENED, "alert"));
 		service.getDoors().syncWithHardware(msg);
 		assertEquals(Doors.State.MOVING, service.getDoors().getState(Doors.GARAGE));
-		assertEquals("[MOVING]", service.getDoors().getJSONArray().toString());
+		assertEquals("[\"MOVING\"]", service.getDoors().getJSONArray().toString());
 
-		msg = new xPLMessage(String.format(XPL_PATTERN, CLOSED, "off"));
+		msg = new xPLMessage(String.format(XPL_PATTERN, CLOSED, "normal"));
 		service.getDoors().syncWithHardware(msg);
 		assertEquals(Doors.State.CLOSED, service.getDoors().getState(Doors.GARAGE));
-		assertEquals("[CLOSED]", service.getDoors().getJSONArray().toString());
+		assertEquals("[\"CLOSED\"]", service.getDoors().getJSONArray().toString());
 		
-		msg = new xPLMessage(String.format(XPL_PATTERN, CLOSED, "on"));
+		msg = new xPLMessage(String.format(XPL_PATTERN, CLOSED, "alert"));
 		service.getDoors().syncWithHardware(msg);
 		assertEquals(Doors.State.MOVING, service.getDoors().getState(Doors.GARAGE));
-		assertEquals("[MOVING]", service.getDoors().getJSONArray().toString());
+		assertEquals("[\"MOVING\"]", service.getDoors().getJSONArray().toString());
 		
-		msg = new xPLMessage(String.format(XPL_PATTERN, OPENED, "off"));
+		msg = new xPLMessage(String.format(XPL_PATTERN, OPENED, "normal"));
 		service.getDoors().syncWithHardware(msg);
 		assertEquals(Doors.State.OPENED, service.getDoors().getState(Doors.GARAGE));
-		assertEquals("[OPENED]", service.getDoors().getJSONArray().toString());
+		assertEquals("[\"OPENED\"]", service.getDoors().getJSONArray().toString());
 		
-		msg = new xPLMessage(String.format(XPL_PATTERN, OPENED, "on"));
+		msg = new xPLMessage(String.format(XPL_PATTERN, OPENED, "alert"));
 		service.getDoors().syncWithHardware(msg);
 		assertEquals(Doors.State.MOVING, service.getDoors().getState(Doors.GARAGE));
-		assertEquals("[MOVING]", service.getDoors().getJSONArray().toString());
+		assertEquals("[\"MOVING\"]", service.getDoors().getJSONArray().toString());
 		
-		msg = new xPLMessage(String.format(XPL_PATTERN, OPENED, "off"));
+		msg = new xPLMessage(String.format(XPL_PATTERN, OPENED, "normal"));
 		service.getDoors().syncWithHardware(msg);
 		assertEquals(Doors.State.OPENED, service.getDoors().getState(Doors.GARAGE));
-		assertEquals("[OPENED]", service.getDoors().getJSONArray().toString());
+		assertEquals("[\"OPENED\"]", service.getDoors().getJSONArray().toString());
 		
-		msg = new xPLMessage(String.format(XPL_PATTERN, CLOSED, "off"));
+		msg = new xPLMessage(String.format(XPL_PATTERN, CLOSED, "normal"));
 		service.getDoors().syncWithHardware(msg);
 		assertEquals(Doors.State.UNKNOWN, service.getDoors().getState(Doors.GARAGE));
-		assertEquals("[UNKNOWN]", service.getDoors().getJSONArray().toString());
+		assertEquals("[\"UNKNOWN\"]", service.getDoors().getJSONArray().toString());
 	}
 	
 }
