@@ -1,6 +1,5 @@
 package com.remi.remidomo;
 
-import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -75,8 +74,6 @@ public class SensorData extends SimpleXYSeries {
 
 			DataInputStream dis = new DataInputStream(fis);
 			String magic = dis.readLine();
-			
-			Log.d(TAG, "READ, MAGIC:" + magic);
 
 			if (FileFormat.BINARY.toString().equals(magic)) {
 				while(true) {
