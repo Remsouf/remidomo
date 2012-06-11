@@ -34,14 +34,6 @@ public class SensorData extends SimpleXYSeries {
 	
 	public enum DirType {INTERNAL, SDCARD};
 	public enum FileFormat {ASCII, BINARY};
-
-	public SensorData(SensorData origin) {
-		super(origin.getTitle());
-	
-		for (int i=0; i<origin.size(); i++) {
-			addLast(origin.getX(i), origin.getY(i));
-		}
-	}
 	
 	public SensorData(String name, RDService service, boolean initFromFile) {
 		super(name);

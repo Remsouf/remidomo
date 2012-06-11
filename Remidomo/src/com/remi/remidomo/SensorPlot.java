@@ -184,15 +184,13 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 
 	public void addSeries(SensorData series, int daysBack) {
 
-		SensorData filteredSeries = series;
-		if (series != null) {
-			filteredSeries = new SensorData(series);
-		}
+		SensorData filteredSeries = null;
 
-		if (filteredSeries != null) {
+		if (series != null) {
 
 			// Remove points before days limit
-			if (filteredSeries.size() > 0) {
+			filteredSeries = new SensorData(series.getTitle(), null, false);
+			if (series.size() > 0) {
 				// If daysBack not provided, read from prefs
 				int effDaysBack = daysBack;
 				if (effDaysBack == 0) {
@@ -200,13 +198,15 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 				}
 				long limit = new Date().getTime() - effDaysBack * HOURS_24;
 
-				long tstamp;
-				do {
-					tstamp = filteredSeries.getX(0).longValue();
+				for (int i=0; i<series.size(); i++) {
+					long tstamp = series.getX(i).longValue();
 					if (tstamp < limit) {
-						filteredSeries.removeFirst();
+						continue;
+					} else {
+						float value = series.getY(i).floatValue();
+						filteredSeries.addLast(tstamp, value);
 					}
-				} while(tstamp < limit);
+				}
 			}
 
 			int dotsEffectiveColor = 0;
