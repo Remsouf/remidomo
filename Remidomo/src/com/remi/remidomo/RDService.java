@@ -178,9 +178,9 @@ public class RDService extends Service {
     		} else {
     			clientTimer = new Timer();
     			int period = Integer.parseInt(prefs.getString("client_poll", Preferences.DEFAULT_CLIENT_POLL));
-    			// 30s graceful period, to let the service read data from FS,
+    			// 15s graceful period, to let the service read data from FS,
     			// before attempting updates from the server
-    			clientTimer.scheduleAtFixedRate(new ClientTask(this), 30000, period*60*1000);
+    			clientTimer.scheduleAtFixedRate(new ClientTask(this), 15000, period*60*1000);
 
     			registerPushMessaging();
     		}
