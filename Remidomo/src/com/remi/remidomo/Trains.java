@@ -44,16 +44,16 @@ public class Trains {
         	JSONObject entries = new JSONObject(content);
         	return entries;
         } catch (java.net.URISyntaxException e) {
-        	service.addLog("Erreur URI SNCF: " + e.getLocalizedMessage());
+        	service.addLog("Erreur URI SNCF: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
         	Log.e(TAG, "Bad URI: " + SNCF_URL+gare);
         } catch (org.apache.http.client.ClientProtocolException e) {
-        	service.addLog("Erreur protocole SNCF: " + e.getLocalizedMessage());
+        	service.addLog("Erreur protocole SNCF: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
         	Log.e(TAG, "ClientProtocolException with URI: " + SNCF_URL + gare + ", " + e);
         } catch (java.io.IOException e) {
-        	service.addLog("Erreur I/O SNCF: " + e.getLocalizedMessage());
+        	service.addLog("Erreur I/O SNCF: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
         	Log.e(TAG, "IOException with URI: " + SNCF_URL + gare + ", " + e);
         } catch (org.json.JSONException e) {
-        	service.addLog("Erreur JSON SNCF");
+        	service.addLog("Erreur JSON SNCF", RDService.LogLevel.HIGH);
         	Log.e(TAG, "JSON error with URI: " + SNCF_URL + gare + ", " + e);
         }
 
@@ -107,14 +107,14 @@ public class Trains {
 			filtered = filterCommonData(gareGRE, gareGOC);
 		} else {
 			Log.e(TAG, "No common trains !");
-			service.addLog("Pas de trains en commun entre les 2 gares");
+			service.addLog("Pas de trains en commun entre les 2 gares", RDService.LogLevel.MEDIUM);
 			return;
 		}
 
 		try {
 			JSONArray departs = filtered.getJSONArray("D");
 			if (departs.length() == 0) {
-				service.addLog("Infos SNCF vides");
+				service.addLog("Infos SNCF vides", RDService.LogLevel.MEDIUM);
 				Log.d(TAG, "Empty JSON data from SNCF");
 				return;
 			} else {
@@ -150,14 +150,14 @@ public class Trains {
 					trainsData = newTrains;
 				}
 
-				service.addLog("Mise à jour des données SNCF (" + newTrains.size() + " trains)");
+				service.addLog("Mise à jour des données SNCF (" + newTrains.size() + " trains)", RDService.LogLevel.UPDATE);
 
 				if (!trainsData.isEmpty()) {
 					lastUpdate = new Date();
 				}
 			}
 		} catch (org.json.JSONException e) {
-        	service.addLog("Erreur JSON SNCF");
+        	service.addLog("Erreur JSON SNCF", RDService.LogLevel.HIGH);
         	Log.e(TAG, "JSON error with URI: " + SNCF_URL + gare + ", " + e);
         }
 	}

@@ -5,6 +5,7 @@ import com.remi.remidomo.RDService;
 import android.content.Intent;
 import android.os.IBinder;
 import android.test.ServiceTestCase;
+import android.util.Log;
 
 public class RDServiceTest extends ServiceTestCase<RDService> {
 	
@@ -36,7 +37,7 @@ public class RDServiceTest extends ServiceTestCase<RDService> {
 		dummy.addLog("msg1");
 		dummy.addLog("msg2");
 		dummy.addLog("msg2");
-		assertEquals("msg1\nmsg2 (x2)", dummy.getLogMessages());
+		assertEquals("msg1\nmsg2 (x2)\n", dummy.getLogMessages().toString());
 	}
 	
 	public void testLog2() {
@@ -45,7 +46,7 @@ public class RDServiceTest extends ServiceTestCase<RDService> {
 		dummy.addLog("msg1");
 		dummy.addLog("msg2");
 		dummy.addLog("msg1");
-		assertEquals("msg1\nmsg2\nmsg1", dummy.getLogMessages());
+		assertEquals("msg1\nmsg2\nmsg1\n", dummy.getLogMessages().toString());
 	}
 	
 	public void testLog3() {
@@ -55,7 +56,7 @@ public class RDServiceTest extends ServiceTestCase<RDService> {
 		for (int i=0; i<10; i++) {
 			dummy.addLog("msg2");
 		}
-		assertEquals("msg1\nmsg2 (x10)", dummy.getLogMessages());
+		assertEquals("msg1\nmsg2 (x10)\n", dummy.getLogMessages().toString());
 	}
 	
 	public void testLog4() {
@@ -65,7 +66,7 @@ public class RDServiceTest extends ServiceTestCase<RDService> {
 		for (int i=0; i<10; i++) {
 			dummy.addLog("Mémàçon");
 		}
-		assertEquals("msg1\nMémàçon (x10)", dummy.getLogMessages());
+		assertEquals("msg1\nMémàçon (x10)\n", dummy.getLogMessages().toString());
 	}
 	
 	public void testLog5() {
@@ -75,6 +76,6 @@ public class RDServiceTest extends ServiceTestCase<RDService> {
 		for (int i=0; i<10; i++) {
 			dummy.addLog("msg2 (en +)");
 		}
-		assertEquals("msg1\nmsg2 (en +) (x10)", dummy.getLogMessages());
+		assertEquals("msg1\nmsg2 (en +) (x10)\n", dummy.getLogMessages().toString());
 	}
 }

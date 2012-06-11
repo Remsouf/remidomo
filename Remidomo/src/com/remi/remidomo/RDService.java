@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
@@ -31,7 +32,9 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -78,9 +81,18 @@ public class RDService extends Service {
 	private Doors doors = null;
 
     private static final int MAX_LOG_LINES = 200;
-    private List<String> log = new ArrayList<String>();
+    private class LogEntry { public String msg;
+    						 public LogLevel level;
+    						 public int repeat;
+    }
+    private List<LogEntry> log = new ArrayList<LogEntry>();
     
     private Set<String> pushDevices = new HashSet<String>();
+    
+    public enum LogLevel { HIGH,
+    					   MEDIUM,
+    					   LOW,
+    					   UPDATE };
 
     /* Broadcast receiver for low battery */
     private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver(){
@@ -129,7 +141,7 @@ public class RDService extends Service {
     		// Don't restart, just account for received Push intent
     		handlePushedMessage(intent);
     	} else if ((intent != null) && ACTION_RESTORE_DATA.equals(intent.getAction())) {
-    		log.add("Lecture des données depuis la carte SD");
+    		addLog("Lecture des données depuis la carte SD");
     		new Thread(new Runnable() {
             	public synchronized void run() {
             		sensors.readFromSdcard();
@@ -363,7 +375,7 @@ public class RDService extends Service {
 			}
 			
 			if (counter == 0) {
-				addLog("Erreur RFX: impossible d'ouvrir le socket (rx)");
+				addLog("Erreur RFX: impossible d'ouvrir le socket (rx)", LogLevel.HIGH);
 			    Log.e(TAG, "IO Error for RFX: Failed to create socket (rx)");
 			    errorLeds();
 			    return;
@@ -382,7 +394,7 @@ public class RDService extends Service {
     				readMessage(packet);
     			} catch (Exception e) {
     				Log.e(TAG, "Error receiving: " + e.getLocalizedMessage());
-    				addLog("Erreur socket RFX (rx): " + e.getLocalizedMessage());
+    				addLog("Erreur socket RFX (rx): " + e.getLocalizedMessage(), LogLevel.HIGH);
     				errorLeds();
     				break;
     			}
@@ -403,7 +415,7 @@ public class RDService extends Service {
     			if (msg.getType() == xPLMessage.MessageType.STATUS) {
     				if ("basic".equals(msg.getSchemaType()) &&
     					"hbeat".equals(msg.getSchemaClass())) {
-    					addLog("Heart beat reçu de " + msg.getSource());
+    					addLog("Heart beat reçu de " + msg.getSource(), LogLevel.UPDATE);
     					Log.d(TAG, "heartbeat from " + msg.getSource());
     					flashLeds();
     				}
@@ -416,7 +428,7 @@ public class RDService extends Service {
     							String batt = msg.getNamedValue("current");
     							if (Integer.parseInt(batt) < 20) {
     								String txt = "Batterie faible pour le capteur '" + device + "'";
-    								addLog(txt);
+    								addLog(txt, LogLevel.MEDIUM);
     								Log.d(TAG, "Low batt on " + device);
     								postToast(txt);
     							}
@@ -432,7 +444,7 @@ public class RDService extends Service {
     							}
     						} else {
     							String log = "Unknown msg type '" + msg.getNamedValue("type") + "' for device " + msg.getNamedValue("device");
-    							addLog("Message RFX inconnu reçu: " + msg.getNamedValue("type"));
+    							addLog("Message RFX inconnu reçu: " + msg.getNamedValue("type"), LogLevel.MEDIUM);
     							Log.d(TAG, log);
     						}
     					}
@@ -447,7 +459,7 @@ public class RDService extends Service {
 
     		} catch (xPLMessage.xPLParseException e) {
     			Log.e(TAG, "Error parsing xPL message: " + e);
-    			addLog("Erreur de parsing xPL: " + e);
+    			addLog("Erreur de parsing xPL: " + e, LogLevel.HIGH);
     		}
 
     		if (callback != null) {
@@ -493,37 +505,39 @@ public class RDService extends Service {
 	}
 	
 	/****************************** LOG ******************************/
-    public synchronized void addLog(String msg) {
+	public void addLog(String msg) {
+		addLog(msg, LogLevel.LOW);
+	}
+
+    public synchronized void addLog(String msg, LogLevel level) {
     	String prev_msg = null;
     	if (!log.isEmpty()) {
-    		prev_msg = log.get(log.size()-1);
+    		prev_msg = log.get(log.size()-1).msg;
     	}
     	if (msg.equals(prev_msg)) {
-    		// Exact match -> x2
-    		log.set(log.size()-1, msg + " (x2)");
+    		// Exact match -> +1
+    		LogEntry entry = log.get(log.size()-1);
+			entry.repeat = entry.repeat + 1;
+			log.set(log.size()-1, entry);
     	} else {
     		if (prev_msg != null) {
-    			int count;
-    			if (prev_msg.startsWith(msg)) {
-    				int beg = prev_msg.lastIndexOf("(x") + 2;
-    				int end = prev_msg.lastIndexOf(")");
-    				if ((beg != -1) && (end != -1)) {
-    					count = Integer.parseInt(prev_msg.substring(beg, end));
-    					log.set(log.size()-1, msg + " (x" + (count+1) + ")");
-    				} else {
-    					log.add(msg);
-    				}
-    			} else {
-    				// No match
-    				log.add(msg);
-    			}
+    			// No match
+    			LogEntry newEntry = new LogEntry();
+    			newEntry.msg = msg;
+    			newEntry.level = level;
+    			newEntry.repeat = 1;
+    			log.add(newEntry);
     		} else {
     			// No previous message
-    			log.add(msg);
+    			LogEntry newEntry = new LogEntry();
+				newEntry.msg = msg;
+				newEntry.level = level;
+				newEntry.repeat = 1;
+				log.add(newEntry);
     		}
     	}
     	if (log.size() > MAX_LOG_LINES) {
-    		log = (List<String>)log.subList(0, MAX_LOG_LINES);
+    		log = (List<LogEntry>)log.subList(0, MAX_LOG_LINES);
     	}
     	
     	if (callback != null) {
@@ -535,8 +549,40 @@ public class RDService extends Service {
     	log.clear();
     }
 
-    public synchronized String getLogMessages() {
-    	return TextUtils.join("\n", log);
+    public synchronized CharSequence getLogMessages() {
+    	SpannableStringBuilder text = new SpannableStringBuilder();
+    	
+    	for (LogEntry entry: log) {
+    		int startPos = text.length();
+    		text.append(entry.msg);
+    		if (entry.repeat > 1) {
+    			text.append(" (x" + entry.repeat + ")");
+    		}
+    		text.append("\n");
+    		int endPos = text.length();
+
+        	int color;
+        	switch (entry.level) {
+        	case HIGH:
+        		color = Color.rgb(255, 160, 160);
+        		break;
+        	case MEDIUM:
+        		color = Color.rgb(255, 200, 100);
+        		break;
+        	case LOW:
+        		color = Color.WHITE;
+        		break;
+        	case UPDATE:
+        		color = Color.rgb(200, 255, 200);
+        		break;
+        	default:
+        		color = Color.GRAY;
+        		break;
+        	}
+        	text.setSpan(new ForegroundColorSpan(color), startPos, endPos, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+    	}
+    	
+    	return text;
     }
     
 	/****************************** LEDs ******************************/
@@ -733,7 +779,7 @@ public class RDService extends Service {
 			Log.e(TAG, "Pushed intent misses extras");
 		} else {
 			Log.d(TAG, "Push received: " + target);
-			addLog("Push reçu: " + target);
+			addLog("Push reçu: " + target, LogLevel.UPDATE);
 
 			if ("switch".equals(target)) {
 				switches.setFromPushedIntent(intent);
@@ -744,7 +790,7 @@ public class RDService extends Service {
 				showAlertNotification(getString(R.string.low_bat), R.raw.garage_alert, tstamp);
 			} else {
 				Log.e(TAG, "Unknown push target: " + target);
-				addLog("Cible push inconnue: " + target);
+				addLog("Cible push inconnue: " + target, LogLevel.HIGH);
 			}
 		}
     }

@@ -15,6 +15,8 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 
+import com.remi.remidomo.RDService.LogLevel;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -145,27 +147,27 @@ public class Doors {
 					setState(i, State.valueOf(stateStr), false);
 				}
 			}
-			service.addLog("Mise à jour des états portes depuis le serveur");
+			service.addLog("Mise à jour des états portes depuis le serveur", RDService.LogLevel.UPDATE);
 			if (service.callback != null) {
 				service.callback.updateDoors();
 			}
 		} catch (java.net.URISyntaxException e) {
-			service.addLog("Erreur URI serveur: " + e.getLocalizedMessage());
+			service.addLog("Erreur URI serveur: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "Bad server URI");
 		} catch (org.apache.http.conn.HttpHostConnectException e) {
-			service.addLog("Impossible de se connecter au serveur: " + e.getLocalizedMessage());
+			service.addLog("Impossible de se connecter au serveur: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "HostConnectException with server: " + e);
 		} catch (org.apache.http.client.ClientProtocolException e) {
-			service.addLog("Erreur protocole serveur");
+			service.addLog("Erreur protocole serveur", RDService.LogLevel.HIGH);
 			Log.e(TAG, "ClientProtocolException with server: " + e);
 		} catch (java.net.SocketException e) {
-			service.addLog("Serveur non joignable: " + e.getLocalizedMessage());
+			service.addLog("Serveur non joignable: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "SocketException with client: " + e);
 		} catch (java.io.IOException e) {
-			service.addLog("Erreur I/O client: " + e.getLocalizedMessage());
+			service.addLog("Erreur I/O client: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "IOException with client: " + e);
 		} catch (org.json.JSONException e) {
-			service.addLog("Erreur JSON serveur");
+			service.addLog("Erreur JSON serveur", RDService.LogLevel.HIGH);
 			Log.e(TAG, "JSON error with server: " + e);
 		}
 	}
@@ -196,7 +198,7 @@ public class Doors {
 		int i = GARAGE_ADDR.indexOf(address);
 		if (i == -1) {
 			Log.e(TAG, "Door address unknown: " + address);
-			service.addLog("Message portes provenant d'une adresse inconnue: " + address);
+			service.addLog("Message portes provenant d'une adresse inconnue: " + address, RDService.LogLevel.HIGH);
 			return;
 		}
 
@@ -206,7 +208,7 @@ public class Doors {
 			garageStates[i] = false;
 		} else {
 			Log.e(TAG, "Doors command unknown: " + command);
-			service.addLog("Message portes avec commande inconnue :" + command);
+			service.addLog("Message portes avec commande inconnue :" + command, RDService.LogLevel.HIGH);
 		}
 		
 		// Handle garage door states -> one state
@@ -219,12 +221,11 @@ public class Doors {
 			newState = State.CLOSED;
 		} else {
 			Log.e(TAG, "Something wrong with garage gate: " + garageStates[0] + "/" + garageStates[1]);
-			service.addLog("Anomalie porte de garage: " + garageStates[0] + "/" + garageStates[1]);
-			newState = State.UNKNOWN;
+			service.addLog("Anomalie porte de garage: " + garageStates[0] + "/" + garageStates[1], RDService.LogLevel.HIGH);
 		}
 	
 		Log.i(TAG, "Doors state updated from hardware: " + newState);
-		service.addLog("Portes synchronisées avec le matériel");
+		service.addLog("Portes synchronisées avec le matériel", RDService.LogLevel.UPDATE);
 
 		if (newState != states[GARAGE]) {
 			setState(GARAGE, newState, true);

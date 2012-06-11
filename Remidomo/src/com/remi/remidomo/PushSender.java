@@ -48,8 +48,7 @@ public class PushSender {
 
 		if (authenticationToken == null) {
 			Log.e(TAG, "Missing authentication token");
-			service.addLog("Push: token d'authentification manquant");
-			return;
+			service.addLog("Push: token d'authentification manquant", RDService.LogLevel.HIGH);
 		}
 
 		try {
@@ -86,7 +85,7 @@ public class PushSender {
 
 			int responseCode = conn.getResponseCode();
 			if (responseCode != 200) {
-				service.addLog("Erreur envoi push: " + responseCode);
+				service.addLog("Erreur envoi push: " + responseCode, RDService.LogLevel.HIGH);
 			}
 		} catch (UnsupportedEncodingException e) {
 			Log.e(TAG, "Encoding error: " + e);
@@ -159,7 +158,7 @@ public class PushSender {
 		
 		if (authenticationToken == null) {
 			Log.e(TAG, "Failed to get authentication token");
-			service.addLog("Push: impossible d'obtenir le token d'authentification");
+			service.addLog("Push: impossible d'obtenir le token d'authentification", RDService.LogLevel.HIGH);
 			return;
 		}
 	}

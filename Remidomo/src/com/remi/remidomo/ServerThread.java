@@ -154,7 +154,7 @@ public class ServerThread implements Runnable {
 			}
 
 			if (counter == 0) {
-				service.addLog("Erreur serveur: impossible d'ouvrir le socket");
+				service.addLog("Erreur serveur: impossible d'ouvrir le socket", RDService.LogLevel.HIGH);
 			    Log.e(TAG, "IO Error for server: Failed to create socket");
 			    service.errorLeds();
 			    return;
@@ -178,12 +178,12 @@ public class ServerThread implements Runnable {
             	} catch (java.net.SocketException ignored) {
             	} catch (java.io.IOException e) {
             		Log.e(TAG, "IO Error for server: " + e);
-            		service.addLog("Erreur IO serveur: " + e.getLocalizedMessage());
+            		service.addLog("Erreur IO serveur: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
             		service.errorLeds();
             		break;
             	} catch (org.apache.http.HttpException e) {
             		Log.e(TAG, "HTTP Error for server: " + e);
-            		service.addLog("Erreur HTTP serveur: " + e.getLocalizedMessage());
+            		service.addLog("Erreur HTTP serveur: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
             		service.errorLeds();
             		break;
             	}
@@ -372,7 +372,7 @@ public class ServerThread implements Runnable {
 				public void writeTo(final OutputStream outstream) throws java.io.IOException {
 					OutputStreamWriter writer = new OutputStreamWriter(outstream, "ISO8859_1");
 					writer.write("<html><body>\n<p>Log:</p>\n<pre>\n");
-					writer.write(service.getLogMessages());
+					writer.write(service.getLogMessages().toString());
 					writer.write("\n</pre>\n</body></html>");
 					writer.flush();
 				}
@@ -420,7 +420,7 @@ public class ServerThread implements Runnable {
 					result = service.getSwitches().setState(Integer.parseInt(index), state);
 				} else {
 					Log.e(TAG, "Malformed URL: " + Uri);
-					service.addLog("Requete erronée reçue: " + Uri);
+					service.addLog("Requete erronée reçue: " + Uri, RDService.LogLevel.HIGH);
 				}
 
 				HttpEntity entity = new EntityTemplate(new ContentProducer() {

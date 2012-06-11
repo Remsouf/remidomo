@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.TextView.BufferType;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.util.Log;
@@ -523,7 +524,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 
 		messages.setText("");
 		if (service != null) {
-			messages.setText(service.getLogMessages());
+			messages.setText(service.getLogMessages(), BufferType.SPANNABLE);
 		}
 		
 		// Scroll to the bottom

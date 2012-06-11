@@ -121,7 +121,7 @@ class Switches {
 	private void sendRfxMessage(final int index, final boolean state) {	
 		if ((service == null) || (service.getRfxSocket() == null)) {
 			Log.e(TAG, "RFX socket not opened. Impossible to send");
-			service.addLog("Socket RFX pas ouvert: impossible d'envoyer des commandes");
+			service.addLog("Socket RFX pas ouvert: impossible d'envoyer des commandes", RDService.LogLevel.HIGH);
 			return;
 		}
 
@@ -135,7 +135,7 @@ class Switches {
 					destination = InetAddress.getByName("255.255.255.255");
 				} catch (java.net.UnknownHostException e) {
 					Log.e(TAG, "Unknown host for sending RFX message");
-					service.addLog("Hote RFX inconnu");
+					service.addLog("Hote RFX inconnu", RDService.LogLevel.HIGH);
 					return;
 				}
 
@@ -163,7 +163,7 @@ class Switches {
 					Log.i(TAG, "RFX packet sent");
 				} catch (Exception e) {
 					Log.e(TAG, "Error sending: " + e.getLocalizedMessage());
-					service.addLog("Erreur socket RFX (tx): " + e.getLocalizedMessage());
+					service.addLog("Erreur socket RFX (tx): " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 					service.errorLeds();
 				}
 			}
@@ -186,13 +186,13 @@ class Switches {
 		int i = SWITCH_ADDR.indexOf(address);
 		if (i == -1) {
 			Log.e(TAG, "AC address unknown: " + address);
-			service.addLog("Message AC provenant d'une adresse inconnue: " + address);
+			service.addLog("Message AC provenant d'une adresse inconnue: " + address, RDService.LogLevel.HIGH);
 			return;
 		}
 		
 		if (!SWITCH_UNIT.get(i).equals(unit)) {
 			Log.e(TAG, "AC unit and address known but not consistent (" + address + "/" + unit + ")");
-			service.addLog("Message AC provenant d'une adresse incohérente avec l'unité (" + address + "/" + unit + ")");
+			service.addLog("Message AC provenant d'une adresse incohérente avec l'unité (" + address + "/" + unit + ")", RDService.LogLevel.HIGH);
 			return;			
 		}
 		
@@ -202,11 +202,11 @@ class Switches {
 			states[i] = false;
 		} else {
 			Log.e(TAG, "AC command unknown: " + command);
-			service.addLog("Message AC avec commande inconnue :" + command);
+			service.addLog("Message AC avec commande inconnue :" + command, RDService.LogLevel.HIGH);
 		}
 		
 		Log.i(TAG, "Switches state updated from hardware");
-		service.addLog("Commandes synchronisées avec le matériel");
+		service.addLog("Commandes synchronisées avec le matériel", RDService.LogLevel.UPDATE);
 		if (service.callback != null) {
 			service.callback.updateSwitches();
 		}
@@ -230,27 +230,27 @@ class Switches {
 					states[i] = array.getBoolean(i);
 				}
 			}
-			service.addLog("Mise à jour des états commandes depuis le serveur");
+			service.addLog("Mise à jour des états commandes depuis le serveur", RDService.LogLevel.UPDATE);
 			if (service.callback != null) {
 				service.callback.updateSwitches();
 			}
 		} catch (java.net.URISyntaxException e) {
-			service.addLog("Erreur URI serveur: " + e.getLocalizedMessage());
+			service.addLog("Erreur URI serveur: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "Bad server URI");
 		} catch (org.apache.http.conn.HttpHostConnectException e) {
-			service.addLog("Impossible de se connecter au serveur: " + e.getLocalizedMessage());
+			service.addLog("Impossible de se connecter au serveur: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "HostConnectException with server: " + e);
 		} catch (org.apache.http.client.ClientProtocolException e) {
-			service.addLog("Erreur protocole serveur");
+			service.addLog("Erreur protocole serveur", RDService.LogLevel.HIGH);
 			Log.e(TAG, "ClientProtocolException with server: " + e);
 		} catch (java.net.SocketException e) {
-			service.addLog("Serveur non joignable: " + e.getLocalizedMessage());
+			service.addLog("Serveur non joignable: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "SocketException with client: " + e);
 		} catch (java.io.IOException e) {
-			service.addLog("Erreur I/O client: " + e.getLocalizedMessage());
+			service.addLog("Erreur I/O client: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "IOException with client: " + e);
 		} catch (org.json.JSONException e) {
-			service.addLog("Erreur JSON serveur");
+			service.addLog("Erreur JSON serveur", RDService.LogLevel.HIGH);
 			Log.e(TAG, "JSON error with server: " + e);
 		}
 	}
@@ -278,7 +278,7 @@ class Switches {
 					service.addLog("Envoi commande au serveur");
 					if (!"OK".equals(content)) {
 						Log.d(TAG, "Bad response to command URL: " + content);
-						service.addLog("Mauvaise réponse du serveur: " + content);
+						service.addLog("Mauvaise réponse du serveur: " + content, RDService.LogLevel.HIGH);
 					}
 				} catch (java.net.URISyntaxException e) {
 					Log.e(TAG, "Bad URI: " + url);

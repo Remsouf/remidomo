@@ -66,7 +66,7 @@ public class SensorData extends SimpleXYSeries {
 					fis = new FileInputStream(path);
 				} else {
 					Log.e(TAG, "Impossible to read from external storage");
-					service.addLog("Impossible de lire depuis la carte SD");
+					service.addLog("Impossible de lire depuis la carte SD", RDService.LogLevel.HIGH);
 				}
 			} else {
 				assert(false);
@@ -106,19 +106,19 @@ public class SensorData extends SimpleXYSeries {
 			}
 		} catch (java.io.FileNotFoundException e) {
 			Log.e(TAG, "Sensor file not found. " + e);
-			service.addLog("Pas de données locales pour " + getTitle());
+			service.addLog("Pas de données locales pour " + getTitle(), RDService.LogLevel.HIGH);
 		} catch (java.lang.IllegalArgumentException e) {
 			Log.e(TAG, "Error parsing sensor file for sensor " + getTitle() + " (IllegalArgument)");
-			service.addLog("Erreur de lecture pour " + getTitle());
+			service.addLog("Erreur de lecture pour " + getTitle(), RDService.LogLevel.HIGH);
 		} catch (java.util.InputMismatchException e) {
 			Log.e(TAG, "Error parsing sensor file for sensor " + getTitle() + " (InputMismatch)");
-			service.addLog("Erreur de lecture pour " + getTitle());
+			service.addLog("Erreur de lecture pour " + getTitle(), RDService.LogLevel.HIGH);
 		} catch (java.util.NoSuchElementException e) {
 			Log.e(TAG, "Error parsing sensor file for sensor " + getTitle() + " (NoSuchElement)");
-			service.addLog("Erreur de lecture pour " + getTitle());
+			service.addLog("Erreur de lecture pour " + getTitle(), RDService.LogLevel.HIGH);
 		} catch (java.io.IOException e) {
 			Log.e(TAG, "Error reading file for sensor " + getTitle() + e);
-			service.addLog("Erreur de lecture pour " + getTitle());
+			service.addLog("Erreur de lecture pour " + getTitle(), RDService.LogLevel.HIGH);
 		} finally {
 			if (scanner != null) {
 				scanner.close();
@@ -148,7 +148,7 @@ public class SensorData extends SimpleXYSeries {
 					fos = new FileOutputStream(path);
 				} else {
 				    Log.e(TAG, "Impossible to write to external storage");
-				    service.addLog("Impossible d'écrire sur la carte SD");
+				    service.addLog("Impossible d'écrire sur la carte SD", RDService.LogLevel.HIGH);
 				}
 			} else {
 				assert(false);
@@ -177,7 +177,7 @@ public class SensorData extends SimpleXYSeries {
 			}
 		} catch (java.io.IOException e) {
 			Log.e(TAG, "Failed to write file for sensor " + this.getTitle() + ": " + e);
-			service.addLog("Impossible d'écrire le fichier de données pour " + this.getTitle());
+			service.addLog("Impossible d'écrire le fichier de données pour " + this.getTitle(), RDService.LogLevel.HIGH);
 		} finally {
 			if (fos != null) {
 				try {

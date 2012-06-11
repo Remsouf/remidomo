@@ -300,7 +300,7 @@ class Meteo {
 				meteoData = newMeteo;
 			}
 
-			service.addLog("Mise à jour des données météo (" + NB_DAYS + " jours)");
+			service.addLog("Mise à jour des données météo (" + NB_DAYS + " jours)", RDService.LogLevel.UPDATE);
 		} catch (java.net.URISyntaxException e) {
 			Log.e(TAG, "Bad URI: " + url);
 		} catch (org.apache.http.client.ClientProtocolException e) {

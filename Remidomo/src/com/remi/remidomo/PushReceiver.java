@@ -92,19 +92,19 @@ public class PushReceiver extends BroadcastReceiver {
 			Log.d(TAG, "Registration server: " + content);
 
 		} catch (java.net.URISyntaxException e) {
-			//service.addLog("Erreur URI serveur: " + e.getLocalizedMessage());
+			//service.addLog("Erreur URI serveur: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "Bad server URI");
 		} catch (org.apache.http.conn.HttpHostConnectException e) {
-			//service.addLog("Impossible de se connecter au serveur: " + e.getLocalizedMessage());
+			//service.addLog("Impossible de se connecter au serveur: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "HostConnectException with server: " + e);
 		} catch (org.apache.http.client.ClientProtocolException e) {
-			//service.addLog("Erreur protocole serveur");
+			//service.addLog("Erreur protocole serveur", RDService.LogLevel.HIGH);
 			Log.e(TAG, "ClientProtocolException with server: " + e);
 		} catch (java.net.SocketException e) {
-			//service.addLog("Serveur non joignable: " + e.getLocalizedMessage());
+			//service.addLog("Serveur non joignable: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "SocketException with client: " + e);
 		} catch (java.io.IOException e) {
-			//service.addLog("Erreur I/O client: " + e.getLocalizedMessage());
+			//service.addLog("Erreur I/O client: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
 			Log.e(TAG, "IOException with client: " + e);
 		}
 	}
