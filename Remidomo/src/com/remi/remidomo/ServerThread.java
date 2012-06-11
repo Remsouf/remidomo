@@ -38,6 +38,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.util.Log;
 
 public class ServerThread implements Runnable {
@@ -371,8 +372,8 @@ public class ServerThread implements Runnable {
 			HttpEntity entity = new EntityTemplate(new ContentProducer() {
 				public void writeTo(final OutputStream outstream) throws java.io.IOException {
 					OutputStreamWriter writer = new OutputStreamWriter(outstream, "ISO8859_1");
-					writer.write("<html><body>\n<p>Log:</p>\n<pre>\n");
-					writer.write(service.getLogMessages().toString());
+					writer.write("<html><body bgcolor=\"black\">\n<p><font color=\"white\">Log:</font></p>\n<pre>\n");
+					writer.write(Html.toHtml(service.getLogMessages()));
 					writer.write("\n</pre>\n</body></html>");
 					writer.flush();
 				}

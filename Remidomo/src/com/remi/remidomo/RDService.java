@@ -520,21 +520,11 @@ public class RDService extends Service {
 			entry.repeat = entry.repeat + 1;
 			log.set(log.size()-1, entry);
     	} else {
-    		if (prev_msg != null) {
-    			// No match
-    			LogEntry newEntry = new LogEntry();
-    			newEntry.msg = msg;
-    			newEntry.level = level;
-    			newEntry.repeat = 1;
-    			log.add(newEntry);
-    		} else {
-    			// No previous message
-    			LogEntry newEntry = new LogEntry();
-				newEntry.msg = msg;
-				newEntry.level = level;
-				newEntry.repeat = 1;
-				log.add(newEntry);
-    		}
+    		LogEntry newEntry = new LogEntry();
+    		newEntry.msg = msg;
+    		newEntry.level = level;
+    		newEntry.repeat = 1;
+    		log.add(newEntry);
     	}
     	if (log.size() > MAX_LOG_LINES) {
     		log = (List<LogEntry>)log.subList(0, MAX_LOG_LINES);
@@ -549,7 +539,7 @@ public class RDService extends Service {
     	log.clear();
     }
 
-    public synchronized CharSequence getLogMessages() {
+    public synchronized SpannableStringBuilder getLogMessages() {
     	SpannableStringBuilder text = new SpannableStringBuilder();
     	
     	for (LogEntry entry: log) {
