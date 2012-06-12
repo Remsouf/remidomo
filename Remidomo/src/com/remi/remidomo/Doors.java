@@ -30,7 +30,8 @@ public class Doors {
 	public enum State { OPENED,
 						CLOSED,
 						MOVING,
-						UNKNOWN };
+						UNKNOWN,
+						ERROR };
 
 	private State states[];
 
@@ -215,6 +216,7 @@ public class Doors {
 		} else if (!garageStates[0] && garageStates[1]) {
 			newState = State.CLOSED;
 		} else {
+			newState = State.ERROR;
 			Log.e(TAG, "Something wrong with garage gate: " + garageStates[0] + "/" + garageStates[1]);
 			service.addLog("Anomalie porte de garage: " + garageStates[0] + "/" + garageStates[1], RDService.LogLevel.HIGH);
 		}

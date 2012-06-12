@@ -582,6 +582,8 @@ public class RDActivity extends Activity implements OnGestureListener {
 				portail.setImageResource(R.drawable.garage_opened);
 			} else if (state == Doors.State.MOVING) {
 				portail.setImageResource(R.drawable.garage_moving);
+			} else if (state == Doors.State.ERROR) {
+				portail.setImageResource(R.drawable.garage_error);
 			}
 		}
 	}

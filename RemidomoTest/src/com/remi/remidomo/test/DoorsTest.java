@@ -70,8 +70,8 @@ public class DoorsTest extends ServiceTestCase<RDService> {
 		
 		msg = new xPLMessage(String.format(XPL_PATTERN, CLOSED, "normal"));
 		service.getDoors().syncWithHardware(msg);
-		assertEquals(Doors.State.UNKNOWN, service.getDoors().getState(Doors.GARAGE));
-		assertEquals("[\"UNKNOWN\"]", service.getDoors().getJSONArray().toString());
+		assertEquals(Doors.State.ERROR, service.getDoors().getState(Doors.GARAGE));
+		assertEquals("[\"ERROR\"]", service.getDoors().getJSONArray().toString());
 	}
 	
 }
