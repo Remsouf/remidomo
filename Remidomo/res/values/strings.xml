@@ -6,12 +6,12 @@
     <string name="cmd_sent">Commande envoyée</string>
     <string name="sdcard">Sauver sur carte SD</string>
     <string name="settings">Paramètres</string>
+    <string name="interrogation">\?</string>
 
     <!-- Service -->
     <string name="service_started">Remidomo: service démarré</string>
     <string name="service_label">Service Remidomo</string>
     <string name="service_alert">Alerte Remidomo</string>
-    <string name="no_network">Pas de réseau !</string>
     <string name="sensors_empty">Aucune donnée capteurs</string>
     <string name="sensors_restore">Tenter une récupération depuis la carte SD ?</string>
     <string name="save_complete">Sauvegarde terminée</string>
@@ -72,7 +72,6 @@
     <string name="switches">Etats</string>
     <string name="degC">°C</string>
     <string name="switch1_text">Prise 1</string>
-    <string name="switch2_text">Inconnu</string>
     <string name="portail_text">Porte garage</string>
 
     <!-- Trains -->

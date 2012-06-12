@@ -4,9 +4,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.http.client.HttpClient;
@@ -14,8 +11,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
-
-import com.remi.remidomo.RDService.LogLevel;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

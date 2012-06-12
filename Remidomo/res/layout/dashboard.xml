@@ -139,7 +139,7 @@
             	android:textSize="36px"
             	android:includeFontPadding="false"
             	android:layout_centerHorizontal="true"
-            	android:text="\?" />
+            	android:text="@string/interrogation" />
 
         	<TextView
         	    android:id="@+id/pool_humi"
@@ -179,7 +179,7 @@
             	android:textSize="36px"
             	android:includeFontPadding="false"
             	android:layout_centerHorizontal="true"
-            	android:text="\?" />
+            	android:text="@string/interrogation" />
 
         	<TextView
         	    android:id="@+id/ext_humi"
@@ -187,7 +187,7 @@
             	android:layout_height="wrap_content"
             	android:textSize="20px"
             	android:layout_below="@id/ext_temp"
-            	android:text="\?"
+            	android:text="@string/interrogation"
             	android:textColor="#5555FF"
             	android:includeFontPadding="false"
             	android:layout_gravity="center"
@@ -220,7 +220,7 @@
             	android:textSize="36px"
             	android:includeFontPadding="false"
             	android:layout_centerHorizontal="true"
-            	android:text="\?" />
+            	android:text="@string/interrogation" />
 
         	<TextView
         	    android:id="@+id/veranda_humi"
@@ -228,7 +228,7 @@
             	android:layout_height="wrap_content"
             	android:textSize="20px"
             	android:layout_below="@id/veranda_temp"
-            	android:text="\?"
+            	android:text="@string/interrogation"
             	android:textColor="#5555FF"
             	android:includeFontPadding="false"
             	android:layout_gravity="center"
