@@ -13,4 +13,5 @@ public interface IUpdateListener {
 	void flashLeds();
 	void startRefreshAnim();
 	void stopRefreshAnim();
+	void postToast(String text);
 }

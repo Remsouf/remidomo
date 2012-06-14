@@ -27,7 +27,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
@@ -36,7 +35,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.widget.Toast;
 
 public class RDService extends Service {
 
@@ -326,17 +324,6 @@ public class RDService extends Service {
         // Send the notification.
         notificationMgr.notify(NOTIFICATION_ALERT++, notification);
     }
-
-	public void postToast(final String msg) {
-		Handler h = new Handler(getMainLooper());
-
-	    h.post(new Runnable() {
-	        public void run() {
-				Toast.makeText(RDService.this, msg, Toast.LENGTH_LONG).show();
-				Looper.loop();
-	        }
-	    });
-	}
 	
 	public void forceRefresh() {
 		switches.syncWithServer();
@@ -430,7 +417,9 @@ public class RDService extends Service {
     								String txt = "Batterie faible pour le capteur '" + device + "'";
     								addLog(txt, LogLevel.MEDIUM);
     								Log.d(TAG, "Low batt on " + device);
-    								postToast(txt);
+    								if (callback != null) {
+    									callback.postToast(txt);
+    								}
     							}
     						} else if ("temp".equals(msg.getNamedValue("type"))) {
     							sensors.updateData(RDService.this, msg);
@@ -721,8 +710,12 @@ public class RDService extends Service {
     	boolean result = switches.toggle(index);
     	if (callback != null) {
     		callback.updateSwitches();
+    		// Don't do this directly from the activity,
+    		// or it won't prove anything about the message
+    		// being sent.
+    		callback.postToast(getString(R.string.cmd_sent));
     	}
-		postToast(getString(R.string.cmd_sent));
+
     	return result;
     }
     

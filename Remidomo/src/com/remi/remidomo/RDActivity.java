@@ -741,5 +741,13 @@ public class RDActivity extends Activity implements OnGestureListener {
 				 }
 			 });
 		 }
+
+		 public void postToast(final String text) {
+			 runOnUiThread(new Runnable() {
+				 public void run() {
+					 Toast.makeText(RDActivity.this, text, Toast.LENGTH_LONG).show();
+				 }
+			 });
+		 }
 	};
 }

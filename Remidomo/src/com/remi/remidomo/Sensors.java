@@ -277,7 +277,9 @@ class Sensors {
         		for (SensorData sensor: sensors) {
         			sensor.writeFile(SensorData.DirType.SDCARD, SensorData.FileFormat.ASCII);
         		}
-        		Sensors.this.service.postToast(Sensors.this.service.getString(R.string.save_complete));
+        		if (service.callback != null) {
+        			service.callback.postToast(service.getString(R.string.save_complete));
+        		}
         	}
         }).start();
     }
@@ -288,7 +290,9 @@ class Sensors {
         		for (SensorData sensor: sensors) {
         			sensor.readFile(SensorData.DirType.SDCARD);
         		}
-        		Sensors.this.service.postToast(Sensors.this.service.getString(R.string.load_complete));
+        		if (service.callback != null) {
+        			service.callback.postToast(service.getString(R.string.load_complete));
+        		}
         	}
     	}).start();
     }
