@@ -144,7 +144,7 @@ public class RDService extends Service {
             	public synchronized void run() {
             		sensors.readFromSdcard();
             	};
-            }).start();
+            }, "sdcard read").start();
     	} else {
     		Log.i(TAG, "Start service");
     		addLog("Service (re)démarré");
@@ -160,7 +160,7 @@ public class RDService extends Service {
     		// Start threads
     		String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
     		if ("Serveur".equals(mode)) {
-    			rfxThread = new Thread(new RfxThread());
+    			rfxThread = new Thread(new RfxThread(), "rfx");
     			rfxThread.start();
 
     			serverThread = new ServerThread(this);
@@ -174,7 +174,7 @@ public class RDService extends Service {
 
     			pusher = new PushSender(this);
     		} else {
-    			clientTimer = new Timer();
+    			clientTimer = new Timer("Client");
     			int period = Integer.parseInt(prefs.getString("client_poll", Preferences.DEFAULT_CLIENT_POLL));
     			// 15s graceful period, to let the service read data from FS,
     			// before attempting updates from the server
@@ -184,12 +184,12 @@ public class RDService extends Service {
     		}
 
     		// Timer for train updates
-    		Timer timerTrains = new Timer();
+    		Timer timerTrains = new Timer("Trains");
     		int period = Integer.parseInt(prefs.getString("sncf_poll", Preferences.DEFAULT_SNCF_POLL));
     		timerTrains.scheduleAtFixedRate(new TrainsTask(), 1, period*60*1000);
 
     		// Timer for weather updates
-    		Timer timerMeteo = new Timer();
+    		Timer timerMeteo = new Timer("Meteo");
     		period = Integer.parseInt(prefs.getString("meteo_poll", Preferences.DEFAULT_METEO_POLL));
     		timerMeteo.scheduleAtFixedRate(new MeteoTask(), 1, period*60*60*1000);
     	}
@@ -649,7 +649,7 @@ public class RDService extends Service {
             			outStream.close();
             	}
             }
-        }).start();
+        }, "LED blink").start();
         
         if (callback != null) {
     		callback.blinkLeds();
@@ -697,7 +697,7 @@ public class RDService extends Service {
             			outStream.close();
             	}
             }
-        }).start();
+        }, "LED flash").start();
         
         if (callback != null) {
     		callback.flashLeds();

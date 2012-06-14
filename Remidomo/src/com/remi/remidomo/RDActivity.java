@@ -136,7 +136,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         }
 
         // Timer for updating "Il y a ..." texts
-        Timer timerIlya = new Timer();
+        Timer timerIlya = new Timer("Il y a");
         timerIlya.scheduleAtFixedRate(new IlyaTask(), 1, 60000);  // 1min
     }
     
