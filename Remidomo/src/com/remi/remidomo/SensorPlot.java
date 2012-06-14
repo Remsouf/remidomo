@@ -31,6 +31,7 @@ import com.androidplot.series.XYSeries;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.RectRegion;
+import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XValueMarker;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYRegionFormatter;
@@ -184,30 +185,16 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 
 	public void addSeries(SensorData series, int daysBack) {
 
-		SensorData filteredSeries = null;
+		SimpleXYSeries filteredSeries = null;
 
 		if (series != null) {
-
 			// Remove points before days limit
-			filteredSeries = new SensorData(series.getTitle(), null, false);
-			if (series.size() > 0) {
-				// If daysBack not provided, read from prefs
-				int effDaysBack = daysBack;
-				if (effDaysBack == 0) {
-					effDaysBack = Integer.parseInt(prefs.getString("plot_limit", Preferences.DEFAULT_PLOTLIMIT));
-				}
-				long limit = new Date().getTime() - effDaysBack * HOURS_24;
-
-				for (int i=0; i<series.size(); i++) {
-					long tstamp = series.getX(i).longValue();
-					if (tstamp < limit) {
-						continue;
-					} else {
-						float value = series.getY(i).floatValue();
-						filteredSeries.addLast(tstamp, value);
-					}
-				}
+			int effDaysBack = daysBack;
+			if (effDaysBack == 0) {
+				effDaysBack = Integer.parseInt(prefs.getString("plot_limit", Preferences.DEFAULT_PLOTLIMIT));
 			}
+			long limit = new Date().getTime() - effDaysBack * HOURS_24;
+			filteredSeries = series.filter(limit);
 
 			int dotsEffectiveColor = 0;
 			if (prefs.getBoolean("dots_highlight", Preferences.DEFAULT_DOTS_HIGHLIGHT)) {

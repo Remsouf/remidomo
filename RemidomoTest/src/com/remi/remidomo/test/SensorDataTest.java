@@ -23,114 +23,114 @@ public class SensorDataTest extends AndroidTestCase {
 	public void testAdd01() {
 		data = new SensorData("testAdd1", null, false);
 		assertEquals(0, data.size());
-		assertEquals("testAdd1", data.getTitle());
+		assertEquals("testAdd1", data.getName());
 	}
 
 	public void testAdd02() {
 		data.addValue(new Date(0), 1.0f);
-		assertEquals(0, data.getX(0).longValue());
-		assertEquals(1.0f, data.getY(0).floatValue());
+		assertEquals(0, data.getFirst().time);
+		assertEquals(1.0f, data.getFirst().value);
 	}
 	
 	public void testAdd03() {
 		data.addValue(new Date(SAMPLING_P_EPSILON), 1.2f);
-		assertEquals(0, data.getX(0).longValue());
-		assertEquals(1.0f, data.getY(0).floatValue());
-		assertEquals(SAMPLING_P_EPSILON, data.getX(1).longValue());
-		assertEquals(1.2f, data.getY(1).floatValue());
+		assertEquals(0, data.getFirst().time);
+		assertEquals(1.0f, data.getFirst().value);
+		assertEquals(SAMPLING_P_EPSILON, data.get(1).time);
+		assertEquals(1.2f, data.get(1).value);
 	}
 		
 	public void testAdd04() {
 		data.addValue(new Date(SAMPLING_P_EPSILON+5*MINS_1), 1.4f);
-		assertEquals(0, data.getX(0).longValue());
-		assertEquals(1.0f, data.getY(0).floatValue());
-		assertEquals(SAMPLING_P_EPSILON, data.getX(1).longValue());
-		assertEquals(1.2f, data.getY(1).floatValue());
-		assertEquals(SAMPLING_P_EPSILON+5*MINS_1, data.getX(2).longValue());
-		assertEquals(1.4f, data.getY(2).floatValue());
+		assertEquals(0, data.getFirst().time);
+		assertEquals(1.0f, data.getFirst().value);
+		assertEquals(SAMPLING_P_EPSILON, data.get(1).time);
+		assertEquals(1.2f, data.get(1).value);
+		assertEquals(SAMPLING_P_EPSILON+5*MINS_1, data.get(2).time);
+		assertEquals(1.4f, data.get(2).value);
 	}
 		
 	public void testAdd05() {
 		data.addValue(new Date(2*SAMPLING_P_EPSILON), 1.6f);
-		assertEquals(0, data.getX(0).longValue());
-		assertEquals(1.0f, data.getY(0).floatValue());
-		assertEquals(SAMPLING_P_EPSILON, data.getX(1).longValue());
-		assertEquals(1.2f, data.getY(1).floatValue());
-		assertEquals(2*SAMPLING_P_EPSILON, data.getX(2).longValue());
-		assertEquals(1.6f, data.getY(2).floatValue());
+		assertEquals(0, data.getFirst().time);
+		assertEquals(1.0f, data.getFirst().value);
+		assertEquals(SAMPLING_P_EPSILON, data.get(1).time);
+		assertEquals(1.2f, data.get(1).value);
+		assertEquals(2*SAMPLING_P_EPSILON, data.get(2).time);
+		assertEquals(1.6f, data.get(2).value);
 	}
 		
 	public void testAdd06() {
 		data.addValue(new Date(2*SAMPLING_P_EPSILON+MINS_1), 1.8f);
-		assertEquals(0, data.getX(0).longValue());
-		assertEquals(1.0f, data.getY(0).floatValue());
-		assertEquals(SAMPLING_P_EPSILON, data.getX(1).longValue());
-		assertEquals(1.2f, data.getY(1).floatValue());
-		assertEquals(2*SAMPLING_P_EPSILON, data.getX(2).longValue());
-		assertEquals(1.6f, data.getY(2).floatValue());		
-		assertEquals(2*SAMPLING_P_EPSILON+MINS_1, data.getX(3).longValue());
-		assertEquals(1.8f, data.getY(3).floatValue());
+		assertEquals(0, data.getFirst().time);
+		assertEquals(1.0f, data.getFirst().value);
+		assertEquals(SAMPLING_P_EPSILON, data.get(1).time);
+		assertEquals(1.2f, data.get(1).value);
+		assertEquals(2*SAMPLING_P_EPSILON, data.get(2).time);
+		assertEquals(1.6f, data.get(2).value);		
+		assertEquals(2*SAMPLING_P_EPSILON+MINS_1, data.get(3).time);
+		assertEquals(1.8f, data.get(3).value);
 	}
 	
 	public void testAdd07() {
 		data.addValue(new Date(2*SAMPLING_P_EPSILON+2*MINS_1), 1.81f);
-		assertEquals(0, data.getX(0).longValue());
-		assertEquals(1.0f, data.getY(0).floatValue());
-		assertEquals(SAMPLING_P_EPSILON, data.getX(1).longValue());
-		assertEquals(1.2f, data.getY(1).floatValue());
-		assertEquals(2*SAMPLING_P_EPSILON, data.getX(2).longValue());
-		assertEquals(1.6f, data.getY(2).floatValue());		
-		assertEquals(2*SAMPLING_P_EPSILON+2*MINS_1, data.getX(3).longValue());
-		assertEquals(1.81f, data.getY(3).floatValue());
+		assertEquals(0, data.getFirst().time);
+		assertEquals(1.0f, data.getFirst().value);
+		assertEquals(SAMPLING_P_EPSILON, data.get(1).time);
+		assertEquals(1.2f, data.get(1).value);
+		assertEquals(2*SAMPLING_P_EPSILON, data.get(2).time);
+		assertEquals(1.6f, data.get(2).value);		
+		assertEquals(2*SAMPLING_P_EPSILON+2*MINS_1, data.get(3).time);
+		assertEquals(1.81f, data.get(3).value);
 	}
 		
 	public void testAdd08() {
 		data.addValue(new Date(2*SAMPLING_P_EPSILON+3*MINS_1), 1.82f);
-		assertEquals(2*SAMPLING_P_EPSILON, data.getX(2).longValue());
-		assertEquals(1.6f, data.getY(2).floatValue());		
-		assertEquals(2*SAMPLING_P_EPSILON+3*MINS_1, data.getX(3).longValue());
-		assertEquals(1.82f, data.getY(3).floatValue());
+		assertEquals(2*SAMPLING_P_EPSILON, data.get(2).time);
+		assertEquals(1.6f, data.get(2).value);		
+		assertEquals(2*SAMPLING_P_EPSILON+3*MINS_1, data.get(3).time);
+		assertEquals(1.82f, data.get(3).value);
 	}
 	
 	public void testAdd09() {
 		data.addValue(new Date(3*SAMPLING_P_EPSILON), 1.8f);
-		assertEquals(2*SAMPLING_P_EPSILON, data.getX(2).longValue());
-		assertEquals(1.6f, data.getY(2).floatValue());		
-		assertEquals(3*SAMPLING_P_EPSILON, data.getX(3).longValue());
-		assertEquals(1.8f, data.getY(3).floatValue());
+		assertEquals(2*SAMPLING_P_EPSILON, data.get(2).time);
+		assertEquals(1.6f, data.get(2).value);		
+		assertEquals(3*SAMPLING_P_EPSILON, data.get(3).time);
+		assertEquals(1.8f, data.get(3).value);
 	}
 	
 	public void testAdd10() {
 		data.addValue(new Date(3*SAMPLING_P_EPSILON+MINS_1), 5.0f);
-		assertEquals(2*SAMPLING_P_EPSILON, data.getX(2).longValue());
-		assertEquals(1.6f, data.getY(2).floatValue());		
-		assertEquals(3*SAMPLING_P_EPSILON, data.getX(3).longValue());
-		assertEquals(1.8f, data.getY(3).floatValue());
-		assertEquals(3*SAMPLING_P_EPSILON+MINS_1, data.getX(4).longValue());
-		assertEquals(5.0f, data.getY(4).floatValue());
+		assertEquals(2*SAMPLING_P_EPSILON, data.get(2).time);
+		assertEquals(1.6f, data.get(2).value);		
+		assertEquals(3*SAMPLING_P_EPSILON, data.get(3).time);
+		assertEquals(1.8f, data.get(3).value);
+		assertEquals(3*SAMPLING_P_EPSILON+MINS_1, data.get(4).time);
+		assertEquals(5.0f, data.get(4).value);
 	}
 	
 	public void testAdd11() {
 		data.addValue(new Date(3*SAMPLING_P_EPSILON+2*MINS_1), 8.0f);
-		assertEquals(2*SAMPLING_P_EPSILON, data.getX(2).longValue());
-		assertEquals(1.6f, data.getY(2).floatValue());		
-		assertEquals(3*SAMPLING_P_EPSILON, data.getX(3).longValue());
-		assertEquals(1.8f, data.getY(3).floatValue());
-		assertEquals(3*SAMPLING_P_EPSILON+MINS_1, data.getX(4).longValue());
-		assertEquals(5.0f, data.getY(4).floatValue());
-		assertEquals(3*SAMPLING_P_EPSILON+2*MINS_1, data.getX(5).longValue());
-		assertEquals(8.0f, data.getY(5).floatValue());
+		assertEquals(2*SAMPLING_P_EPSILON, data.get(2).time);
+		assertEquals(1.6f, data.get(2).value);		
+		assertEquals(3*SAMPLING_P_EPSILON, data.get(3).time);
+		assertEquals(1.8f, data.get(3).value);
+		assertEquals(3*SAMPLING_P_EPSILON+MINS_1, data.get(4).time);
+		assertEquals(5.0f, data.get(4).value);
+		assertEquals(3*SAMPLING_P_EPSILON+2*MINS_1, data.get(5).time);
+		assertEquals(8.0f, data.get(5).value);
 	}
 	
 	public void testWriteJSON() {
 		data = new SensorData("testJSON", null, false);
 		data.addValue(new Date(0), 1.0f);
-		data.addValue(new Date(10000), 2.2f);
+		data.addValue(new Date(10000), 2.5f);
 		data.addValue(new Date(20000), 3.0f);
 		data.addValue(new Date(30000), 4.0f);
 		
 		String array = data.getJSONArray(0).toString();
-		assertEquals("[[0,1],[10000,2.2],[20000,3],[30000,4]]", array);
+		assertEquals("[[0,1],[10000,2.5],[20000,3],[30000,4]]", array);
 	}
 	
 	public void testWriteCSV() {

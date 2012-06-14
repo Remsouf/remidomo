@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.Writer;
 import java.lang.Math;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 import org.json.JSONArray;
@@ -20,7 +21,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class SensorData extends SimpleXYSeries {
+public class SensorData {
 
 	private final static String TAG = RDService.class.getSimpleName();
 
@@ -32,11 +33,25 @@ public class SensorData extends SimpleXYSeries {
 	
 	public Date lastUpdate = null;
 	
+	private String name = null;
+	
 	public enum DirType {INTERNAL, SDCARD};
 	public enum FileFormat {ASCII, BINARY};
 	
+	public class Pair {
+		public long time;
+		public float value;
+		
+		public Pair(long time, float value) {
+			this.time = time;
+			this.value = value;
+		}
+	}
+	
+	private LinkedList<Pair> data = new LinkedList<Pair> ();
+	
 	public SensorData(String name, RDService service, boolean initFromFile) {
-		super(name);
+		this.name = name;
 		this.service = service;
 		
 		if (initFromFile) {
@@ -50,11 +65,11 @@ public class SensorData extends SimpleXYSeries {
 		Scanner scanner = null;
 		try {
 			if (dir == DirType.INTERNAL) {
-				fis = service.openFileInput(getTitle()+".dat");
+				fis = service.openFileInput(name+".dat");
 			} else if (dir == DirType.SDCARD) {
 				String state = Environment.getExternalStorageState();
 				if (Environment.MEDIA_MOUNTED.equals(state)) {
-					File path = new File(Environment.getExternalStorageDirectory(), getTitle() + ".dat");
+					File path = new File(Environment.getExternalStorageDirectory(), name + ".dat");
 					fis = new FileInputStream(path);
 				} else {
 					Log.e(TAG, "Impossible to read from external storage");
@@ -72,11 +87,11 @@ public class SensorData extends SimpleXYSeries {
 					try {
 						long timestamp = dis.readLong();
 						float value = dis.readFloat();
-						addLast(timestamp, value);
+						data.addLast(new Pair(timestamp, value));
 					} catch (java.io.EOFException eof) {
 						break;
 					} catch (java.io.IOException e) {
-						Log.e(TAG, "Error reading " + getTitle() + ": " + e);
+						Log.e(TAG, "Error reading " + name + ": " + e);
 					}
 				}
 			} else if (FileFormat.ASCII.toString().equals(magic)) {
@@ -88,7 +103,7 @@ public class SensorData extends SimpleXYSeries {
 					}
 					long timestamp = Long.parseLong(scanner.next());
 					float value = Float.parseFloat(scanner.next());
-					addLast(timestamp, value);
+					data.addLast(new Pair(timestamp, value));
 
 					// Filter with sampling period
 					//addValue(new Date(timestamp), value);
@@ -98,19 +113,19 @@ public class SensorData extends SimpleXYSeries {
 			}
 		} catch (java.io.FileNotFoundException e) {
 			Log.e(TAG, "Sensor file not found. " + e);
-			service.addLog("Pas de données locales pour " + getTitle(), RDService.LogLevel.HIGH);
+			service.addLog("Pas de données locales pour " + name, RDService.LogLevel.HIGH);
 		} catch (java.lang.IllegalArgumentException e) {
-			Log.e(TAG, "Error parsing sensor file for sensor " + getTitle() + " (IllegalArgument)");
-			service.addLog("Erreur de lecture pour " + getTitle(), RDService.LogLevel.HIGH);
+			Log.e(TAG, "Error parsing sensor file for sensor " + name + " (IllegalArgument)");
+			service.addLog("Erreur de lecture pour " + name, RDService.LogLevel.HIGH);
 		} catch (java.util.InputMismatchException e) {
-			Log.e(TAG, "Error parsing sensor file for sensor " + getTitle() + " (InputMismatch)");
-			service.addLog("Erreur de lecture pour " + getTitle(), RDService.LogLevel.HIGH);
+			Log.e(TAG, "Error parsing sensor file for sensor " + name + " (InputMismatch)");
+			service.addLog("Erreur de lecture pour " + name, RDService.LogLevel.HIGH);
 		} catch (java.util.NoSuchElementException e) {
-			Log.e(TAG, "Error parsing sensor file for sensor " + getTitle() + " (NoSuchElement)");
-			service.addLog("Erreur de lecture pour " + getTitle(), RDService.LogLevel.HIGH);
+			Log.e(TAG, "Error parsing sensor file for sensor " + name + " (NoSuchElement)");
+			service.addLog("Erreur de lecture pour " + name, RDService.LogLevel.HIGH);
 		} catch (java.io.IOException e) {
-			Log.e(TAG, "Error reading file for sensor " + getTitle() + e);
-			service.addLog("Erreur de lecture pour " + getTitle(), RDService.LogLevel.HIGH);
+			Log.e(TAG, "Error reading file for sensor " + name + e);
+			service.addLog("Erreur de lecture pour " + name, RDService.LogLevel.HIGH);
 		} finally {
 			if (scanner != null) {
 				scanner.close();
@@ -122,8 +137,8 @@ public class SensorData extends SimpleXYSeries {
 			}
 		}
 	
-		if (this.size() > 0) {
-			lastUpdate = new Date(this.getX(this.size()-1).longValue());
+		if (data.size() > 0) {
+			lastUpdate = new Date(data.getLast().time);
 		}
 	}
 	
@@ -131,11 +146,11 @@ public class SensorData extends SimpleXYSeries {
 		FileOutputStream fos = null;
 		try {
 			if (dir == DirType.INTERNAL) {
-				fos = service.openFileOutput(getTitle()+".dat", Context.MODE_WORLD_READABLE);
+				fos = service.openFileOutput(name+".dat", Context.MODE_WORLD_READABLE);
 			} else if (dir == DirType.SDCARD) {
 				String state = Environment.getExternalStorageState();
 				if (Environment.MEDIA_MOUNTED.equals(state)) {
-					File path = new File(Environment.getExternalStorageDirectory(), getTitle() + ".dat");
+					File path = new File(Environment.getExternalStorageDirectory(), name + ".dat");
 					//path.mkdirs();
 					fos = new FileOutputStream(path);
 				} else {
@@ -150,17 +165,17 @@ public class SensorData extends SimpleXYSeries {
 					// Binary
 					DataOutputStream dos = new DataOutputStream(fos);
 					dos.writeBytes(FileFormat.BINARY+"\n");
-					for (int i=0; i<this.size(); i++) {
-						dos.writeLong(this.getX(i).longValue());
-						dos.writeFloat(this.getY(i).floatValue());
+					for (Pair pair:data) {
+						dos.writeLong(pair.time);
+						dos.writeFloat(pair.value);
 					}
 				} else if (format == FileFormat.ASCII) {
 					// ASCII
 					fos.write((FileFormat.ASCII+"\n").getBytes());
-					for (int i=0; i<this.size(); i++) {
-						fos.write(this.getX(i).toString().getBytes());
+					for (Pair pair:data) {
+						fos.write(String.valueOf(pair.time).getBytes());
 						fos.write(" ".getBytes());
-						fos.write(this.getY(i).toString().getBytes());
+						fos.write(String.valueOf(pair.value).getBytes());
 						fos.write("\n".getBytes());
 					}
 				} else {
@@ -168,8 +183,8 @@ public class SensorData extends SimpleXYSeries {
 				}
 			}
 		} catch (java.io.IOException e) {
-			Log.e(TAG, "Failed to write file for sensor " + this.getTitle() + ": " + e);
-			service.addLog("Impossible d'écrire le fichier de données pour " + this.getTitle(), RDService.LogLevel.HIGH);
+			Log.e(TAG, "Failed to write file for sensor " + this.name + ": " + e);
+			service.addLog("Impossible d'écrire le fichier de données pour " + this.name, RDService.LogLevel.HIGH);
 		} finally {
 			if (fos != null) {
 				try {
@@ -182,49 +197,47 @@ public class SensorData extends SimpleXYSeries {
 	public JSONArray getJSONArray(long lastTstamp) {
 		try {
 			JSONArray array = new JSONArray();
-			for (int i=0; i<this.size(); i++) {
-				if (this.getX(i).longValue() >= lastTstamp) {
+			for (Pair pair:data) {
+				if (pair.time >= lastTstamp) {
 					JSONArray couple = new JSONArray();
-					couple.put(0, this.getX(i));
-					couple.put(1, this.getY(i));
+					couple.put(0, pair.time);
+					couple.put(1, pair.value);
 					array.put(couple);
 				}
 			}
 			return array;
 		} catch (org.json.JSONException e) {
-			Log.e(TAG, "Failed creating JSON data for sensor " + this.getTitle());
+			Log.e(TAG, "Failed creating JSON data for sensor " + this.name);
 			return null;
 		}
 	}
 	
 	public void readJSON(JSONArray input) {
-		while (this.size() > 0) {
-			this.removeLast();
-		}
+		data.clear();
 		
 		try {
 			for (int i=0; i<input.length(); i++) {
 				JSONArray couple = input.getJSONArray(i);
 				long timestamp = couple.optLong(0);
 				float value = (float)couple.optDouble(1);
-				this.addLast(timestamp, value);
+				data.addLast(new Pair(timestamp, value));
 			}
 		} catch (org.json.JSONException e) {
 			Log.e(TAG, "Failed reading JSON data");
 		}
 		
-		if (this.size() > 0) {
-			lastUpdate = new Date(this.getX(this.size()-1).longValue());
+		if (data.size() > 0) {
+			lastUpdate = new Date(data.getLast().time);
 		}
 	}
 	
 	public void writeCSV(Writer writer) {
 		try {
-			writer.write(getTitle() + "<br/>");
-			for (int i=0; i<this.size(); i++) {
-				writer.write(new Date(getX(i).longValue()).toGMTString());
+			writer.write(name + "<br/>");
+			for (Pair pair:data) {
+				writer.write(new Date(pair.time).toGMTString());
 				writer.write(";");
-				writer.write(getY(i).toString());
+				writer.write(String.valueOf(pair.value));
 				writer.write("<br/>");
 			}
 			writer.write("<br/>");
@@ -233,48 +246,54 @@ public class SensorData extends SimpleXYSeries {
 		}
 	}
 	
-	public void addValue(Number value) {
-		addValue(new Date(), value);
-	}
-
 	public void addValuesChunk(SensorData newData) {
-		if (newData.size() == 0) {
+		if (newData.data.size() == 0) {
 			return;
 		}
 
-		if ((this.size() > 0) &&
-			(newData.getX(0).longValue() < this.getX(this.size() - 1).longValue())) {
+		if ((data.size() > 0) &&
+			(newData.data.getFirst().time < data.getLast().time)) {
 			return;
 		}
-		
-		for (int i=0; i<newData.size(); i++) {
-			// Values come from the server
-			// -> no need for filtering with sampling period
-			this.addLast(newData.getX(i), newData.getY(i));
-		}
-		lastUpdate = new Date(this.getX(this.size()-1).longValue());
+
+		// concatenate
+		data.addAll(newData.data);
+
+		lastUpdate = new Date(data.getLast().time);
 	}
 	
-	public void addValue(Date tstamp, Number value) {
+	public void addValue(float value) {
+		addValue(new Date(), value);
+	}
+	
+	public void addValue(Date tstamp, float value) {
+		addValue(tstamp, value, true);
+	}
+
+	public void addValue(Date tstamp, float value, boolean compress) {
 		long tstampLong = tstamp.getTime();
 		
-		// If not later than 10min, and below 0.5 delta,
-		// just replace last value
-		if (this.size() >= 2) {
-			long lastLong1 = getX(size()-1).longValue();
-			float lastVal1 = getY(size()-1).floatValue();
-			long lastLong2 = getX(size()-2).longValue();
-			float lastVal2 = getY(size()-2).floatValue();
-			if ((tstampLong-lastLong1 < SAMPLING_PERIOD) &&
-				(Math.abs(lastVal1 - value.floatValue()) < 0.5f) &&
-				(lastLong1-lastLong2 < SAMPLING_PERIOD) &&
-				(Math.abs(lastVal2 - lastVal1) < 0.5f)) {
-				this.removeLast();
+		if (compress) {
+			// If not later than 10min, and below 0.5 delta,
+			// just replace last value
+			if (data.size() >= 2) {
+				long lastLong1 = data.getLast().time;
+				float lastVal1 = data.getLast().value;
+				long lastLong2 = data.get(data.size()-2).time;
+				float lastVal2 = data.get(data.size()-2).value;
+				if ((tstampLong-lastLong1 < SAMPLING_PERIOD) &&
+						(Math.abs(lastVal1 - value) < 0.5f) &&
+						(lastLong1-lastLong2 < SAMPLING_PERIOD) &&
+						(Math.abs(lastVal2 - lastVal1) < 0.5f)) {
+					data.removeLast();
+				}
+
+				data.addLast(new Pair(tstampLong, value));
+			} else {
+				data.addLast(new Pair(tstampLong, value));
 			}
-				
-			this.addLast(tstampLong, value);
 		} else {
-			this.addLast(tstampLong, value);
+			data.addLast(new Pair(tstampLong, value));
 		}
 		lastUpdate = tstamp;
 
@@ -282,9 +301,48 @@ public class SensorData extends SimpleXYSeries {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.service);
 			int maxHistory = Integer.parseInt(prefs.getString("loglimit", Preferences.DEFAULT_LOGLIMIT));
 			long tstampLimit = tstampLong - maxHistory*HOURS_24;
-			while ((size() > 0) && (getX(0).longValue() < tstampLimit)) {
-				this.removeFirst();
+			while ((data.size() > 0) && (data.getFirst().time < tstampLimit)) {
+				data.removeFirst();
 			}
 		}
+	}
+	
+	public SimpleXYSeries filter(long limit) {
+		SimpleXYSeries series = new SimpleXYSeries(name);
+		
+		// Ignore points before days limit
+		for (Pair pair:data) {
+			if (pair.time < limit) {
+				continue;
+			} else {
+				series.addLast(pair.time, pair.value);
+			}
+		}
+		return series;
+	}
+	
+	/* Wrappers to this.data */
+	public Pair getLast() {
+		return data.getLast();
+	}
+	
+	public Pair getFirst() {
+		return data.getFirst();
+	}
+	
+	public int size() {
+		return data.size();
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public Pair get(int i) {
+		return data.get(i);
+	}
+	
+	public void set(int i, Pair pair) {
+		data.set(i, pair);
 	}
 }

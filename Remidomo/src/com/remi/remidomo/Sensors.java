@@ -121,7 +121,7 @@ class Sensors {
 	
     public SensorData getData(String name) {
     	for (SensorData i: sensors) {
-    		if (i.getTitle().equals(name)) {
+    		if (i.getName().equals(name)) {
     			return i;
     		}
     	}
@@ -129,9 +129,9 @@ class Sensors {
     }
     
     public void updateDataChunk(String name, SensorData newData) {
-		for (int i=0; i<sensors.size(); i++) {
-			if (sensors.get(i).getTitle().equals(name)) {
-				sensors.get(i).addValuesChunk(newData);
+    	for (SensorData sensor:sensors) {
+			if (sensor.getName().equals(name)) {
+				sensor.addValuesChunk(newData);
 				return;
 			}
 		}
@@ -161,7 +161,7 @@ class Sensors {
 
     	SensorData data = null;
     	for (SensorData i: sensors) {
-    		if (i.getTitle().equals(device)) {
+    		if (i.getName().equals(device)) {
     			data = i;
     		}
     	}
@@ -187,7 +187,7 @@ class Sensors {
     		for (SensorData sensor: sensors) {
     			JSONArray array = sensor.getJSONArray(lastTstamp);
     			if (array != null) {
-    				object.put(sensor.getTitle(), array);
+    				object.put(sensor.getName(), array);
     			}
     		}
     		writer.write(object.toString());

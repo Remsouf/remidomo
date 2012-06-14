@@ -30,8 +30,6 @@ import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 import org.json.JSONArray;
 
-import com.androidplot.series.XYSeries;
-
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -223,11 +221,11 @@ public class ServerThread implements Runnable {
 			            
 			            // Pool
 			            String poolTemp = "?";
-			            XYSeries series = service.getSensors().getData(Sensors.ID_POOL_T);
+			            SensorData series = service.getSensors().getData(Sensors.ID_POOL_T);
 			            if ((series != null) && (series.size() > 0)) {
 			            	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
 			                decimalFormat.applyPattern("#0.0#");
-			                float lastValue = series.getY(series.size()-1).floatValue();
+			                float lastValue = series.getLast().value;
 			            	poolTemp = decimalFormat.format(lastValue);
 			            }
 
@@ -237,7 +235,7 @@ public class ServerThread implements Runnable {
 			            if ((series != null) && (series.size() > 0)) {
 			            	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
 			                decimalFormat.applyPattern("#0.0#");
-			                float lastValue = series.getY(series.size()-1).floatValue();
+			                float lastValue = series.getLast().value;
 			                extTemp = decimalFormat.format(lastValue);
 			            }
 			            String extHumidity = "?";
@@ -245,7 +243,7 @@ public class ServerThread implements Runnable {
 			            if ((series != null) && (series.size() > 0)) {
 			            	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
 			                decimalFormat.applyPattern("##");
-			                float lastValue = series.getY(series.size()-1).floatValue();
+			                float lastValue = series.getLast().value;
 			                extHumidity = decimalFormat.format(lastValue);
 			            }
 
@@ -255,7 +253,7 @@ public class ServerThread implements Runnable {
 			            if ((series != null) && (series.size() > 0)) {
 			            	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
 			                decimalFormat.applyPattern("#0.0#");
-			                float lastValue = series.getY(series.size()-1).floatValue();
+			                float lastValue = series.getLast().value;
 			                verandaTemp = decimalFormat.format(lastValue);
 			            }
 			            String verandaHumidity = "?";
@@ -263,7 +261,7 @@ public class ServerThread implements Runnable {
 			            if ((series != null) && (series.size() > 0)) {
 			            	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
 			                decimalFormat.applyPattern("##");
-			                float lastValue = series.getY(series.size()-1).floatValue();
+			                float lastValue = series.getLast().value;
 			                verandaHumidity = decimalFormat.format(lastValue);
 			            }
 

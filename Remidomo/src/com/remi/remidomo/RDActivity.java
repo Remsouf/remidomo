@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.androidplot.series.XYSeries;
-
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -406,7 +404,6 @@ public class RDActivity extends Activity implements OnGestureListener {
 			series = service.getSensors().getData(Sensors.ID_POOL_T);
 		}
 
-		// TODO: thread this ! (ANRs)
 		SensorPlot plot = (SensorPlot) findViewById(R.id.poolTempPlot);
 		plot.clear();
 		plot.removeMarkers();
@@ -448,7 +445,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 	
 	private void updateDashboardThermo() {
 		// Pool
-		XYSeries series = null;
+		SensorData series = null;
 		if (service != null) {
 			series = service.getSensors().getData(Sensors.ID_POOL_T);
 		}
@@ -456,7 +453,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         if ((series != null) && (series.size() > 0)) {
         	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
             decimalFormat.applyPattern("#0.0#");
-            float lastValue = series.getY(series.size()-1).floatValue();
+            float lastValue = series.getLast().value;
             textView.setText(decimalFormat.format(lastValue)+getString(R.string.degC));
         } else {
         	textView.setText("?");
@@ -471,7 +468,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         if ((series != null) && (series.size() > 0)) {
         	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
             decimalFormat.applyPattern("#0.0#");
-            float lastValue = series.getY(series.size()-1).floatValue();
+            float lastValue = series.getLast().value;
             textView.setText(decimalFormat.format(lastValue)+getString(R.string.degC));
         } else {
         	textView.setText("?");
@@ -483,7 +480,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         if ((series != null) && (series.size() > 0)) {
         	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
             decimalFormat.applyPattern("##");
-            float lastValue = series.getY(series.size()-1).floatValue();
+            float lastValue = series.getLast().value;
             textView.setText(decimalFormat.format(lastValue)+"%");
         } else {
         	textView.setText("?");
@@ -498,7 +495,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         if ((series != null) && (series.size() > 0)) {
         	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
             decimalFormat.applyPattern("#0.0#");
-            float lastValue = series.getY(series.size()-1).floatValue();
+            float lastValue = series.getLast().value;
             textView.setText(decimalFormat.format(lastValue)+getString(R.string.degC));
         } else {
         	textView.setText("?");
@@ -510,7 +507,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         if ((series != null) && (series.size() > 0)) {
         	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
             decimalFormat.applyPattern("##");
-            float lastValue = series.getY(series.size()-1).floatValue();
+            float lastValue = series.getLast().value;
             textView.setText(decimalFormat.format(lastValue)+"%");
         } else {
         	textView.setText("?");

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.androidplot.series.XYSeries;
 import com.remi.remidomo.SensorData;
+import com.remi.remidomo.SensorData.Pair;
 import com.remi.remidomo.SensorPlot;
 
 import android.test.AndroidTestCase;
@@ -20,7 +21,7 @@ public class SensorPlotTest extends AndroidTestCase {
 		float value = 0.0f;
 		
 		for (int i=0; i<number; i++) {
-			series.addLast(tstamp, value);
+			series.addValue(new Date(tstamp), value, false);
 			tstamp = tstamp + SAMPLE_PERIOD;
 			value = value + 0.1f;
 		}
@@ -62,7 +63,10 @@ public class SensorPlotTest extends AndroidTestCase {
 		addValues(data, 7200); // 5 days
 		// Shift test data 10 days back
 		for (int i=0; i<7200; i++) {
-			data.setX(data.getX(i).longValue()-10*24*60*60*1000, i);
+			Pair pair = data.new Pair(
+					data.get(i).time-10*24*60*60*1000,
+					data.get(i).value);
+			data.set(i, pair);
 		}
 		
 		plot.addSeries(data, 5);
