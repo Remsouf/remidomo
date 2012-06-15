@@ -30,7 +30,7 @@ class Sensors {
 	// Hard-coded values
 	public final static String ID_EXT_T = "th2_0x9b05-temp";
 	public final static String ID_EXT_H = "th2_0x9b05-humidity";
-	public final static String ID_POOL_T = "temp3_0x1202-temp";
+	public final static String ID_POOL_T = "temp3_0xf102-temp";
 	public final static String ID_VERANDA_T = "th1_0xe902-temp";
 	public final static String ID_VERANDA_H = "th1_0xe902-humidity";
 
