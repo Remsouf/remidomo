@@ -54,6 +54,13 @@
         
     	</LinearLayout>
         
+    	<ProgressBar
+			android:id="@+id/log_progress"
+			android:layout_centerInParent="true"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="gone" />
+
     	<ImageButton
             android:id="@+id/rlog_button"
             android:layout_width="wrap_content"

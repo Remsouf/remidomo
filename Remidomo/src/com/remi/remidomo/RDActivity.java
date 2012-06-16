@@ -34,10 +34,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -292,7 +294,12 @@ public class RDActivity extends Activity implements OnGestureListener {
         		clientLogButton.setVisibility(View.VISIBLE);
         		clearLogButton.setVisibility(View.GONE);
 
+        		final ProgressBar progress = (ProgressBar) findViewById(R.id.log_progress);
+        		progress.setVisibility(View.VISIBLE);
+
         		WebView remoteContent = (WebView) findViewById(R.id.rlogtext);
+
+        		// WebViewClient for errors
         		remoteContent.setWebViewClient(new WebViewClient() {
 
         			@Override
@@ -303,6 +310,21 @@ public class RDActivity extends Activity implements OnGestureListener {
         					Log.d(TAG, service.getString(R.string.rlog_failed) + description);
         				}
         			}
+
+        			@Override
+        			public void onPageFinished(WebView view, String url) {
+        				progress.setVisibility(View.GONE);
+        			}
+        		});
+
+        		// WebChromeClient for progress
+        		remoteContent.setWebChromeClient(new WebChromeClient() {
+
+        			@Override
+        			public void onProgressChanged(WebView view, int progr) {
+        				progress.setProgress(progr);
+        			}
+
         		});
 
         		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(RDActivity.this);
