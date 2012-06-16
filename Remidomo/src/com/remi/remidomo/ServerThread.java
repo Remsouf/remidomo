@@ -370,9 +370,9 @@ public class ServerThread implements Runnable {
 			HttpEntity entity = new EntityTemplate(new ContentProducer() {
 				public void writeTo(final OutputStream outstream) throws java.io.IOException {
 					OutputStreamWriter writer = new OutputStreamWriter(outstream, "ISO8859_1");
-					writer.write("<html><body bgcolor=\"black\">\n<p><font color=\"white\">Log:</font></p>\n<pre>\n");
+					writer.write("<html><body bgcolor=\"black\">\n<font size=\"1\">");
 					writer.write(Html.toHtml(service.getLogMessages()));
-					writer.write("\n</pre>\n</body></html>");
+					writer.write("\n</font>\n</body></html>");
 					writer.flush();
 				}
 			});

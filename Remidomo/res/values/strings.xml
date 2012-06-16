@@ -7,6 +7,9 @@
     <string name="sdcard">Sauver sur carte SD</string>
     <string name="settings">Paramètres</string>
     <string name="interrogation">\?</string>
+    <string name="clear_log_title">Effacer journal</string>
+    <string name="clear_log_msg">Vraiment effacer le journal ?</string>
+    <string name="rlog_failed">Impossible d\'obtenir le journal du serveur</string>
 
     <!-- Service -->
     <string name="service_started">Remidomo: service démarré</string>

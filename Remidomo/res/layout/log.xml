@@ -13,18 +13,78 @@
         android:textSize="34px"
         android:gravity="center" />
     
-    <ScrollView
-        android:id="@+id/logscroller"
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
         
-        <TextView
-            android:id="@+id/logtext"
-    		android:text=""
+    	<!--  Group 2 scrollviews together -->
+    	<LinearLayout
+        	android:id="@+id/loglayout"
         	android:layout_width="fill_parent"
-        	android:layout_height="wrap_content"
-        	android:textSize="16px" />
+        	android:layout_height="fill_parent"
+        	android:orientation="horizontal">
         
-    </ScrollView>
+    		<ScrollView
+        		android:id="@+id/logscroller"
+        		android:layout_width="fill_parent"
+        		android:layout_height="fill_parent" >
+        
+        		<TextView
+            		android:id="@+id/logtext"
+    				android:text=""
+        			android:layout_width="fill_parent"
+        			android:layout_height="wrap_content"
+        			android:textSize="16px" />
+                
+    		</ScrollView>
     
+    		<ScrollView
+        		android:id="@+id/rlogscroller"
+        		android:layout_width="fill_parent"
+        		android:layout_height="fill_parent"
+        		android:visibility="gone" >
+
+        		<WebView
+            		android:id="@+id/rlogtext"
+            		android:background="@android:color/black"
+        			android:layout_width="wrap_content"
+        			android:layout_height="wrap_content" />
+
+    		</ScrollView>
+        
+    	</LinearLayout>
+        
+    	<ImageButton
+            android:id="@+id/rlog_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_alignRight="@id/loglayout"
+            android:layout_alignTop="@id/loglayout"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/server" />
+
+    	<ImageButton
+            android:id="@+id/log_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_alignRight="@id/loglayout"
+            android:layout_alignTop="@id/loglayout"
+            android:layout_below="@id/rlog_button"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/client"
+            android:visibility="gone" />
+
+    	<ImageButton
+            android:id="@+id/trash_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_alignRight="@id/loglayout"
+            android:layout_below="@id/rlog_button"
+            android:src="@drawable/trash" />
+
+    </RelativeLayout>
+
 </LinearLayout>

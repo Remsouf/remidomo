@@ -8,8 +8,10 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -32,6 +34,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -252,6 +256,77 @@ public class RDActivity extends Activity implements OnGestureListener {
         		service.toggleSwitch(0);
         	}
         });
+        
+        // Hooks for log buttons
+        final ImageButton clearLogButton = (ImageButton) findViewById(R.id.trash_button);
+        clearLogButton.setOnClickListener(new RelativeLayout.OnClickListener() {
+        	public void onClick(View v) {
+        		new AlertDialog.Builder(RDActivity.this)
+                .setIcon(android.R.drawable.ic_delete)
+                .setTitle(R.string.clear_log_title)
+                .setMessage(R.string.clear_log_msg)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    	if (service != null) {
+                    		service.clearLog();
+                    	}
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+        	}
+        });  
+        
+        final ImageButton serverLogButton = (ImageButton) findViewById(R.id.rlog_button);
+        final ImageButton clientLogButton = (ImageButton) findViewById(R.id.log_button);
+        serverLogButton.setOnClickListener(new RelativeLayout.OnClickListener() {
+        	public void onClick(View v) {
+        		ScrollView localLog = (ScrollView) findViewById(R.id.logscroller);
+        		localLog.setVisibility(View.GONE);
+
+        		ScrollView remoteLog = (ScrollView) findViewById(R.id.rlogscroller);
+				remoteLog.setVisibility(View.VISIBLE);
+
+        		serverLogButton.setVisibility(View.GONE);
+        		clientLogButton.setVisibility(View.VISIBLE);
+        		clearLogButton.setVisibility(View.GONE);
+
+        		WebView remoteContent = (WebView) findViewById(R.id.rlogtext);
+        		remoteContent.setWebViewClient(new WebViewClient() {
+
+        			@Override
+        			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+        				Toast.makeText(RDActivity.this, R.string.rlog_failed, Toast.LENGTH_SHORT).show();
+        				if (service != null) {
+        					service.addLog(service.getString(R.string.rlog_failed) + description);
+        					Log.d(TAG, service.getString(R.string.rlog_failed) + description);
+        				}
+        			}
+        		});
+
+        		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(RDActivity.this);
+        		int port = Integer.parseInt(prefs.getString("port", Preferences.DEFAULT_PORT));
+        		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
+
+        		remoteContent.clearView();
+        		remoteContent.loadUrl("http://" + ipAddr + ":" + port + "/log");
+        	}
+        });
+
+        clientLogButton.setOnClickListener(new RelativeLayout.OnClickListener() {
+        	public void onClick(View v) {
+        		ScrollView localLog = (ScrollView) findViewById(R.id.logscroller);
+        		localLog.setVisibility(View.VISIBLE);
+
+        		ScrollView remoteLog = (ScrollView) findViewById(R.id.rlogscroller);
+        		remoteLog.setVisibility(View.GONE);
+
+        		serverLogButton.setVisibility(View.VISIBLE);
+        		clientLogButton.setVisibility(View.GONE);
+        		clearLogButton.setVisibility(View.VISIBLE);
+        	}
+        });
     }
     
     @Override
@@ -261,9 +336,14 @@ public class RDActivity extends Activity implements OnGestureListener {
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     	ImageButton refresh = (ImageButton) findViewById(R.id.refreshButton);
+        ImageButton serverLogButton = (ImageButton) findViewById(R.id.rlog_button);
+        ImageButton clientLogButton = (ImageButton) findViewById(R.id.log_button);
+
     	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
         if ("Serveur".equals(mode)) {
         	refresh.setVisibility(View.GONE);
+        	serverLogButton.setVisibility(View.GONE);
+        	clientLogButton.setVisibility(View.GONE);
         } else {
         	refresh.setVisibility(View.VISIBLE);
         }

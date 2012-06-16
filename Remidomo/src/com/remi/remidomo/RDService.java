@@ -526,6 +526,9 @@ public class RDService extends Service {
     
     public synchronized void clearLog() {
     	log.clear();
+    	if (callback != null) {
+    		callback.updateLog();
+    	}
     }
 
     public synchronized SpannableStringBuilder getLogMessages() {
