@@ -33,12 +33,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -263,23 +265,10 @@ public class RDActivity extends Activity implements OnGestureListener {
         final ImageButton clearLogButton = (ImageButton) findViewById(R.id.trash_button);
         clearLogButton.setOnClickListener(new RelativeLayout.OnClickListener() {
         	public void onClick(View v) {
-        		new AlertDialog.Builder(RDActivity.this)
-                .setIcon(android.R.drawable.ic_delete)
-                .setTitle(R.string.clear_log_title)
-                .setMessage(R.string.clear_log_msg)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    	if (service != null) {
-                    		service.clearLog();
-                    	}
-                    }
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .show();
+        		clearLog();
         	}
-        });  
-        
+        });
+
         final ImageButton serverLogButton = (ImageButton) findViewById(R.id.rlog_button);
         final ImageButton clientLogButton = (ImageButton) findViewById(R.id.log_button);
         serverLogButton.setOnClickListener(new RelativeLayout.OnClickListener() {
@@ -294,45 +283,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         		clientLogButton.setVisibility(View.VISIBLE);
         		clearLogButton.setVisibility(View.GONE);
 
-        		final ProgressBar progress = (ProgressBar) findViewById(R.id.log_progress);
-        		progress.setVisibility(View.VISIBLE);
-
-        		WebView remoteContent = (WebView) findViewById(R.id.rlogtext);
-
-        		// WebViewClient for errors
-        		remoteContent.setWebViewClient(new WebViewClient() {
-
-        			@Override
-        			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-        				Toast.makeText(RDActivity.this, R.string.rlog_failed, Toast.LENGTH_SHORT).show();
-        				if (service != null) {
-        					service.addLog(service.getString(R.string.rlog_failed) + description);
-        					Log.d(TAG, service.getString(R.string.rlog_failed) + description);
-        				}
-        			}
-
-        			@Override
-        			public void onPageFinished(WebView view, String url) {
-        				progress.setVisibility(View.GONE);
-        			}
-        		});
-
-        		// WebChromeClient for progress
-        		remoteContent.setWebChromeClient(new WebChromeClient() {
-
-        			@Override
-        			public void onProgressChanged(WebView view, int progr) {
-        				progress.setProgress(progr);
-        			}
-
-        		});
-
-        		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(RDActivity.this);
-        		int port = Integer.parseInt(prefs.getString("port", Preferences.DEFAULT_PORT));
-        		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
-
-        		remoteContent.clearView();
-        		remoteContent.loadUrl("http://" + ipAddr + ":" + port + "/log");
+        		showRemoteLog();
         	}
         });
 
@@ -442,6 +393,86 @@ public class RDActivity extends Activity implements OnGestureListener {
 		toast.show();
 	}
 	
+	private void clearLog() {
+		new AlertDialog.Builder(RDActivity.this)
+        .setIcon(android.R.drawable.ic_delete)
+        .setTitle(R.string.clear_log_title)
+        .setMessage(R.string.clear_log_msg)
+        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	Animation anim = AnimationUtils.loadAnimation(RDActivity.this, R.anim.rotozoomout);
+            	TextView log = (TextView) findViewById(R.id.logtext);
+            	WebView rlog = (WebView) findViewById(R.id.rlogtext);
+            	if (log.getVisibility() == View.VISIBLE) {
+            		log.startAnimation(anim);
+            	} else if (rlog.getVisibility() == View.VISIBLE) {
+            		rlog.startAnimation(anim);
+            	}
+            	// Clear log at the end of animation
+            	anim.setAnimationListener(new AnimationListener() {
+            		@Override
+            		public void onAnimationStart(Animation animation) {}
+
+            		@Override
+            		public void onAnimationRepeat(Animation animation) {}
+
+            		@Override
+            		public void onAnimationEnd(Animation animation) {
+            			if (service != null) {
+            				service.clearLog();
+            			}
+            		}
+            	});
+
+            }
+        })
+        .setNegativeButton(android.R.string.no, null)
+        .show();
+	}
+
+	private void showRemoteLog() {
+		final ProgressBar progress = (ProgressBar) findViewById(R.id.log_progress);
+		progress.setVisibility(View.VISIBLE);
+
+		WebView remoteContent = (WebView) findViewById(R.id.rlogtext);
+
+		// WebViewClient for errors
+		remoteContent.setWebViewClient(new WebViewClient() {
+
+			@Override
+			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+				Toast.makeText(RDActivity.this, R.string.rlog_failed, Toast.LENGTH_SHORT).show();
+				if (service != null) {
+					service.addLog(service.getString(R.string.rlog_failed) + description);
+					Log.d(TAG, service.getString(R.string.rlog_failed) + description);
+				}
+			}
+
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				progress.setVisibility(View.GONE);
+			}
+		});
+
+		// WebChromeClient for progress
+		remoteContent.setWebChromeClient(new WebChromeClient() {
+
+			@Override
+			public void onProgressChanged(WebView view, int progr) {
+				progress.setProgress(progr);
+			}
+
+		});
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(RDActivity.this);
+		int port = Integer.parseInt(prefs.getString("port", Preferences.DEFAULT_PORT));
+		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
+
+		remoteContent.clearView();
+		remoteContent.loadUrl("http://" + ipAddr + ":" + port + "/log");
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -546,6 +577,11 @@ public class RDActivity extends Activity implements OnGestureListener {
 	}
 	
 	private void updateDashboardThermo() {
+
+		final Animation anim = AnimationUtils.loadAnimation(this, R.anim.zoomin);
+		final LinearLayout layout = (LinearLayout) findViewById(R.id.temps_layout);
+		layout.startAnimation(anim);
+
 		// Pool
 		SensorData series = null;
 		if (service != null) {
