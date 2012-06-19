@@ -38,7 +38,7 @@ public class SensorData {
 	public enum DirType {INTERNAL, SDCARD};
 	public enum FileFormat {ASCII, BINARY};
 	
-	public class Pair {
+	public static class Pair {
 		public long time;
 		public float value;
 		
@@ -59,7 +59,7 @@ public class SensorData {
 		}
 	}
 
-	public void readFile(DirType dir) {
+	public synchronized void readFile(DirType dir) {
 		// Read file
 		FileInputStream fis = null;
 		Scanner scanner = null;
@@ -144,6 +144,7 @@ public class SensorData {
 	
 	public void writeFile(DirType dir, FileFormat format) {
 		FileOutputStream fos = null;
+		DataOutputStream dos = null;
 		try {
 			if (dir == DirType.INTERNAL) {
 				fos = service.openFileOutput(name+".dat", Context.MODE_WORLD_READABLE);
@@ -163,7 +164,7 @@ public class SensorData {
 			if (fos != null) {
 				if (format == FileFormat.BINARY) {
 					// Binary
-					DataOutputStream dos = new DataOutputStream(fos);
+					dos = new DataOutputStream(fos);
 					dos.writeBytes(FileFormat.BINARY+"\n");
 					for (Pair pair:data) {
 						dos.writeLong(pair.time);
@@ -191,6 +192,11 @@ public class SensorData {
 					fos.close();
 				} catch (java.io.IOException ignored) {}
 			}
+			if (dos != null) {
+				try {
+					dos.close();
+				} catch (java.io.IOException ignored) {}
+			}
 		}
 	}
 
@@ -212,7 +218,7 @@ public class SensorData {
 		}
 	}
 	
-	public void readJSON(JSONArray input) {
+	public synchronized void readJSON(JSONArray input) {
 		data.clear();
 		
 		try {
@@ -246,7 +252,7 @@ public class SensorData {
 		}
 	}
 	
-	public void addValuesChunk(SensorData newData) {
+	public synchronized void addValuesChunk(SensorData newData) {
 		if (newData.data.size() == 0) {
 			return;
 		}
@@ -270,7 +276,7 @@ public class SensorData {
 		addValue(tstamp, value, true);
 	}
 
-	public void addValue(Date tstamp, float value, boolean compress) {
+	public synchronized void addValue(Date tstamp, float value, boolean compress) {
 		long tstampLong = tstamp.getTime();
 		
 		if (compress) {
@@ -307,7 +313,7 @@ public class SensorData {
 		}
 	}
 	
-	public SimpleXYSeries filter(long limit) {
+	public synchronized SimpleXYSeries filter(long limit) {
 		SimpleXYSeries series = new SimpleXYSeries(name);
 		
 		// Ignore points before days limit
@@ -338,11 +344,11 @@ public class SensorData {
 		return name;
 	}
 	
-	public Pair get(int i) {
+	public synchronized Pair get(int i) {
 		return data.get(i);
 	}
 	
-	public void set(int i, Pair pair) {
+	public synchronized void set(int i, Pair pair) {
 		data.set(i, pair);
 	}
 }

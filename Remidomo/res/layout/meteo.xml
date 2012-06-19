@@ -16,8 +16,8 @@
     	    	
         	<ImageView
             		android:id="@+id/meteo_pic1"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
+            		android:layout_width="64dp"
+            		android:layout_height="64dp"
             		android:paddingRight="10px"
             		android:paddingLeft="10px"
             		android:src="@drawable/meteo_unknown" />
@@ -82,8 +82,8 @@
        		
         	<ImageView
             		android:id="@+id/meteo_pic2"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
+            		android:layout_width="64dp"
+            		android:layout_height="64dp"
             		android:paddingRight="10px"
             		android:paddingLeft="10px"
             		android:src="@drawable/meteo_unknown" />
@@ -148,8 +148,8 @@
        		
         	<ImageView
             		android:id="@+id/meteo_pic3"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
+            		android:layout_width="64dp"
+            		android:layout_height="64dp"
             		android:paddingRight="10px"
             		android:paddingLeft="10px"
             		android:src="@drawable/meteo_unknown" />
@@ -214,8 +214,8 @@
        		
         	<ImageView
             		android:id="@+id/meteo_pic4"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
+            		android:layout_width="64dp"
+            		android:layout_height="64dp"
             		android:paddingRight="10px"
             		android:paddingLeft="10px"
             		android:src="@drawable/meteo_unknown" />
@@ -280,8 +280,8 @@
        		
         	<ImageView
             		android:id="@+id/meteo_pic5"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
+            		android:layout_width="64dp"
+            		android:layout_height="64dp"
             		android:paddingRight="10px"
             		android:paddingLeft="10px"
             		android:src="@drawable/meteo_unknown" />
@@ -310,7 +310,7 @@
     	    	android:textStyle="italic"
     	    	android:paddingRight="10px"
     	    	android:text="" />
-    	
+
     		<TextView
     	    	android:id="@+id/meteo_min5"
     	    	android:layout_width="wrap_content"

@@ -121,6 +121,8 @@ public class PushSender {
 
 		authenticationToken = null;
 
+		BufferedReader reader = null;
+
 		try {
 			// Setup the Http Post
 			byte[] data = builder.toString().getBytes();
@@ -138,7 +140,7 @@ public class PushSender {
 			output.close();
 
 			// Read the response
-			BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				if (line.startsWith("Auth=")) {
@@ -154,6 +156,12 @@ public class PushSender {
 			Log.e(TAG, "Malformed URL: " + e);
 		} catch (java.io.IOException e) {
 			Log.e(TAG, "IO: " + e);
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (java.io.IOException ignored) {}
+			}
 		}
 		
 		if (authenticationToken == null) {

@@ -17,7 +17,7 @@ public class xPLMessage {
 	private String msgTarget = null;
 	private ArrayList<NamedValue> namedValues = new ArrayList<NamedValue>();
 
-	public class NamedValue {
+	public static class NamedValue {
 		private String theName;
 		private String theValue;
 		
@@ -36,7 +36,7 @@ public class xPLMessage {
 		}
 	}
 
-	public class xPLParseException extends Exception {
+	public static class xPLParseException extends Exception {
 		static final long serialVersionUID=0;
 
 		public xPLParseException() {

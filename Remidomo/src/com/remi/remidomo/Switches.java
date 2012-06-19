@@ -121,7 +121,9 @@ class Switches {
 	private void sendRfxMessage(final int index, final boolean state) {	
 		if ((service == null) || (service.getRfxSocket() == null)) {
 			Log.e(TAG, "RFX socket not opened. Impossible to send");
-			service.addLog("Socket RFX pas ouvert: impossible d'envoyer des commandes", RDService.LogLevel.HIGH);
+			if (service != null) {
+				service.addLog("Socket RFX pas ouvert: impossible d'envoyer des commandes", RDService.LogLevel.HIGH);
+			}
 			return;
 		}
 

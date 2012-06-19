@@ -22,18 +22,18 @@ import android.widget.TextView;
 class Meteo {
 	private final static String TAG = RDActivity.class.getSimpleName();
 
-	private final String LOCATION = "le+touvet,france";
-	private final String METEO_URL = "http://free.worldweatheronline.com/feed/weather.ashx?format=json";
-	private final String API_KEY = "18d9f01634202138120203";
-	private final int NB_DAYS = 5;
+	private final static String LOCATION = "le+touvet,france";
+	private final static String METEO_URL = "http://free.worldweatheronline.com/feed/weather.ashx?format=json";
+	private final static String API_KEY = "18d9f01634202138120203";
+	private final static int NB_DAYS = 5;
 
-	private final String url = METEO_URL+"&q="+LOCATION+"&key="+API_KEY+"&num_of_days="+NB_DAYS;
+	private final static String url = METEO_URL+"&q="+LOCATION+"&key="+API_KEY+"&num_of_days="+NB_DAYS;
 
 	private ArrayList<MeteoData> meteoData = new ArrayList<MeteoData>();
 	
 	private Date lastUpdate = null;
 
-	private class MeteoData {
+	private static class MeteoData {
 		public String day;
 		public int weatherCode;
 		public float minTemp;

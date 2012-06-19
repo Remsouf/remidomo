@@ -22,13 +22,13 @@ public class Trains {
 	
 	private final static String TAG = RDService.class.getSimpleName();
 
-	private final int NB_TRAINS = 3;
-	private final String SNCF_URL = "http://sncf.mobi/infotrafic/iphoneapp/ddge/?gare=";
+	private final static int NB_TRAINS = 3;
+	private final static String SNCF_URL = "http://sncf.mobi/infotrafic/iphoneapp/ddge/?gare=";
 	
     private ArrayList<TrainData> trainsData = new ArrayList<TrainData>();
 	private Date lastUpdate = null;
 	
-	public class TrainData {
+	public static class TrainData {
 		public String heure;
 		public boolean status;
 		public String info;
@@ -166,7 +166,7 @@ public class Trains {
 		return lastUpdate;
 	}
 	
-	public ArrayList<TrainData> getData() {
+	public final ArrayList<TrainData> getData() {
 		return trainsData;
 	}
 }

@@ -44,13 +44,13 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 //	private final static String TAG = RDActivity.class.getSimpleName();
 	
 	// Definition of the touch states
-	static final private int NONE = 0;
-	static final private int ONE_FINGER_DRAG = 1;
-	static final private int TWO_FINGERS_DRAG = 2;
+	private final static int NONE = 0;
+	private final static int ONE_FINGER_DRAG = 1;
+	private final static int TWO_FINGERS_DRAG = 2;
 	private int mode = NONE;
 
-	private final long HOURS_24 = 24*60*60*1000;
-	private final long HOURS_12 = 12*60*60*1000;
+	private final static long HOURS_24 = 24*60*60*1000;
+	private final static long HOURS_12 = 12*60*60*1000;
 
 	private final static int[] COLORS_TABLE = {Color.CYAN, Color.GREEN, Color.YELLOW};
 
@@ -300,7 +300,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 			break;
 
 		case MotionEvent.ACTION_UP: //end tap
-		        if (tapEnabled && (motionEvent.getEventTime() - motionEvent.getDownTime() <= 100)) {
+		    if (tapEnabled && (motionEvent.getEventTime() - motionEvent.getDownTime() <= 100)) {
 				displayPointValue(firstFinger);
 			}
 			break;
@@ -330,6 +330,10 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 				setDomainBoundaries(newMinX, newMaxX, BoundaryMode.FIXED);
 				redraw();
 			}
+			break;
+
+		default:
+			// Do nothing
 			break;
 		}
 		return true;
@@ -417,7 +421,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		}
 	}
 
-	private class PoolDateFormat extends Format {
+	private static class PoolDateFormat extends Format {
 		private static final long serialVersionUID = 0;
 		
         // create a simple date format that draws on the year portion of our timestamp.

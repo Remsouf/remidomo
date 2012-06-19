@@ -79,9 +79,10 @@ public class RDService extends Service {
 	private Doors doors = null;
 
     private static final int MAX_LOG_LINES = 200;
-    private class LogEntry { public String msg;
-    						 public LogLevel level;
-    						 public int repeat;
+    private static class LogEntry {
+    		public String msg;
+    		public LogLevel level;
+    		public int repeat;
     }
     private List<LogEntry> log = new ArrayList<LogEntry>();
     
@@ -113,11 +114,11 @@ public class RDService extends Service {
         pwrMgr = (PowerManager) getSystemService(Context.POWER_SERVICE);
         if (pwrMgr == null) {
         	Log.e(TAG, "Failed to get Power Manager");
-        }
-       
-        wakeLock = pwrMgr.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "Remidomo");
-        if (wakeLock == null) {
-        	Log.e(TAG, "Failed to create WakeLock");
+        } else {
+        	wakeLock = pwrMgr.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "Remidomo");
+        	if (wakeLock == null) {
+        		Log.e(TAG, "Failed to create WakeLock");
+        	}
         }
 
         registerReceiver(batteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
@@ -178,7 +179,7 @@ public class RDService extends Service {
     			int period = Integer.parseInt(prefs.getString("client_poll", Preferences.DEFAULT_CLIENT_POLL));
     			// 15s graceful period, to let the service read data from FS,
     			// before attempting updates from the server
-    			clientTimer.scheduleAtFixedRate(new ClientTask(this), 15000, period*60*1000);
+    			clientTimer.scheduleAtFixedRate(new ClientTask(this), 15000, 1000L*60*period);
 
     			registerPushMessaging();
     		}
@@ -186,12 +187,12 @@ public class RDService extends Service {
     		// Timer for train updates
     		Timer timerTrains = new Timer("Trains");
     		int period = Integer.parseInt(prefs.getString("sncf_poll", Preferences.DEFAULT_SNCF_POLL));
-    		timerTrains.scheduleAtFixedRate(new TrainsTask(), 1, period*60*1000);
+    		timerTrains.scheduleAtFixedRate(new TrainsTask(), 1, 1000L*60*period);
 
     		// Timer for weather updates
     		Timer timerMeteo = new Timer("Meteo");
     		period = Integer.parseInt(prefs.getString("meteo_poll", Preferences.DEFAULT_METEO_POLL));
-    		timerMeteo.scheduleAtFixedRate(new MeteoTask(), 1, period*60*60*1000);
+    		timerMeteo.scheduleAtFixedRate(new MeteoTask(), 1, 1000L*60*60*period);
     	}
     
         // We want this service to continue running until it is explicitly
@@ -534,7 +535,7 @@ public class RDService extends Service {
     public synchronized SpannableStringBuilder getLogMessages() {
     	SpannableStringBuilder text = new SpannableStringBuilder();
     	
-    	for (LogEntry entry: log) {
+    	for (final LogEntry entry: log) {
     		int startPos = text.length();
     		text.append(entry.msg);
     		if (entry.repeat > 1) {
@@ -646,7 +647,8 @@ public class RDService extends Service {
 
             		builder.setCharAt(4, '0');
             		outStream.println(builder.toString());
-            	} catch (Exception ignored) {
+            	} catch (java.io.IOException ignored) {
+            	} catch (java.lang.InterruptedException ignored) {
             	} finally {
             		if (outStream != null)
             			outStream.close();
@@ -694,7 +696,8 @@ public class RDService extends Service {
             		builder.setCharAt(2, '0');
             		outStream.println(builder.toString());
             		outStream.flush();
-            	} catch (Exception ignored) {
+            	} catch (java.io.IOException ignored) {
+            	} catch (java.lang.InterruptedException ignored) {
             	} finally {
             		if (outStream != null)
             			outStream.close();
