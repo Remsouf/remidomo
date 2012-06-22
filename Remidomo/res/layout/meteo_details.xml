@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_centerHorizontal="true"
+	android:layout_centerVertical="true"
+	android:background="@drawable/gradient" >
+
+    <LinearLayout
+        android:id="@+id/meteodetails_title"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:layout_alignParentLeft="true"
+    	android:layout_alignParentTop="true">
+
+    	<ImageButton
+        	android:id="@+id/meteodetails_img"
+        	android:layout_width="64dp"
+    		android:layout_height="64dp"
+    		android:background="@null"
+    		android:src="@drawable/meteo_unknown"
+    		android:layout_marginRight="15dp" />
+
+		<TextView
+			android:id="@+id/meteodetails_day"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:textSize="30dp"
+    		android:text=""
+    		android:layout_gravity="center_vertical" />
+
+	</LinearLayout>
+
+    <ImageButton
+        android:id="@+id/meteodetails_button"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:background="@null"
+		android:src="@android:drawable/btn_dialog"
+		android:layout_alignParentRight="true"
+    	android:layout_alignParentTop="true" />
+
+	<TextView 
+		android:id="@+id/meteodetails_text"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:textSize="20dp"
+    	android:text=""
+    	android:layout_below="@id/meteodetails_title"
+    	android:layout_centerHorizontal="true"
+    	android:layout_marginTop="20dp" />
+        
+</RelativeLayout>

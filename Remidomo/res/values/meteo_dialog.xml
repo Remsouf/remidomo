@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MeteoDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/MeteoDialogAnimation</item>
+    </style>
+
+    <style name="MeteoDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_down</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_up</item>
+    </style>
+</resources>

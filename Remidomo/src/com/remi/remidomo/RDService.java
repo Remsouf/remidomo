@@ -73,7 +73,7 @@ public class RDService extends Service {
     private String registrationKey = null;
 	
 	private Trains trains = new Trains();
-	private Meteo meteo = new Meteo();
+	private Meteo meteo = new MeteoVilles();
 	private Sensors sensors = null;
 	private Switches switches = null;
 	private Doors doors = null;
