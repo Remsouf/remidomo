@@ -6,10 +6,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
@@ -84,7 +83,7 @@ public class RDService extends Service {
     		public LogLevel level;
     		public int repeat;
     }
-    private List<LogEntry> log = new ArrayList<LogEntry>();
+    private LinkedList<LogEntry> log = new LinkedList<LogEntry>();
     
     private Set<String> pushDevices = new HashSet<String>();
     
@@ -502,22 +501,25 @@ public class RDService extends Service {
     public synchronized void addLog(String msg, LogLevel level) {
     	String prev_msg = null;
     	if (!log.isEmpty()) {
-    		prev_msg = log.get(log.size()-1).msg;
+    		prev_msg = log.getLast().msg;
     	}
     	if (msg.equals(prev_msg)) {
     		// Exact match -> +1
-    		LogEntry entry = log.get(log.size()-1);
+    		LogEntry entry = log.getLast();
 			entry.repeat = entry.repeat + 1;
-			log.set(log.size()-1, entry);
+			log.removeLast();
+			log.addLast(entry);
     	} else {
     		LogEntry newEntry = new LogEntry();
     		newEntry.msg = msg;
     		newEntry.level = level;
     		newEntry.repeat = 1;
-    		log.add(newEntry);
+    		log.addLast(newEntry);
     	}
+    	// Since we're adding one msg at a time,
+    	// we should be ok removing only the oldest one
     	if (log.size() > MAX_LOG_LINES) {
-    		log = (List<LogEntry>)log.subList(0, MAX_LOG_LINES);
+    		log.removeFirst();
     	}
     	
     	if (callback != null) {
@@ -535,7 +537,7 @@ public class RDService extends Service {
     public synchronized SpannableStringBuilder getLogMessages() {
     	SpannableStringBuilder text = new SpannableStringBuilder();
     	
-    	for (final LogEntry entry: log) {
+    	for (LogEntry entry: log) {
     		int startPos = text.length();
     		text.append(entry.msg);
     		if (entry.repeat > 1) {
