@@ -144,6 +144,10 @@ public class RDActivity extends Activity implements OnGestureListener {
         // Timer for updating "Il y a ..." texts
         Timer timerIlya = new Timer("Il y a");
         timerIlya.scheduleAtFixedRate(new IlyaTask(), 1, 60000);  // 1min
+
+        // Start with dashboard view
+        ImageButton dashboard = (ImageButton) findViewById(R.id.dashboardButton);
+        changeView(dashboard, DASHBOARD_VIEW_ID);
     }
     
     /**
@@ -179,35 +183,35 @@ public class RDActivity extends Activity implements OnGestureListener {
         ImageButton poolTemp = (ImageButton) findViewById(R.id.poolButton);
         poolTemp.setOnClickListener(new ImageButton.OnClickListener() {
         	public void onClick(View v) {
-        		flipper.setDisplayedChild(POOL_VIEW_ID);
+        		changeView(v, POOL_VIEW_ID);
         	}
         });
 
         ImageButton thermo = (ImageButton) findViewById(R.id.tempButton);
         thermo.setOnClickListener(new ImageButton.OnClickListener() {
         	public void onClick(View v) {
-        		flipper.setDisplayedChild(TEMP_VIEW_ID);
+        		changeView(v, TEMP_VIEW_ID);
         	}
         });
 
         ImageButton dashboard = (ImageButton) findViewById(R.id.dashboardButton);
         dashboard.setOnClickListener(new ImageButton.OnClickListener() {
         	public void onClick(View v) {
-        		flipper.setDisplayedChild(DASHBOARD_VIEW_ID);
+        		changeView(v, DASHBOARD_VIEW_ID);
         	}
         });
       
         ImageButton log = (ImageButton) findViewById(R.id.logButton);
         log.setOnClickListener(new ImageButton.OnClickListener() {
         	public void onClick(View v) {
-        		flipper.setDisplayedChild(LOG_VIEW_ID);
+        		changeView(v, LOG_VIEW_ID);
         	}
         });
 
         ImageButton switches = (ImageButton) findViewById(R.id.switchButton);
         switches.setOnClickListener(new ImageButton.OnClickListener() {
         	public void onClick(View v) {
-        		flipper.setDisplayedChild(SWITCHES_VIEW_ID);
+        		changeView(v, SWITCHES_VIEW_ID);
         	}
         });
         
@@ -223,21 +227,21 @@ public class RDActivity extends Activity implements OnGestureListener {
         RelativeLayout poolLayout = (RelativeLayout) findViewById(R.id.pool_layout);
         poolLayout.setOnClickListener(new RelativeLayout.OnClickListener() {
         	public void onClick(View v) {
-        		flipper.setDisplayedChild(POOL_VIEW_ID);
+        		changeView(v, POOL_VIEW_ID);
         	}
         });
         
         RelativeLayout extLayout = (RelativeLayout) findViewById(R.id.ext_layout);
         extLayout.setOnClickListener(new RelativeLayout.OnClickListener() {
         	public void onClick(View v) {
-        		flipper.setDisplayedChild(TEMP_VIEW_ID);
+        		changeView(v, TEMP_VIEW_ID);
         	}
         });
 
         RelativeLayout verandaLayout = (RelativeLayout) findViewById(R.id.veranda_layout);
         verandaLayout.setOnClickListener(new RelativeLayout.OnClickListener() {
         	public void onClick(View v) {
-        		flipper.setDisplayedChild(TEMP_VIEW_ID);
+        		changeView(v, TEMP_VIEW_ID);
         	}
         });
         
@@ -301,7 +305,27 @@ public class RDActivity extends Activity implements OnGestureListener {
         	}
         });
     }
-    
+
+    private void changeView(View button, int destination) {
+    	// Change flipper view + animate buttons
+    	flipper.setDisplayedChild(destination);
+
+    	ImageButton poolTemp = (ImageButton) findViewById(R.id.poolButton);
+    	ImageButton thermo = (ImageButton) findViewById(R.id.tempButton);
+    	ImageButton log = (ImageButton) findViewById(R.id.logButton);
+    	ImageButton dashboard = (ImageButton) findViewById(R.id.dashboardButton);
+    	ImageButton switches = (ImageButton) findViewById(R.id.switchButton);
+
+    	poolTemp.clearAnimation();
+    	thermo.clearAnimation();
+    	log.clearAnimation();
+    	dashboard.clearAnimation();
+    	switches.clearAnimation();
+
+		Animation anim = AnimationUtils.loadAnimation(RDActivity.this, R.anim.icon_select);
+		button.startAnimation(anim);
+    }
+
     @Override
     protected void onResume() {
     	super.onResume();
