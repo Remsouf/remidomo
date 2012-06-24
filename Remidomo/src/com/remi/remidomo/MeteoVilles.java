@@ -31,8 +31,8 @@ class MeteoVilles extends Meteo {
 		map.put(2, R.drawable.meteo_lsnow);     // averse_neige_faible
 		map.put(4, R.drawable.meteo_lsnow);     // averse_neige_fondue
 		map.put(6, R.drawable.meteo_hsnow);     // averse_neige_forte
-		map.put(7, R.drawable.meteo_lrain);     // averse_orageuse
-		map.put(9, R.drawable.meteo_lrain);     // averse_pluie_faible
+		map.put(7, R.drawable.meteo_ltonerre);  // averse_orageuse
+		map.put(9, R.drawable.meteo_mist);      // averse_pluie_faible
 		map.put(12, R.drawable.meteo_srain);    // averse_pluie_forte
 		map.put(10, R.drawable.meteo_pcloud);   // brume
 		map.put(14, R.drawable.meteo_ncloud);   // couvert
@@ -48,7 +48,7 @@ class MeteoVilles extends Meteo {
 		map.put(30, R.drawable.meteo_hrain);    // pluie_forte
 		map.put(87, R.drawable.meteo_hfrain);   // pluie_verglas
 		map.put(32, R.drawable.meteo_sunny);    // soleil
-		map.put(34, R.drawable.meteo_cloud);    // tres_nuageux
+		map.put(34, R.drawable.meteo_ncloud);   // tres_nuageux
 		map.put(36, R.drawable.meteo_tonerre);  // tres_orageux
 	    map.put(24, R.drawable.meteo_verglas);  // verglas
 
