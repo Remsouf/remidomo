@@ -63,7 +63,7 @@ public class SensorPlotTest extends AndroidTestCase {
 		addValues(data, 7200); // 5 days
 		// Shift test data 10 days back
 		for (int i=0; i<7200; i++) {
-			Pair pair = data.new Pair(
+			Pair pair = new SensorData.Pair(
 					data.get(i).time-10*24*60*60*1000,
 					data.get(i).value);
 			data.set(i, pair);
