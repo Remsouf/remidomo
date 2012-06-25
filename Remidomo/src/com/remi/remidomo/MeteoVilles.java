@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import android.text.Html;
 import android.util.Log;
 import android.util.Xml;
 
@@ -100,7 +101,7 @@ class MeteoVilles extends Meteo {
 	        } catch (java.io.IOException e) {
 	        	Log.e(TAG, "Failed to read weather URL: " + feedUrl);
 	        	service.addLog("Impossible d'obtenir les infos météo", RDService.LogLevel.HIGH);
-	            throw new RuntimeException(e);
+	        	return null;
 	        }
 	    }
 	    
@@ -109,7 +110,11 @@ class MeteoVilles extends Meteo {
 	        XmlPullParser parser = Xml.newPullParser();
 	        try {
 	            // auto-detect the encoding from the stream
-	            parser.setInput(this.getInputStream(), null);
+	        	InputStream is = this.getInputStream();
+	        	if (is == null) {
+	        		return new ArrayList<MeteoData>();
+	        	}
+	            parser.setInput(is, null);
 	            int eventType = parser.getEventType();
 	            
 	            // Data being parsed
@@ -148,7 +153,7 @@ class MeteoVilles extends Meteo {
 	                        } else if (TEMP_MAX_APREM.equals(name)) {
 	                        	tempMaxAprem = Float.parseFloat(parser.nextText());
 	                        } else if (COMMENTAIRE.equals(name)) {
-	                        	details = parser.nextText();
+	                        	details = Html.fromHtml(parser.nextText()).toString();
 	                        }
 	                        break;
 	                    case XmlPullParser.END_TAG:

@@ -299,6 +299,9 @@ public class RDActivity extends Activity implements OnGestureListener {
         		ScrollView remoteLog = (ScrollView) findViewById(R.id.rlogscroller);
         		remoteLog.setVisibility(View.GONE);
 
+        		ProgressBar progress = (ProgressBar) findViewById(R.id.log_progress);
+        		progress.setVisibility(View.GONE);
+
         		serverLogButton.setVisibility(View.VISIBLE);
         		clientLogButton.setVisibility(View.GONE);
         		clearLogButton.setVisibility(View.VISIBLE);
