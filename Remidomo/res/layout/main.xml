@@ -73,7 +73,8 @@
             	android:layout_height="wrap_content"
             	android:background="@null"
             	android:src="@drawable/refresh_button"
-            	android:layout_alignParentRight="true" />
+            	android:layout_alignParentRight="true"
+            	android:layout_centerVertical="true" />
                   
             <ImageButton
             	android:id="@+id/redLed"
