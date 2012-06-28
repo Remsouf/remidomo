@@ -349,13 +349,17 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
         		(maxYSeriesValue != null)) {
         		if (minYSeriesValue.floatValue() < 20.0) {
         			rangeMinY = 10.0f;
-        		} else {
+        		} else if (minYSeriesValue.floatValue() < 25.0){
         			rangeMinY = 20.0f;
+        		} else {
+        			rangeMinY = 25.0f;
         		}
-        		if (maxYSeriesValue.floatValue() > 20.0) {
+        		if (maxYSeriesValue.floatValue() < 20.0) {
+        			rangeMaxY = 20.0f;
+        		} else if (maxYSeriesValue.floatValue() < 30.0){
         			rangeMaxY = 30.0f;
         		} else {
-        			rangeMaxY = 20.0f;
+        			rangeMaxY = 34.0f;
         		}
         	} else {
         		rangeMinY = 10.0f;
