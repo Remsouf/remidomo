@@ -227,21 +227,24 @@ public class RDActivity extends Activity implements OnGestureListener {
         RelativeLayout poolLayout = (RelativeLayout) findViewById(R.id.pool_layout);
         poolLayout.setOnClickListener(new RelativeLayout.OnClickListener() {
         	public void onClick(View v) {
-        		changeView(v, POOL_VIEW_ID);
+        		ImageButton button = (ImageButton) findViewById(R.id.poolButton);
+        		changeView(button, POOL_VIEW_ID);
         	}
         });
         
         RelativeLayout extLayout = (RelativeLayout) findViewById(R.id.ext_layout);
         extLayout.setOnClickListener(new RelativeLayout.OnClickListener() {
         	public void onClick(View v) {
-        		changeView(v, TEMP_VIEW_ID);
+        		ImageButton button = (ImageButton) findViewById(R.id.tempButton);
+        		changeView(button, TEMP_VIEW_ID);
         	}
         });
 
         RelativeLayout verandaLayout = (RelativeLayout) findViewById(R.id.veranda_layout);
         verandaLayout.setOnClickListener(new RelativeLayout.OnClickListener() {
         	public void onClick(View v) {
-        		changeView(v, TEMP_VIEW_ID);
+        		ImageButton button = (ImageButton) findViewById(R.id.tempButton);
+        		changeView(button, TEMP_VIEW_ID);
         	}
         });
         
