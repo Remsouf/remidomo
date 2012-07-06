@@ -142,7 +142,7 @@ public class SensorData {
 		}
 	}
 	
-	public void writeFile(DirType dir, FileFormat format) {
+	public synchronized void writeFile(DirType dir, FileFormat format) {
 		FileOutputStream fos = null;
 		DataOutputStream dos = null;
 		try {

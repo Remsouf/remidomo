@@ -38,8 +38,6 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	private EditTextPreference client_poll;
 	private CheckBoxPreference reset;
 	private EditTextPreference plotlimit;
-	private EditTextPreference c2dm_account;
-	private EditTextPreference c2dm_password;
 
 	private SharedPreferences prefs;
 	
@@ -63,9 +61,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
         gare = (ListPreference) getPreferenceScreen().findPreference("gare");
         meteo_poll = (EditTextPreference) getPreferenceScreen().findPreference("meteo_poll");
         plotlimit = (EditTextPreference) getPreferenceScreen().findPreference("plot_limit");
-        c2dm_account = (EditTextPreference) getPreferenceScreen().findPreference("c2dm_account");
-        c2dm_password = (EditTextPreference) getPreferenceScreen().findPreference("c2dm_password");
-        
+
         updateTexts();
     }
     
@@ -118,14 +114,10 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     		ip_address.setEnabled(false);
     		rfx_port.setEnabled(true);
     		client_poll.setEnabled(false);
-    		c2dm_account.setEnabled(true);
-    		c2dm_password.setEnabled(true);
     	} else {
     		ip_address.setEnabled(true);
     		rfx_port.setEnabled(false);
     		client_poll.setEnabled(true);
-    		c2dm_account.setEnabled(false);
-    		c2dm_password.setEnabled(false);
     	}
 
         ip_address.setSummary(prefs.getString("ip_address", DEFAULT_IP)); 

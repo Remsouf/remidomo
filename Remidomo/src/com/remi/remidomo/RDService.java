@@ -6,6 +6,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -13,6 +14,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.google.android.gcm.GCMConstants;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -68,6 +71,7 @@ public class RDService extends Service {
     private ServerThread serverThread = null;
     private Timer clientTimer = null;
     
+    private final static String GCM_PROJECT_ID = "25944642123";
     private PushSender pusher = null;
     private String registrationKey = null;
 	
@@ -133,9 +137,10 @@ public class RDService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
     	// In case of crash/restart, intent can be null
-    	if ((intent != null) && PushReceiver.REGISTRATION.equals(intent.getAction())) {
+    	if ((intent != null) && GCMConstants.INTENT_FROM_GCM_REGISTRATION_CALLBACK.equals(intent.getAction())) {
     		registrationKey = intent.getStringExtra("registration_id");
-    	} else if ((intent != null) && PushReceiver.RECEIVE.equals(intent.getAction())) {
+    		Log.d(TAG, "Got GCM registration key");
+    	} else if ((intent != null) && GCMConstants.INTENT_FROM_GCM_MESSAGE.equals(intent.getAction())) {
     		// Don't restart, just account for received Push intent
     		handlePushedMessage(intent);
     	} else if ((intent != null) && ACTION_RESTORE_DATA.equals(intent.getAction())) {
@@ -393,7 +398,7 @@ public class RDService extends Service {
 
 			Log.d(TAG, "RFX Thread ended.");
     	}
- 
+
     	private void readMessage(DatagramPacket packet) {
     		String received = new String(packet.getData(), 0, packet.getLength());
 
@@ -743,9 +748,10 @@ public class RDService extends Service {
     // For clients
     private void registerPushMessaging() {
     	if (registrationKey == null) {
-    		Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
-    		registrationIntent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
-    		registrationIntent.putExtra("sender", "rpeuvergne.c2dm@gmail.com");
+    		Intent registrationIntent = new Intent(GCMConstants.INTENT_TO_GCM_REGISTRATION);
+    		registrationIntent.putExtra(GCMConstants.EXTRA_APPLICATION_PENDING_INTENT,
+    									PendingIntent.getBroadcast(this, 0, new Intent(), 0));
+    		registrationIntent.putExtra(GCMConstants.EXTRA_SENDER, GCM_PROJECT_ID);
     		startService(registrationIntent);
     	}
     }
@@ -758,9 +764,7 @@ public class RDService extends Service {
     
     public void pushToClients(String target, int index, String data) {
     	addLog("Envoi Push vers abonnés: " + target);
-    	for (String key: pushDevices) {
-    		pusher.pushMsg(key, target, index, data);
-    	}
+    	pusher.pushMsg(new ArrayList<String>(pushDevices), target, index, data);
     }
     
     private void handlePushedMessage(Intent intent) {

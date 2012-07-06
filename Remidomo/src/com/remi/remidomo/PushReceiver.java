@@ -7,6 +7,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.google.android.gcm.GCMConstants;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
  
 /*
  * This is for the client side, receiving a pushed notification
@@ -21,9 +24,6 @@ import android.util.Log;
 public class PushReceiver extends BroadcastReceiver {
 	
 	private final static String TAG = PushReceiver.class.getSimpleName();
-
-	public final static String REGISTRATION = "com.google.android.c2dm.intent.REGISTRATION";
-	public final static String RECEIVE = "com.google.android.c2dm.intent.RECEIVE";
 	
 	// Pref keys
 	private SharedPreferences prefs;
@@ -39,20 +39,20 @@ public class PushReceiver extends BroadcastReceiver {
     	this.context = context;
     	this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		this.lastMsgKey = prefs.getString(LAST_MSG_KEY, null);
-		if (intent.getAction().equals(REGISTRATION)) {
+		if (intent.getAction().equals(GCMConstants.INTENT_FROM_GCM_REGISTRATION_CALLBACK)) {
 	        handleRegistration(intent);
 	        bounceMessage(intent);
-	    } else if (intent.getAction().equals(RECEIVE)) {
+	    } else if (intent.getAction().equals(GCMConstants.INTENT_FROM_GCM_MESSAGE)) {
 	        bounceMessage(intent);
 	    }
     }
     
     private void handleRegistration(Intent intent) {
-	    registrationKey = intent.getStringExtra("registration_id");
-	    if (intent.getStringExtra("error") != null) {
+	    registrationKey = intent.getStringExtra(GCMConstants.EXTRA_REGISTRATION_ID);
+	    if (intent.getStringExtra(GCMConstants.EXTRA_ERROR) != null) {
 	        // Registration failed, should try again later.
-		    Log.e(TAG, "registration failed: " + intent.getStringExtra("error"));
-	    } else if (intent.getStringExtra("unregistered") != null) {
+		    Log.e(TAG, "registration failed: " + intent.getStringExtra(GCMConstants.EXTRA_ERROR));
+	    } else if (intent.getStringExtra(GCMConstants.EXTRA_UNREGISTERED) != null) {
 	        // unregistration done, new messages from the authorized sender will be rejected
 	    	Log.d(TAG, "unregistered");
 	    } else if (registrationKey != null) {
