@@ -30,7 +30,7 @@ class Sensors {
 	// Hard-coded values
 	public final static String ID_EXT_T = "th2_0x9b05-temp";
 	public final static String ID_EXT_H = "th2_0x9b05-humidity";
-	public final static String ID_POOL_T = "temp3_0x802-temp";
+	public final static String ID_POOL_T = "temp3-temp";
 	public final static String ID_VERANDA_T = "th1_0xe902-temp";
 	public final static String ID_VERANDA_H = "th1_0xe902-humidity";
 
@@ -147,6 +147,12 @@ class Sensors {
     	}
     	
     	String device = msg.getNamedValue("device");
+
+    	// Special case for temp3 (pool), which changes
+    	// address after each reboot (much too often)
+    	if (device.startsWith("temp3")) {
+    		device = device.split(" ")[0];
+    	}
     	device = device.replace(' ', '_');
     	device = device + "-" + msg.getNamedValue("type");
     	
