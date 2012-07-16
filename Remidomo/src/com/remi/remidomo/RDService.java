@@ -99,9 +99,12 @@ public class RDService extends Service {
     /* Broadcast receiver for low battery */
     private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver(){
         @Override
-        public void onReceive(Context context, Intent intent) {          
-            pushToClients("lowbat", 0, "");
-            Log.i(TAG, "Sending push for low battery !");
+        public void onReceive(Context context, Intent intent) {
+        	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
+    		if ("Serveur".equals(mode)) {
+    			pushToClients("lowbat", 0, "");
+    			Log.i(TAG, "Sending push for low battery !");
+    		}
         }
     };
 
@@ -764,7 +767,9 @@ public class RDService extends Service {
     
     public void pushToClients(String target, int index, String data) {
     	addLog("Envoi Push vers abonnés: " + target);
-    	pusher.pushMsg(new ArrayList<String>(pushDevices), target, index, data);
+    	if (pusher != null) {
+    		pusher.pushMsg(new ArrayList<String>(pushDevices), target, index, data);
+    	}
     }
     
     private void handlePushedMessage(Intent intent) {
