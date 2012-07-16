@@ -220,11 +220,11 @@ public class Doors {
 			Log.e(TAG, "Something wrong with garage gate: " + garageStates[0] + "/" + garageStates[1]);
 			service.addLog("Anomalie porte de garage: " + garageStates[0] + "/" + garageStates[1], RDService.LogLevel.HIGH);
 		}
-	
-		Log.i(TAG, "Doors state updated from hardware: " + newState);
-		service.addLog("Portes synchronisées avec le matériel", RDService.LogLevel.UPDATE);
 
 		if (newState != states[GARAGE]) {
+			Log.i(TAG, "Doors state updated from hardware: " + newState);
+			service.addLog("Portes synchronisées avec le matériel", RDService.LogLevel.UPDATE);
+
 			setState(GARAGE, newState, true);
 			if ((newState == State.CLOSED) || (newState == State.OPENED)) {
 				service.pushToClients("door", GARAGE, newState.toString());
@@ -234,6 +234,8 @@ public class Doors {
 				//Date later = new Date(new Date().getTime() + GARAGE_DOOR_DELAY);
 				//doorTimer.schedule(new DoorTask(), later);
 			}
+		} else {
+			Log.d(TAG, "Doors state confirmed (" + newState + ")");
 		}
 	}
 	
