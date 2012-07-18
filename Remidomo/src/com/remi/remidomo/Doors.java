@@ -43,7 +43,7 @@ public class Doors {
 
 	// 1st=closed, 2nd=opened
 	public final static ArrayList<String> GARAGE_ADDR =
-			new ArrayList<String>(Arrays.asList("0xb5baf7", "0x0f00d9"));
+			new ArrayList<String>(Arrays.asList("0x757a0f", "0x8f8039"));
 	
 	public Doors(RDService service) {
 		this.service = service;
@@ -198,9 +198,9 @@ public class Doors {
 			return;
 		}
 
-		if ("alert".equals(command)) {
+		if ("normal".equals(command)) {
 			garageStates[i] = true;
-		} else if ("normal".equals(command)) {
+		} else if ("alert".equals(command)) {
 			garageStates[i] = false;
 		} else {
 			Log.e(TAG, "Doors command unknown: " + command);

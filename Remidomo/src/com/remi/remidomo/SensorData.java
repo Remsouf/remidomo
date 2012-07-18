@@ -200,7 +200,7 @@ public class SensorData {
 		}
 	}
 
-	public JSONArray getJSONArray(long lastTstamp) {
+	public synchronized JSONArray getJSONArray(long lastTstamp) {
 		try {
 			JSONArray array = new JSONArray();
 			for (Pair pair:data) {
