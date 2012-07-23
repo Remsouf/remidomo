@@ -19,7 +19,7 @@
         app:grid_color="#400000FF"
         app:nights_color="#5A505080"
 		app:dots_color="#00FFFF"
-		app:auto_range="true"
+		app:auto_range="false"
         app:tap_enabled="true"
     	android:background="@drawable/water_background" />
         

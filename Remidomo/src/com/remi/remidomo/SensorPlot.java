@@ -93,7 +93,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		gridColor = Color.DKGRAY;
 		nightsColor = Color.parseColor("#5A505080");
 		dotsColor = Color.CYAN;
-		autoRange = false;
+		autoRange = true;
 		tapEnabled = false;
 
 		initTouchHandling();
@@ -340,26 +340,40 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 	}
 
 	private void updateRangeBoundaries() {
-		if (!autoRange) {
+		if (autoRange) {
 			setRangeBoundaries(0.0, 0.0, BoundaryMode.AUTO);
 		} else if (!getSeriesSet().isEmpty()) {
+			// Temporary switch to autorange, to get real min/max
+			// (or we get the fixed range we set just before !)
+			setRangeBoundaries(0.0, 0.0, BoundaryMode.AUTO);
+			calculateMinMaxVals();
         	minYSeriesValue = getCalculatedMinY();
         	maxYSeriesValue = getCalculatedMaxY();
         	if ((minYSeriesValue != null) &&
         		(maxYSeriesValue != null)) {
-        		if (minYSeriesValue.floatValue() < 20.0) {
-        			rangeMinY = 10.0f;
-        		} else if (minYSeriesValue.floatValue() < 25.0){
-        			rangeMinY = 20.0f;
-        		} else {
+        		if (minYSeriesValue.floatValue() >= 25.0) {
         			rangeMinY = 25.0f;
+        		} else if (minYSeriesValue.floatValue() >= 20.0) {
+        			rangeMinY = 20.0f;
+        		} else if (minYSeriesValue.floatValue() >= 10.0) {
+        			rangeMinY = 10.0f;
+        		} else if (minYSeriesValue.floatValue() >= 0.0) {
+        			rangeMinY = 0.0f;
+        		} else {
+        			rangeMinY = -10.0f;
         		}
         		if (maxYSeriesValue.floatValue() < 20.0) {
         			rangeMaxY = 20.0f;
-        		} else if (maxYSeriesValue.floatValue() < 30.0){
+        		} else if (maxYSeriesValue.floatValue() < 30.0) {
         			rangeMaxY = 30.0f;
+        		} else if (maxYSeriesValue.floatValue() < 32.5) {
+        			rangeMaxY = 32.5f;
+        		} else if (maxYSeriesValue.floatValue() < 35.0) {
+        			rangeMaxY = 35.0f;
+        		} else if (maxYSeriesValue.floatValue() < 40.0) {
+        			rangeMaxY = 40.0f;
         		} else {
-        			rangeMaxY = 34.0f;
+        			rangeMaxY = 48.0f;
         		}
         	} else {
         		rangeMinY = 10.0f;
