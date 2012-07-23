@@ -351,4 +351,8 @@ public class SensorData {
 	public synchronized void set(int i, Pair pair) {
 		data.set(i, pair);
 	}
+
+	public synchronized void clearData() {
+		data.clear();
+	}
 }

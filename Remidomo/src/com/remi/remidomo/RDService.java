@@ -80,6 +80,7 @@ public class RDService extends Service {
 	private Sensors sensors = null;
 	private Switches switches = null;
 	private Doors doors = null;
+	private Energy energy = null;
 
     private static final int MAX_LOG_LINES = 200;
     private static class LogEntry {
@@ -132,6 +133,7 @@ public class RDService extends Service {
         sensors = new Sensors(this);
         switches = new Switches(this);
         doors = new Doors(this);
+        energy = new Energy(this);
 
         // Display a notification about us starting.  We put an icon in the status bar.
         showServiceNotification();
@@ -151,6 +153,10 @@ public class RDService extends Service {
     		new Thread(new Runnable() {
             	public synchronized void run() {
             		sensors.readFromSdcard();
+            		energy.readFromSdcard();
+            		if (callback != null) {
+            			callback.postToast(getString(R.string.load_complete));
+            		}
             	};
             }, "sdcard read").start();
     	} else {
@@ -337,6 +343,7 @@ public class RDService extends Service {
 		switches.syncWithServer();
 		sensors.syncWithServer();
 		doors.syncWithServer();
+		energy.syncWithServer();
 	}
 
     /****************************** SENSORS ******************************/
@@ -440,6 +447,16 @@ public class RDService extends Service {
     							if (callback != null) {
     								callback.updateThermo();
     							}
+    						} else if ("energy".equals(msg.getNamedValue("type"))) {
+    							energy.updateData(RDService.this, msg);
+    							if (callback != null) {
+    								callback.updateEnergy();
+    							}
+    						} else if ("power".equals(msg.getNamedValue("type"))) {
+    							energy.updateData(RDService.this, msg);
+    							if (callback != null) {
+    								callback.updateEnergy();
+    							}
     						} else {
     							String log = "Unknown msg type '" + msg.getNamedValue("type") + "' for device " + msg.getNamedValue("device");
     							addLog("Message RFX inconnu reçu: " + msg.getNamedValue("type"), LogLevel.MEDIUM);
@@ -469,7 +486,19 @@ public class RDService extends Service {
 	public synchronized Sensors getSensors() {
 		return sensors;
 	}
-	
+
+	public void saveToSdcard() {
+		new Thread(new Runnable() {
+        	public void run() {
+        		sensors.saveToSdcard();
+        		energy.saveToSdcard();
+        		if (callback != null) {
+        			callback.postToast(getString(R.string.save_complete));
+        		}
+        	}
+		}).start();
+	}
+
     /****************************** TRAINS ******************************/
 	public synchronized Trains getTrains() {
 		return trains;
@@ -746,7 +775,13 @@ public class RDService extends Service {
     	return doors;
     }
 
-    
+
+    /****************************** DOORs ******************************/
+    public Energy getEnergy() {
+    	return energy;
+    }
+
+
     /****************************** PUSH ******************************/
     
     // For clients

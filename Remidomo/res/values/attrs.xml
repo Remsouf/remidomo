@@ -8,5 +8,6 @@
         <attr name="dots_color" format="color"/>
         <attr name="auto_range" format="boolean"/>
         <attr name="tap_enabled" format="boolean"/>
+        <attr name="units" format="string"/>
     </declare-styleable>
 </resources>

@@ -285,29 +285,15 @@ class Sensors {
     }
     
     public void saveToSdcard() {
-    	new Thread(new Runnable() {
-        	public synchronized void run() {
-        		for (SensorData sensor: sensors) {
-        			sensor.writeFile(SensorData.DirType.SDCARD, SensorData.FileFormat.ASCII);
-        		}
-        		if (service.callback != null) {
-        			service.callback.postToast(service.getString(R.string.save_complete));
-        		}
-        	}
-        }).start();
+    	for (SensorData sensor: sensors) {
+    		sensor.writeFile(SensorData.DirType.SDCARD, SensorData.FileFormat.ASCII);
+    	}
     }
-    
+
     public void readFromSdcard() {
-    	new Thread(new Runnable() {
-        	public synchronized void run() {
-        		for (SensorData sensor: sensors) {
-        			sensor.readFile(SensorData.DirType.SDCARD);
-        		}
-        		if (service.callback != null) {
-        			service.callback.postToast(service.getString(R.string.load_complete));
-        		}
-        	}
-    	}).start();
+        for (SensorData sensor: sensors) {
+        	sensor.readFile(SensorData.DirType.SDCARD);
+        }
     }
 
     private void checkSensorsConsistency() {

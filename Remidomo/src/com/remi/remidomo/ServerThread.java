@@ -79,6 +79,7 @@ public class ServerThread implements Runnable {
 	private static final String LOG_PATTERN = "/log";
 	private static final String SENSORS_PATTERN = "/sensors";
 	private static final String SENSORS_CSV_PATTERN = "/sensors/csv";
+	private static final String ENERGY_PATTERN = "/energy";
 	private static final String SWITCHES_PATTERN = "/switches*";
 	private static final String DOORS_PATTERN = "/doors";
 	private static final String IMAGES_PATTERN = "/img/*";
@@ -109,6 +110,7 @@ public class ServerThread implements Runnable {
         httpRegistry.register(LOG_PATTERN, new ServiceLogHandler());
         httpRegistry.register(SENSORS_CSV_PATTERN, new SensorsCsvHandler());
         httpRegistry.register(SENSORS_PATTERN, new SensorsHandler());
+        httpRegistry.register(ENERGY_PATTERN, new EnergyHandler());
         httpRegistry.register(SWITCHES_PATTERN, new SwitchesHandler());
         httpRegistry.register(DOORS_PATTERN, new DoorsHandler());
         httpRegistry.register(PUSHREG_PATTERN, new PushRegHandler());
@@ -356,7 +358,45 @@ public class ServerThread implements Runnable {
 			response.setEntity(entity);
 		}
 	}
-	
+
+	class EnergyHandler implements HttpRequestHandler {
+
+		public EnergyHandler(){
+			// Do nothing
+		}
+
+		private long parseLastTstamp(String Uri) {
+			Pattern pattern = Pattern.compile("/energy\\?last=(\\d+)");
+			Matcher matcher = pattern.matcher(Uri);
+			if (matcher.matches()) {
+				return Long.parseLong(matcher.group(1));
+			} else {
+				return 0;
+			}
+		}
+
+		public void handle(HttpRequest request, HttpResponse response, HttpContext httpContext) throws org.apache.http.HttpException, java.io.IOException {
+			service.addLog("Requete HTTP reçue (energie)");
+			Log.d(TAG, "Got a HTTP request for server (energy)");
+
+			String Uri = request.getRequestLine().getUri();
+			final long lastTstamp = parseLastTstamp(Uri);
+
+			String contentType = "text/html";
+			HttpEntity entity = new EntityTemplate(new ContentProducer() {
+				public void writeTo(final OutputStream outstream) throws java.io.IOException {
+					OutputStreamWriter writer = new OutputStreamWriter(outstream, "UTF-8");
+					service.getEnergy().dumpData(writer, lastTstamp);
+					writer.flush();
+				}
+			});
+
+			((EntityTemplate)entity).setContentType(contentType);
+
+			response.setEntity(entity);
+		}
+	}
+
 	class ServiceLogHandler implements HttpRequestHandler {
 
 		public ServiceLogHandler(){

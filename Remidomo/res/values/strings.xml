@@ -81,9 +81,11 @@
     <string name="degC">°C</string>
     <string name="switch1_text">Prise 1</string>
     <string name="portail_text">Porte garage</string>
+    <string name="ilya">Il y a %1$s</string>
+    <string name="depuis">Depuis %1$s</string>
+    <string name="days">%1$d jours</string>
 
     <!-- Trains -->
-    <string name="ilya">Il y a %1$s</string>
     <string name="supprime">SUPPR.</string>
 
     <!-- Etats -->
@@ -92,5 +94,9 @@
     <string name="garage_moving">Garage bloqué en cours de manoeuvre</string>
     <string name="low_bat">Batterie du serveur faible</string>
     <string name="missing_sensor">Le capteur \'%1$s\' n\'émet plus</string>
+
+    <!--  Energie -->
+    <string name="kw">kW</string>
+    <string name="kwh">kWh</string>
 
 </resources>

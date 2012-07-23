@@ -48,7 +48,15 @@
             			android:background="@null"
             			android:layout_marginLeft="20px"
             			android:src="@drawable/inter_button" />
-                                        
+
+                    <ImageButton
+            			android:id="@+id/energyButton"
+            			android:layout_width="wrap_content"
+            			android:layout_height="wrap_content"
+            			android:background="@null"
+            			android:layout_marginLeft="20px"
+            			android:src="@drawable/energy_button" />
+
                     <ImageButton
             			android:id="@+id/logButton"
             			android:layout_width="wrap_content"
@@ -107,6 +115,7 @@
 			<include layout="@layout/thermo" />
 			<include layout="@layout/pool" />
 			<include layout="@layout/switches" />
+			<include layout="@layout/energy" />
 			<include layout="@layout/log" />
 			
         </ViewFlipper>

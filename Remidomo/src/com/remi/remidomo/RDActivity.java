@@ -61,7 +61,8 @@ public class RDActivity extends Activity implements OnGestureListener {
     private static final int TEMP_VIEW_ID = 1;
     private static final int POOL_VIEW_ID = 2;
     private static final int SWITCHES_VIEW_ID = 3;
-    private static final int LOG_VIEW_ID = 4;
+    private static final int ENERGY_VIEW_ID = 4;
+    private static final int LOG_VIEW_ID = 5;
  
 	private ViewFlipper flipper;
 
@@ -214,6 +215,13 @@ public class RDActivity extends Activity implements OnGestureListener {
         		changeView(v, SWITCHES_VIEW_ID);
         	}
         });
+
+        ImageButton energy = (ImageButton) findViewById(R.id.energyButton);
+        energy.setOnClickListener(new ImageButton.OnClickListener() {
+        	public void onClick(View v) {
+        		changeView(v, ENERGY_VIEW_ID);
+        	}
+        });
         
         ImageButton trainNote = (ImageButton) findViewById(R.id.train_note);
         trainNote.setOnClickListener(new TrainsView.OnClickListener() {
@@ -338,6 +346,17 @@ public class RDActivity extends Activity implements OnGestureListener {
         		clearLogButton.setVisibility(View.VISIBLE);
         	}
         });
+
+        // Hooks for energy buttons
+        ImageButton resetEnergy = (ImageButton) findViewById(R.id.energyreset_button);
+        resetEnergy.setOnClickListener(new ImageButton.OnClickListener() {
+        	public void onClick(View v) {
+        		if (service != null) {
+        			service.getEnergy().resetEnergyCounter();
+        			updateEnergyView();
+        		}
+        	}
+        });
     }
 
     private void changeView(View button, int destination) {
@@ -348,12 +367,14 @@ public class RDActivity extends Activity implements OnGestureListener {
     	ImageButton thermo = (ImageButton) findViewById(R.id.tempButton);
     	ImageButton log = (ImageButton) findViewById(R.id.logButton);
     	ImageButton dashboard = (ImageButton) findViewById(R.id.dashboardButton);
+    	ImageButton energy = (ImageButton) findViewById(R.id.energyButton);
     	ImageButton switches = (ImageButton) findViewById(R.id.switchButton);
 
     	poolTemp.clearAnimation();
     	thermo.clearAnimation();
     	log.clearAnimation();
     	dashboard.clearAnimation();
+    	energy.clearAnimation();
     	switches.clearAnimation();
 
 		Animation anim = AnimationUtils.loadAnimation(RDActivity.this, R.anim.icon_select);
@@ -545,7 +566,9 @@ public class RDActivity extends Activity implements OnGestureListener {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.save_sdcard:
-			service.getSensors().saveToSdcard();
+			if (service != null) {
+				service.saveToSdcard();
+			}
 			return true;
 		case R.id.settings:
 			startActivity(new Intent(RDActivity.this, Preferences.class));
@@ -563,6 +586,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 					updateTrainLastUpdate();
 					updateMeteoLastUpdate();
 					updateThermoLastUpdate();
+					updateEnergyLastUpdate();
 				}
 			});
 		}
@@ -581,6 +605,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 	        	updateThermoView();
 	        	updateSwitchesView();
 	        	updateDoorsView();
+	        	updateEnergyView();
 	        	updateTrainView();
 	        	updateDashboardThermo();
 	        }
@@ -793,30 +818,73 @@ public class RDActivity extends Activity implements OnGestureListener {
 			}
 		}
 	}
-	
-	private String deltaToString(long delta) {
+
+	private void updateEnergyView() {
+		SensorData series = null;
+
+		// Power
+		if (service != null) {
+			series = service.getEnergy().getPowerData();
+		}
+
+		SensorPlot plot = (SensorPlot) findViewById(R.id.energyPlot);
+		plot.clear();
+		plot.removeMarkers();
+		plot.addSeries(series);
+		plot.redraw();
+
+		TextView power = (TextView) findViewById(R.id.power);
+		if ((series != null) && (series.size() > 0)) {
+        	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+            decimalFormat.applyPattern("#0.000");
+            float lastValue = series.getLast().value;
+            power.setText(decimalFormat.format(lastValue));
+        } else {
+        	power.setText("?");
+        }
+
+		TextView energy = (TextView) findViewById(R.id.energy);
+        DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+        decimalFormat.applyPattern("#0.0");
+        float value = 0.0f;
+        if ((service != null) && (service.getEnergy().getEnergyValue() >= 0)) {
+        	value = service.getEnergy().getEnergyValue();
+        	energy.setText(decimalFormat.format(value));
+        } else {
+        	energy.setText("?");
+        }
+
+        updateEnergyLastUpdate();
+	}
+
+	private String deltaToTimeString(long delta) {
 		int hours = (int) delta / 3600000;
 		int minutes = ((int)delta - (hours * 3600000)) / 60000;
 		String delai = "" + hours + ":" + String.format("%02d", minutes);
 		return delai;
 	}
-	
+
+	private String deltaToDateString(long delta) {
+		int days = (int) delta / 86400000;
+		return String.format(getString(R.string.days), days);
+	}
+
 	public void updateMeteoLastUpdate() {
 		TextView lastUpdate = (TextView) findViewById(R.id.meteo_last_update);
 		if ((service != null) && (service.getMeteo().getLastUpdate() != null)) {
 			long delta = new Date().getTime() - service.getMeteo().getLastUpdate().getTime();
-			lastUpdate.setText(String.format(getString(R.string.ilya), deltaToString(delta)));
+			lastUpdate.setText(String.format(getString(R.string.ilya), deltaToTimeString(delta)));
 		} else {
 			lastUpdate.setText("");
 		}
 		lastUpdate.invalidate();
 	}
-	
+
 	public void updateTrainLastUpdate() {
 		TextView lastUpdate = (TextView) findViewById(R.id.train_last_update);
 		if ((service != null) && (service.getTrains().getLastUpdate() != null)) {
 			long delta = new Date().getTime() - service.getTrains().getLastUpdate().getTime();
-			lastUpdate.setText(String.format(getString(R.string.ilya), deltaToString(delta)));
+			lastUpdate.setText(String.format(getString(R.string.ilya), deltaToTimeString(delta)));
 		} else {
 			lastUpdate.setText("");
 		}
@@ -827,11 +895,31 @@ public class RDActivity extends Activity implements OnGestureListener {
 		TextView lastUpdate = (TextView) findViewById(R.id.thermo_last_update);
 		if ((service != null) && (service.getSensors().getLastUpdate() != null)) {
 			long delta = new Date().getTime() - service.getSensors().getLastUpdate().getTime();
-			lastUpdate.setText(String.format(getString(R.string.ilya), deltaToString(delta)));
+			lastUpdate.setText(String.format(getString(R.string.ilya), deltaToTimeString(delta)));
 		} else {
 			lastUpdate.setText("");
 		}
 		lastUpdate.invalidate();
+	}
+
+	public void updateEnergyLastUpdate() {
+		TextView lastUpdate = (TextView) findViewById(R.id.power_last_update);
+		if ((service != null) && (service.getEnergy().getLastUpdate() != null)) {
+			long delta = new Date().getTime() - service.getEnergy().getLastUpdate().getTime();
+			lastUpdate.setText(String.format(getString(R.string.ilya), deltaToTimeString(delta)));
+		} else {
+			lastUpdate.setText("");
+		}
+		lastUpdate.invalidate();
+
+		TextView lastEnergyUpdate = (TextView) findViewById(R.id.energy_last_update);
+		if ((service != null) && (service.getEnergy().getLastEnergyResetDate() != null)) {
+			long delta = new Date().getTime() - service.getEnergy().getLastEnergyResetDate().getTime();
+			lastEnergyUpdate.setText(String.format(getString(R.string.depuis), deltaToDateString(delta)));
+		} else {
+			lastEnergyUpdate.setText("");
+		}
+		lastEnergyUpdate.invalidate();
 	}
 
 	// Callback for Service
@@ -884,7 +972,15 @@ public class RDActivity extends Activity implements OnGestureListener {
 				 }
 			 });
 		 }
-		 
+
+		 public void updateEnergy() {
+			 runOnUiThread(new Runnable() {
+				 public void run() {
+					 updateEnergyView();
+				 }
+			 });
+		 }
+
 		 public void resetLeds() {
 			 runOnUiThread(new Runnable() {
 				 public void run() {

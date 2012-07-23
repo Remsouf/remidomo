@@ -21,6 +21,7 @@
 		app:dots_color="#00FFFF"
 		app:auto_range="false"
         app:tap_enabled="true"
+        app:units="@string/degC"
     	android:background="@drawable/water_background" />
         
 </LinearLayout>

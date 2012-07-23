@@ -77,6 +77,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 	private int dotsColor;
 	private boolean autoRange;
     private boolean tapEnabled;
+    private String units;
 	
 	private SharedPreferences prefs;
 	
@@ -95,6 +96,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		dotsColor = Color.CYAN;
 		autoRange = true;
 		tapEnabled = false;
+		units = "?";
 
 		initTouchHandling();
 		initPlot();
@@ -112,7 +114,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		dotsColor = a.getColor(R.styleable.SensorPlot_dots_color, Color.CYAN);
 		autoRange = a.getBoolean(R.styleable.SensorPlot_auto_range, false);
 		tapEnabled = a.getBoolean(R.styleable.SensorPlot_tap_enabled, false);
-		
+		units = a.getString(R.styleable.SensorPlot_units);
 		initTouchHandling();
 		initPlot();
 	}
@@ -129,6 +131,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		dotsColor = a.getColor(R.styleable.SensorPlot_dots_color, Color.CYAN);
 		autoRange = a.getBoolean(R.styleable.SensorPlot_auto_range, false);
 		tapEnabled = a.getBoolean(R.styleable.SensorPlot_tap_enabled, false);
+		units = a.getString(R.styleable.SensorPlot_units);
 
 		initTouchHandling();
 		initPlot();
@@ -165,7 +168,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
         
         // domain/range labels
         setDomainLabel("");
-        setRangeLabel("°C");
+        setRangeLabel(units);
  
         setPlotMargins(0, 0, 0, 0);
         setPlotPadding(0, 0, 0, 0);

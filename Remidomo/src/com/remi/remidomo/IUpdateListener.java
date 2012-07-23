@@ -7,6 +7,7 @@ public interface IUpdateListener {
 	void updateThermo();
 	void updateSwitches();
 	void updateDoors();
+	void updateEnergy();
 	void resetLeds();
 	void errorLeds();
 	void blinkLeds();
