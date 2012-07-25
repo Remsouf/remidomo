@@ -410,8 +410,9 @@ public class RDService extends Service {
     			if (msg.getType() == xPLMessage.MessageType.STATUS) {
     				if ("basic".equals(msg.getSchemaType()) &&
     					"hbeat".equals(msg.getSchemaClass())) {
-    					addLog("Heart beat reçu de " + msg.getSource(), LogLevel.UPDATE);
-    					Log.d(TAG, "heartbeat from " + msg.getSource());
+    					String details = msg.getSource() + " (v" + msg.getNamedValue("version")+")";
+    					addLog("Heart beat reçu de " + details, LogLevel.UPDATE);
+    					Log.d(TAG, "heartbeat from " + details);
     					flashLeds();
     				}
     			} else if (msg.getType() == xPLMessage.MessageType.TRIGGER) {
