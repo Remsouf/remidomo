@@ -68,22 +68,65 @@
         <TableRow
             android:paddingTop="10dp"
             android:paddingBottom="10dp">
-          
+
             <ImageButton
             	android:id="@+id/garage_status"
             	android:layout_width="wrap_content"
             	android:layout_height="wrap_content"
             	android:src="@drawable/meteo_unknown"
-            	android:background="@null" />
+            	android:background="@null"
+            	android:layout_gravity="center_vertical" />
 
             <TextView
     			android:text="@string/portail_text"
-        		android:layout_width="fill_parent"
+        		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
         		android:textSize="24px"
         		android:paddingLeft="20px"
         		android:layout_gravity="center_vertical" />
-           
+
+            <RelativeLayout
+                android:id="@+id/history_layout"
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/garage_frame"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                	android:src="@drawable/history"
+            		android:background="@null"
+            		android:layout_centerVertical="true"/>
+
+            	<ScrollView
+                	android:layout_width="fill_parent"
+                	android:layout_height="55dp"
+                	android:scrollbarStyle="insideInset">
+
+                	<LinearLayout
+                    	android:id="@+id/garage_history"
+                    	android:layout_width="wrap_content"
+                    	android:layout_height="wrap_content"
+                    	android:orientation="vertical"
+                    	android:layout_gravity="center_horizontal">
+                    	<!-- Content added dynamically -->
+                	</LinearLayout>
+
+            	</ScrollView>
+
+            	<ImageButton
+            	    android:id="@+id/history_clear"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                	android:src="@drawable/trash"
+            		android:background="@null"
+            		android:layout_alignParentRight="true"
+            		android:layout_centerVertical="true"/>
+
+            </RelativeLayout>
+
         </TableRow>
     </TableLayout>
 </LinearLayout>

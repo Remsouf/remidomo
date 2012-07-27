@@ -267,7 +267,35 @@ public class RDActivity extends Activity implements OnGestureListener {
         		service.toggleSwitch(0);
         	}
         });
-        
+
+        // Hooks for log buttons
+        final ImageButton clearHistoryButton = (ImageButton) findViewById(R.id.history_clear);
+        clearHistoryButton.setOnClickListener(new RelativeLayout.OnClickListener() {
+        	public void onClick(View v) {
+        		if (service != null) {
+        			Animation anim = AnimationUtils.loadAnimation(RDActivity.this, R.anim.rotozoomout);
+                	LinearLayout history = (LinearLayout) findViewById(R.id.garage_history);
+                	history.startAnimation(anim);
+
+                	// Clear history at the end of animation
+                	anim.setAnimationListener(new AnimationListener() {
+                		@Override
+                		public void onAnimationStart(Animation animation) {}
+
+                		@Override
+                		public void onAnimationRepeat(Animation animation) {}
+
+                		@Override
+                		public void onAnimationEnd(Animation animation) {
+                			if (service != null) {
+                				service.getDoors().clearHistory(0);
+                			}
+                		}
+                	});
+        		}
+        	}
+        });
+
         // Hooks for log buttons
         final ImageButton clearLogButton = (ImageButton) findViewById(R.id.trash_button);
         clearLogButton.setOnClickListener(new RelativeLayout.OnClickListener() {
@@ -341,14 +369,17 @@ public class RDActivity extends Activity implements OnGestureListener {
     	ImageButton refresh = (ImageButton) findViewById(R.id.refreshButton);
         ImageButton serverLogButton = (ImageButton) findViewById(R.id.rlog_button);
         ImageButton clientLogButton = (ImageButton) findViewById(R.id.log_button);
+        ImageButton switchesHistoryButton = (ImageButton) findViewById(R.id.history_clear);
 
     	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
         if ("Serveur".equals(mode)) {
         	refresh.setVisibility(View.GONE);
         	serverLogButton.setVisibility(View.GONE);
         	clientLogButton.setVisibility(View.GONE);
+        	switchesHistoryButton.setVisibility(View.VISIBLE);
         } else {
         	refresh.setVisibility(View.VISIBLE);
+        	switchesHistoryButton.setVisibility(View.GONE);
         }
 
 		updateListener.startRefreshAnim();
@@ -737,18 +768,28 @@ public class RDActivity extends Activity implements OnGestureListener {
 	
 	private void updateDoorsView() {
 		if (service != null) {
+			// Main icon
 			ImageButton portail = (ImageButton) findViewById(R.id.garage_status);
 			Doors.State state = service.getDoors().getState(Doors.GARAGE);
-			if (state == Doors.State.UNKNOWN) {
-				portail.setImageResource(R.drawable.meteo_unknown);
-			} else if (state == Doors.State.CLOSED) {
-				portail.setImageResource(R.drawable.garage_closed);
-			} else if (state == Doors.State.OPENED) {
-				portail.setImageResource(R.drawable.garage_opened);
-			} else if (state == Doors.State.MOVING) {
-				portail.setImageResource(R.drawable.garage_moving);
-			} else if (state == Doors.State.ERROR) {
-				portail.setImageResource(R.drawable.garage_error);
+			portail.setImageResource(service.getDoors().getResourceForState(state));
+
+			// History
+			LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LinearLayout layout = (LinearLayout) findViewById(R.id.garage_history);
+			layout.removeAllViews();
+
+			int i = 0;
+			for (Doors.Event event: service.getDoors().getHistory(Doors.GARAGE)) {
+				LinearLayout inflated = (LinearLayout) inflater.inflate(R.layout.door_event, layout, true);
+				RelativeLayout eventLayout = (RelativeLayout) inflated.getChildAt(i);
+
+				ImageView icon = (ImageView) eventLayout.getChildAt(0);
+				icon.setImageResource(service.getDoors().getResourceForState(event.state));
+
+				TextView text = (TextView) eventLayout.getChildAt(1);
+				text.setText(event.tstamp.toLocaleString());
+
+				i++;
 			}
 		}
 	}

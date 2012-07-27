@@ -29,6 +29,7 @@ import org.apache.http.protocol.ResponseContent;
 import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -544,8 +545,8 @@ public class ServerThread implements Runnable {
 			HttpEntity entity = new EntityTemplate(new ContentProducer() {
 				public void writeTo(final OutputStream outstream) throws java.io.IOException {
 					OutputStreamWriter writer = new OutputStreamWriter(outstream, "UTF-8");
-					JSONArray array = service.getDoors().getJSONArray();
-					writer.write(array.toString());
+					JSONObject json = service.getDoors().getJSON();
+					writer.write(json.toString());
 					writer.flush();
 				}
 			});

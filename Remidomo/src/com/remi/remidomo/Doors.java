@@ -11,6 +11,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +33,14 @@ public class Doors {
 						MOVING,
 						UNKNOWN,
 						ERROR };
+
+	public static class Event {
+		public State state;
+		public Date tstamp;
+	}
+
+	// Only for 1 door for now
+	private ArrayList<Event> eventHistory = new ArrayList<Event>();
 
 	private State states[];
 
@@ -136,13 +145,38 @@ public class Doors {
 
 			request.setURI(new URI("http://"+ipAddr+":"+port+"/doors"));
 			String content = client.execute(request, new BasicResponseHandler());
-			JSONArray array = new JSONArray(content);
+			JSONObject data = new JSONObject(content);
+
+			// Current values
+			JSONArray current = data.getJSONArray("current");
 			for (int i=0; i<MAX_DOORS; i++) {
-				if (i<array.length()) {
-					String stateStr = array.getString(i);
+				if (i<current.length()) {
+					String stateStr = current.getString(i);
 					setState(i, State.valueOf(stateStr), false);
 				}
 			}
+
+			// History
+			synchronized(eventHistory) {
+				JSONArray history = data.getJSONArray("history");
+				for (int i=0; i<MAX_DOORS; i++) {
+					if (i<history.length()) {
+						eventHistory.clear();
+						JSONArray events = history.getJSONArray(i);
+
+						for (int j=0; j<events.length(); j++) {
+							JSONArray event = events.getJSONArray(j);
+							String stateStr = event.getString(0);
+							long tstamp = event.getLong(1);
+							Event pastEvent = new Event();
+							pastEvent.state = State.valueOf(stateStr);
+							pastEvent.tstamp = new Date(tstamp);
+							eventHistory.add(pastEvent);
+						}
+					}
+				}
+			}
+
 			service.addLog("Mise à jour des états portes depuis le serveur", RDService.LogLevel.UPDATE);
 			if (service.callback != null) {
 				service.callback.updateDoors();
@@ -168,13 +202,35 @@ public class Doors {
 		}
 	}
 	
-	public JSONArray getJSONArray() {
+	public JSONObject getJSON() {
 		try {
-			JSONArray array = new JSONArray();
+			JSONObject dict = new JSONObject();
+
+			// Current values
+			JSONArray currentArray = new JSONArray();
 			for (int i=0; i<MAX_DOORS; i++) {
-				array.put(i, states[i].toString());
+				currentArray.put(i, states[i].toString());
 			}
-			return array;
+			dict.put("current", currentArray);
+
+			// history
+			synchronized(eventHistory) {
+				JSONArray histArray = new JSONArray();
+				for (int i=0; i<MAX_DOORS; i++) {
+					JSONArray events = new JSONArray();
+					for (Event ev: eventHistory) {
+						JSONArray event = new JSONArray();
+
+						event.put(ev.state.toString());
+						event.put(ev.tstamp.getTime());
+						events.put(event);
+					}
+					histArray.put(events);
+				}
+				dict.put("history", histArray);
+			}
+
+			return dict;
 		} catch (org.json.JSONException e) {
 			Log.e(TAG, "Failed creating JSON data for doors");
 			return null;
@@ -226,6 +282,14 @@ public class Doors {
 			service.addLog("Portes synchronisées avec le matériel", RDService.LogLevel.UPDATE);
 
 			setState(GARAGE, newState, true);
+			Event event = new Event();
+			event.state = newState;
+			event.tstamp  = new Date();
+
+			synchronized(eventHistory) {
+				eventHistory.add(event);
+			}
+
 			if ((newState == State.CLOSED) || (newState == State.OPENED)) {
 				service.pushToClients("door", GARAGE, newState.toString());
 			} else if (newState == State.MOVING) {
@@ -247,6 +311,37 @@ public class Doors {
 				// there's something wrong.
 				service.pushToClients("door", GARAGE, states[GARAGE].toString());
 			}
+		}
+	}
+
+	public int getResourceForState(State state) {
+		if (state == Doors.State.UNKNOWN) {
+			return R.drawable.meteo_unknown;
+		} else if (state == Doors.State.CLOSED) {
+			return R.drawable.garage_closed;
+		} else if (state == Doors.State.OPENED) {
+			return R.drawable.garage_opened;
+		} else if (state == Doors.State.MOVING) {
+			return R.drawable.garage_moving;
+		} else if (state == Doors.State.ERROR) {
+			return R.drawable.garage_error;
+		} else {
+			return R.drawable.meteo_unknown;
+		}
+	}
+
+	public ArrayList<Event> getHistory(int index) {
+		synchronized(eventHistory) {
+			return eventHistory;
+		}
+	}
+
+	public void clearHistory(int index) {
+		synchronized(eventHistory) {
+			eventHistory.clear();
+		}
+		if (service.callback != null) {
+			service.callback.updateDoors();
 		}
 	}
 }
