@@ -789,6 +789,10 @@ public class RDService extends Service {
 			} else if ("lowbat".equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
 				showAlertNotification(getString(R.string.low_bat), R.raw.garage_alert, tstamp);
+			} else if ("missing_sensor".equals(target)) {
+				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
+				String sensorName = intent.getStringExtra(PushSender.STATE);
+				showAlertNotification(String.format(getString(R.string.missing_sensor), sensorName), R.raw.garage_alert, tstamp);
 			} else {
 				Log.e(TAG, "Unknown push target: " + target);
 				addLog("Cible push inconnue: " + target, LogLevel.HIGH);

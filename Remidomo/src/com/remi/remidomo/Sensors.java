@@ -42,6 +42,7 @@ class Sensors {
     private final RDService service;
     
     private boolean readyForUpdates;
+    private boolean warnedAboutMissingSensor = false;
 
     private SharedPreferences prefs;
     private NotificationManager notificationMgr;
@@ -49,6 +50,10 @@ class Sensors {
     // Unique Identification Number for the Notification.
     private final int NOTIFICATION_RESTORE = 2;
     
+    // Time in minutes before warning that a sensor
+    // stopped being updated.
+    private final static long WARN_MISSING_MINS = 60;
+
 	public Sensors(RDService service) {
 		this.service = service;
 		
@@ -185,6 +190,8 @@ class Sensors {
     	
     	data.writeFile(SensorData.DirType.INTERNAL,
     				   SensorData.FileFormat.BINARY);
+
+    	checkSensorsConsistency();
     }
 
     public void dumpData(OutputStreamWriter writer, long lastTstamp) throws java.io.IOException {
@@ -301,5 +308,44 @@ class Sensors {
         		}
         	}
     	}).start();
+    }
+
+    private void checkSensorsConsistency() {
+    	// 1st, find the most recent sensor timestamp
+    	long maxTime = 0;
+    	for (SensorData sensor: sensors) {
+    		long tstamp = sensor.getLast().time;
+    		if (tstamp > maxTime) {
+    			maxTime = tstamp;
+    		}
+    	}
+
+    	// Now, see if a sensor has not been updated for 15 min
+    	boolean foundMissingSensor = false;
+    	for (SensorData sensor: sensors) {
+    		long tstamp = sensor.getLast().time;
+
+    		if (maxTime - tstamp > WARN_MISSING_MINS*60*1000) {
+    			// Note: we're necessarily in server mode,
+    			// because the only caller is updateData() from xPL message
+    			if ((service != null) && (!warnedAboutMissingSensor)) {
+        			service.pushToClients("missing_sensor", 0, sensor.getName());
+        			String msg = String.format(service.getString(R.string.missing_sensor), sensor.getName());
+        			service.showAlertNotification(msg, R.raw.garage_alert, new Date());
+        			service.addLog(msg);
+        			warnedAboutMissingSensor = true;
+    			}
+
+    			foundMissingSensor = true;
+        		Log.i(TAG, "Sensor " + sensor.getName() + " not updated any more !");
+        		// Warn for 1st sensor found missing
+        		return;
+    		}
+    	}
+
+    	// Reset flag when everything's fine
+    	if (!foundMissingSensor) {
+    		warnedAboutMissingSensor = false;
+    	}
     }
 }

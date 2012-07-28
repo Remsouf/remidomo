@@ -90,5 +90,6 @@
     <string name="garage_closed">Garage fermé</string>
     <string name="garage_moving">Garage bloqué en cours de manoeuvre</string>
     <string name="low_bat">Batterie du serveur faible</string>
+    <string name="missing_sensor">Le capteur \'%1$s\' n\'émet plus</string>
 
 </resources>
