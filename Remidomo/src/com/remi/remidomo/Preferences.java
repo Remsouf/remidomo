@@ -11,10 +11,11 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 public class Preferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
-	
-	public static final String DEFAULT_RFX_PORT = "3865";
-	public static final String DEFAULT_PORT = "2012";
-	public static final String DEFAULT_IP = "remidomo.hd.free.fr";
+
+	//public static final String DEFAULT_RFX_PORT = "3865";
+	public static final String DEFAULT_RFX_PORT = "1234";
+	public static final String DEFAULT_PORT = "1234";
+	public static final String DEFAULT_IP = "1.2.3.4";
 	public static final String DEFAULT_MODE = "Serveur";
 	public static final String DEFAULT_LOGLIMIT = "365";
 	public static final String DEFAULT_SNCF_POLL = "15";

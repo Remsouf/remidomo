@@ -75,22 +75,6 @@
             android:persistent="true"
             android:inputType="number"
             android:numeric="integer" />
-
-        <EditTextPreference
-            android:key="c2dm_account"
-            android:title="@string/pref_c2dm_account_title"
-            android:summary="@string/pref_c2dm_account_summary"
-            android:defaultValue=""
-            android:dialogTitle="@string/pref_c2dm_account_dialog"
-            android:persistent="true" />
-        
-        <EditTextPreference
-            android:key="c2dm_password"
-            android:title="@string/pref_c2dm_password_title"
-            android:summary="@string/pref_c2dm_password_summary"
-            android:defaultValue=""
-            android:dialogTitle="@string/pref_c2dm_password_dialog"
-            android:persistent="true" />
                
     </PreferenceCategory>
 
