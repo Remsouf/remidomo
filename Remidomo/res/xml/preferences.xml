@@ -1,177 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory
-        android:title="@string/pref_general"
-    	android:key="general">
-        
+    <PreferenceCategory android:title="@string/pref_service" >
+
         <CheckBoxPreference
-            android:key="reset"
-            android:title="@string/pref_reset_title"
-            android:summary="@string/pref_reset_summary"
             android:defaultValue="false"
-            android:persistent="false" />
+            android:key="reset"
+            android:persistent="false"
+            android:summary="@string/pref_reset_summary"
+            android:title="@string/pref_reset_title" />
+
+        <PreferenceScreen
+            android:key="mode_screen"
+            android:title="@string/pref_reseau"
+            android:icon="@drawable/pref_network" >
+
+            <ListPreference
+                android:defaultValue="Serveur"
+                android:entries="@array/mode"
+                android:entryValues="@array/modeValues"
+                android:key="mode"
+                android:persistent="true"
+                android:summary="@string/pref_mode_summary"
+                android:title="@string/pref_mode_title" />
+            <EditTextPreference
+                android:defaultValue="192.168.0.5"
+                android:dialogTitle="@string/pref_ip_dialog"
+                android:key="ip_address"
+                android:persistent="true"
+                android:summary="@string/pref_ip_summary"
+                android:title="@string/pref_ip_title" />
+            <EditTextPreference
+                android:defaultValue="3865"
+                android:dialogTitle="@string/pref_port_rfxlan"
+                android:inputType="number"
+                android:key="rfx_port"
+                android:numeric="integer"
+                android:persistent="true"
+                android:summary="@string/pref_port_summary"
+                android:title="@string/pref_port_rfxlan" />
+            <EditTextPreference
+                android:defaultValue="2012"
+                android:dialogTitle="@string/pref_port_serveur"
+                android:inputType="number"
+                android:key="port"
+                android:numeric="integer"
+                android:persistent="true"
+                android:summary="@string/pref_port_summary"
+                android:title="@string/pref_port_serveur" />
+            <EditTextPreference
+                android:defaultValue="60"
+                android:dialogTitle="@string/pref_poll_dialog"
+                android:inputType="number"
+                android:key="client_poll"
+                android:numeric="integer"
+                android:persistent="true"
+                android:summary="@string/pref_poll_summary"
+                android:title="@string/pref_client_poll_title" />
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_general" >
 
         <EditTextPreference
-            android:key="loglimit"
-            android:title="@string/pref_storelimit_title"
-            android:summary="@string/pref_storelimit_summary"
             android:defaultValue="365"
             android:dialogTitle="@string/pref_storelimit_dialog"
-            android:persistent="true"
             android:inputType="number"
-            android:numeric="integer" />
+            android:key="loglimit"
+            android:numeric="integer"
+            android:persistent="true"
+            android:summary="@string/pref_storelimit_summary"
+            android:title="@string/pref_storelimit_title" />
+
+        <PreferenceScreen
+            android:title="@string/pref_sncf"
+            android:icon="@drawable/pref_train" >
+            <ListPreference
+                android:defaultValue="GOC"
+                android:entries="@array/gares"
+                android:entryValues="@array/garesValues"
+                android:key="gare"
+                android:persistent="true"
+                android:summary="@string/pref_gare_summary"
+                android:title="@string/pref_gare_title" />
+
+            <EditTextPreference
+                android:defaultValue="15"
+                android:dialogTitle="@string/pref_poll_dialog"
+                android:inputType="number"
+                android:key="sncf_poll"
+                android:numeric="integer"
+                android:persistent="true"
+                android:summary="@string/pref_poll_summary"
+                android:title="@string/pref_poll_title" />
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:title="@string/pref_meteo"
+            android:icon="@drawable/pref_meteo" >
+            <EditTextPreference
+                android:defaultValue="4"
+                android:dialogTitle="@string/pref_meteo_dialog"
+                android:inputType="number"
+                android:key="meteo_poll"
+                android:numeric="integer"
+                android:persistent="true"
+                android:summary="@string/pref_meteo_summary"
+                android:title="@string/pref_meteo_title" />
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:title="@string/pref_plots"
+            android:icon="@drawable/pref_plots" >
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="night_highlight"
+                android:persistent="true"
+                android:summaryOff="@string/pref_night_summary_off"
+                android:summaryOn="@string/pref_night_summary_on"
+                android:title="@string/pref_night_title" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="dots_highlight"
+                android:persistent="true"
+                android:summaryOff="@string/pref_dots_summary_off"
+                android:summaryOn="@string/pref_dots_summary_on"
+                android:title="@string/pref_dots_title" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="day_labels"
+                android:persistent="true"
+                android:summaryOff="@string/pref_days_summary_off"
+                android:summaryOn="@string/pref_days_summary_on"
+                android:title="@string/pref_days_title" />
+
+            <EditTextPreference
+                android:defaultValue="10"
+                android:dialogTitle="@string/pref_plotlimit_dialog"
+                android:inputType="number"
+                android:key="plot_limit"
+                android:numeric="integer"
+                android:persistent="true"
+                android:summary="@string/pref_plotlimit_summary"
+                android:title="@string/pref_plotlimit_title" />
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:icon="@drawable/pref_notif"
+            android:title="@string/pref_notifications" >
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="notif_sound"
+                android:persistent="true"
+                android:summaryOff="@string/pref_sound_summary_off"
+                android:summaryOn="@string/pref_sound_summary_on"
+                android:title="@string/pref_sound_title" />
+        </PreferenceScreen>
 
     </PreferenceCategory>
- 
-    <PreferenceCategory 
-        android:title="@string/pref_reseau"
-        android:key="reseau">
-                
-        <ListPreference 
-            android:key="mode"
-            android:title="@string/pref_mode_title"
-            android:summary="@string/pref_mode_summary"
-            android:defaultValue="Serveur" 
-            android:entries="@array/mode"
-            android:entryValues="@array/modeValues"
-            android:persistent="true"
-        />
 
-        <EditTextPreference
-            android:key="ip_address"
-            android:title="@string/pref_ip_title"
-            android:summary="@string/pref_ip_summary"
-            android:defaultValue="192.168.0.5"
-            android:dialogTitle="@string/pref_ip_dialog"
-            android:persistent="true" />
-
-        <EditTextPreference
-            android:key="rfx_port"
-            android:title="@string/pref_port_rfxlan"
-            android:summary="@string/pref_port_summary"
-            android:defaultValue="3865"
-            android:dialogTitle="@string/pref_port_rfxlan"
-            android:persistent="true"
-            android:inputType="number"
-            android:numeric="integer" />
-
-        <EditTextPreference
-            android:key="port"
-            android:title="@string/pref_port_serveur"
-            android:summary="@string/pref_port_summary"
-            android:defaultValue="2012"
-            android:dialogTitle="@string/pref_port_serveur"
-            android:persistent="true"
-            android:inputType="number"
-            android:numeric="integer" />
-               
-        <EditTextPreference
-            android:key="client_poll"
-            android:title="@string/pref_client_poll_title"
-            android:summary="@string/pref_poll_summary"
-            android:defaultValue="60"
-            android:dialogTitle="@string/pref_poll_dialog"
-            android:persistent="true"
-            android:inputType="number"
-            android:numeric="integer" />
-               
-    </PreferenceCategory>
-
-    <PreferenceCategory 
-        android:title="@string/pref_sncf"
-        android:key="sncf">
-                
-        <ListPreference 
-            android:key="gare"
-            android:title="@string/pref_gare_title"
-            android:summary="@string/pref_gare_summary"
-            android:defaultValue="GOC" 
-            android:entries="@array/gares"
-            android:entryValues="@array/garesValues"
-            android:persistent="true"
-        />
-        
-        <EditTextPreference
-            android:key="sncf_poll"
-            android:title="@string/pref_poll_title"
-            android:summary="@string/pref_poll_summary"
-            android:defaultValue="15"
-            android:dialogTitle="@string/pref_poll_dialog"
-            android:persistent="true"
-            android:inputType="number"
-            android:numeric="integer" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory 
-        android:title="@string/pref_meteo"
-        android:key="meteo">
-
-        <EditTextPreference
-            android:key="meteo_poll"
-            android:title="@string/pref_meteo_title"
-            android:summary="@string/pref_meteo_summary"
-            android:defaultValue="4"
-            android:dialogTitle="@string/pref_meteo_dialog"
-            android:persistent="true"
-            android:inputType="number"
-            android:numeric="integer" />
-
-    </PreferenceCategory>
-    
-    <PreferenceCategory
-        android:title="@string/pref_plots"
-        android:key="plots">
-        
-        <CheckBoxPreference
-            android:key="night_highlight"
-            android:title="@string/pref_night_title"
-            android:summaryOn="@string/pref_night_summary_on"
-            android:summaryOff="@string/pref_night_summary_off"
-            android:defaultValue="true"
-            android:persistent="true" />
-
-        <CheckBoxPreference
-            android:key="dots_highlight"
-            android:title="@string/pref_dots_title"
-            android:summaryOn="@string/pref_dots_summary_on"
-            android:summaryOff="@string/pref_dots_summary_off"
-            android:defaultValue="true"
-            android:persistent="true" />
-        
-        <CheckBoxPreference
-            android:key="day_labels"
-            android:title="@string/pref_days_title"
-            android:summaryOn="@string/pref_days_summary_on"
-            android:summaryOff="@string/pref_days_summary_off"
-            android:defaultValue="true"
-            android:persistent="true" />
-        
-        <EditTextPreference
-            android:key="plot_limit"
-            android:title="@string/pref_plotlimit_title"
-            android:summary="@string/pref_plotlimit_summary"
-            android:defaultValue="10"
-            android:dialogTitle="@string/pref_plotlimit_dialog"
-            android:persistent="true"
-            android:inputType="number"
-            android:numeric="integer" />
-                
-    </PreferenceCategory>
-    
-    <PreferenceCategory
-        android:title="@string/pref_notifications"
-        android:key="notifications">
-        
-        <CheckBoxPreference
-            android:key="notif_sound"
-            android:title="@string/pref_sound_title"
-            android:summaryOn="@string/pref_sound_summary_on"
-            android:summaryOff="@string/pref_sound_summary_off"
-            android:defaultValue="true"
-            android:persistent="true" />
-                
-    </PreferenceCategory>
-    
 </PreferenceScreen>

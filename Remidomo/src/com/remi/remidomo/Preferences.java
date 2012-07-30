@@ -9,6 +9,7 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 
 public class Preferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
@@ -29,6 +30,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	public static final boolean DEFAULT_SOUND = true;
 
 	private ListPreference mode;
+	private PreferenceScreen mode_screen;
 	private EditTextPreference ip_address;
 	private EditTextPreference rfx_port;
 	private EditTextPreference port;
@@ -53,6 +55,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 
         reset = (CheckBoxPreference) getPreferenceScreen().findPreference("reset");
         mode = (ListPreference) getPreferenceScreen().findPreference("mode");
+        mode_screen = (PreferenceScreen) getPreferenceScreen().findPreference("mode_screen");
         ip_address = (EditTextPreference) getPreferenceScreen().findPreference("ip_address");
         port = (EditTextPreference) getPreferenceScreen().findPreference("port");
         rfx_port = (EditTextPreference) getPreferenceScreen().findPreference("rfx_port");
@@ -77,6 +80,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
         
         // Set up a listener whenever a key changes            
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        mode_screen.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -111,6 +115,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     private void updateTexts() {
     	String mode_sel = prefs.getString("mode", DEFAULT_MODE);
     	mode.setSummary(mode_sel);
+    	mode_screen.setSummary(mode_sel);
+    	this.onContentChanged();
     	if ("Serveur".equals(mode_sel)) {
     		ip_address.setEnabled(false);
     		rfx_port.setEnabled(true);
