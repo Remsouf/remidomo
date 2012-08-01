@@ -3,7 +3,9 @@ package com.remi.remidomo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.TimerTask;
 
 import org.apache.http.client.HttpClient;
@@ -40,7 +42,8 @@ public class Doors {
 	}
 
 	// Only for 1 door for now
-	private ArrayList<Event> eventHistory = new ArrayList<Event>();
+	private ArrayList<Event> eventHistoryInternal = new ArrayList<Event>();
+	private List<Event> eventHistory = Collections.synchronizedList(eventHistoryInternal);
 
 	private State states[];
 
@@ -157,22 +160,20 @@ public class Doors {
 			}
 
 			// History
-			synchronized(eventHistory) {
-				JSONArray history = data.getJSONArray("history");
-				for (int i=0; i<MAX_DOORS; i++) {
-					if (i<history.length()) {
-						eventHistory.clear();
-						JSONArray events = history.getJSONArray(i);
+			JSONArray history = data.getJSONArray("history");
+			for (int i=0; i<MAX_DOORS; i++) {
+				if (i<history.length()) {
+					eventHistory.clear();
+					JSONArray events = history.getJSONArray(i);
 
-						for (int j=0; j<events.length(); j++) {
-							JSONArray event = events.getJSONArray(j);
-							String stateStr = event.getString(0);
-							long tstamp = event.getLong(1);
-							Event pastEvent = new Event();
-							pastEvent.state = State.valueOf(stateStr);
-							pastEvent.tstamp = new Date(tstamp);
-							eventHistory.add(pastEvent);
-						}
+					for (int j=0; j<events.length(); j++) {
+						JSONArray event = events.getJSONArray(j);
+						String stateStr = event.getString(0);
+						long tstamp = event.getLong(1);
+						Event pastEvent = new Event();
+						pastEvent.state = State.valueOf(stateStr);
+						pastEvent.tstamp = new Date(tstamp);
+						eventHistory.add(pastEvent);
 					}
 				}
 			}
@@ -214,21 +215,19 @@ public class Doors {
 			dict.put("current", currentArray);
 
 			// history
-			synchronized(eventHistory) {
-				JSONArray histArray = new JSONArray();
-				for (int i=0; i<MAX_DOORS; i++) {
-					JSONArray events = new JSONArray();
-					for (Event ev: eventHistory) {
-						JSONArray event = new JSONArray();
+			JSONArray histArray = new JSONArray();
+			for (int i=0; i<MAX_DOORS; i++) {
+				JSONArray events = new JSONArray();
+				for (Event ev: eventHistory) {
+					JSONArray event = new JSONArray();
 
-						event.put(ev.state.toString());
-						event.put(ev.tstamp.getTime());
-						events.put(event);
-					}
-					histArray.put(events);
+					event.put(ev.state.toString());
+					event.put(ev.tstamp.getTime());
+					events.put(event);
 				}
-				dict.put("history", histArray);
+				histArray.put(events);
 			}
+			dict.put("history", histArray);
 
 			return dict;
 		} catch (org.json.JSONException e) {
@@ -286,9 +285,7 @@ public class Doors {
 			event.state = newState;
 			event.tstamp  = new Date();
 
-			synchronized(eventHistory) {
-				eventHistory.add(event);
-			}
+			eventHistory.add(event);
 
 			if ((newState == State.CLOSED) || (newState == State.OPENED)) {
 				service.pushToClients("door", GARAGE, newState.toString());
@@ -331,15 +328,11 @@ public class Doors {
 	}
 
 	public ArrayList<Event> getHistory(int index) {
-		synchronized(eventHistory) {
-			return eventHistory;
-		}
+		return new ArrayList<Event>(eventHistory);
 	}
 
 	public void clearHistory(int index) {
-		synchronized(eventHistory) {
-			eventHistory.clear();
-		}
+		eventHistory.clear();
 		if (service.callback != null) {
 			service.callback.updateDoors();
 		}
