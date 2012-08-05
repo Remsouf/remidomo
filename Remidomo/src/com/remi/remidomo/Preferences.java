@@ -28,6 +28,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	public static final boolean DEFAULT_DAY_LABELS = true;
 	public static final String DEFAULT_PLOTLIMIT = "10";
 	public static final boolean DEFAULT_SOUND = true;
+	public static final boolean DEFAULT_BOOTKICK = true;
+	public static final boolean DEFAULT_KEEPSERVICE = true;
 
 	private ListPreference mode;
 	private PreferenceScreen mode_screen;
@@ -39,7 +41,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	private ListPreference gare;
 	private EditTextPreference meteo_poll;
 	private EditTextPreference client_poll;
-	private CheckBoxPreference reset;
+	private CheckBoxPreference bootkick;
+	private CheckBoxPreference keepservice;
 	private EditTextPreference plotlimit;
 
 	private SharedPreferences prefs;
@@ -53,7 +56,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
         
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        reset = (CheckBoxPreference) getPreferenceScreen().findPreference("reset");
+        bootkick = (CheckBoxPreference) getPreferenceScreen().findPreference("bootkick");
+        keepservice = (CheckBoxPreference) getPreferenceScreen().findPreference("keepservice");
         mode = (ListPreference) getPreferenceScreen().findPreference("mode");
         mode_screen = (PreferenceScreen) getPreferenceScreen().findPreference("mode_screen");
         ip_address = (EditTextPreference) getPreferenceScreen().findPreference("ip_address");
@@ -91,7 +95,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);    
 
         // Start the service (again, now that prefs maybe changed)
-        if (prefChanged || reset.isChecked()) {
+        if (prefChanged) {
         	final Intent intent = new Intent(this, RDService.class);
         	intent.putExtra("FORCE_RESTART", true);
         	startService(intent);
@@ -107,7 +111,9 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     		(!"dots_highlight".equals(key)) &&
     		(!"day_labels".equals(key)) &&
     		(!"plot_limit".equals(key)) &&
-    		(!"sound".equals(key))) {
+    		(!"sound".equals(key)) &&
+    		(!"bootkick".equals(key)) &&
+    		(!"keepservice".equals(key))) {
     		prefChanged = true;
     	}
     }
@@ -153,5 +159,19 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     	days = Integer.parseInt(prefs.getString("plot_limit", DEFAULT_PLOTLIMIT));
     	msg = String.format(getString(R.string.pref_plotlimit_summary), days);
     	plotlimit.setSummary(msg);
+
+    	boolean boot = prefs.getBoolean("bootkick", DEFAULT_BOOTKICK);
+    	if (boot) {
+    		bootkick.setSummary(R.string.pref_boot_summary_on);
+    	} else {
+    		bootkick.setSummary(R.string.pref_boot_summary_off);
+    	}
+
+    	boolean keep = prefs.getBoolean("keepservice", DEFAULT_KEEPSERVICE);
+    	if (keep) {
+    		keepservice.setSummary(R.string.pref_keepservice_summary_on);
+    	} else {
+    		keepservice.setSummary(R.string.pref_keepservice_summary_off);
+    	}
     }
 }

@@ -4,11 +4,16 @@
     <PreferenceCategory android:title="@string/pref_service" >
 
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="reset"
-            android:persistent="false"
-            android:summary="@string/pref_reset_summary"
-            android:title="@string/pref_reset_title" />
+            android:defaultValue="true"
+            android:key="bootkick"
+            android:persistent="true"
+            android:title="@string/pref_boot_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="keepservice"
+            android:persistent="true"
+            android:title="@string/pref_keepservice_title" />
 
         <PreferenceScreen
             android:key="mode_screen"

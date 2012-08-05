@@ -55,6 +55,7 @@ public class RDService extends Service {
     private int NOTIFICATION_ALERT = 3; // Not final !
     
     public final static String ACTION_RESTORE_DATA = "com.remi.remidomo.RESTORE_DATA";
+    public final static String ACTION_BOOTKICK = "com.remi.remidomo.BOOTKICK";
 
     private final IBinder mBinder = new LocalBinder();
     public IUpdateListener callback;
@@ -159,6 +160,13 @@ public class RDService extends Service {
             		}
             	};
             }, "sdcard read").start();
+    	} else if ((intent != null) && ACTION_BOOTKICK.equals(intent.getAction())) {
+    		boolean kickboot = prefs.getBoolean("bootkick", Preferences.DEFAULT_BOOTKICK);
+    		if (!kickboot) {
+    			Log.i(TAG, "Exit service to ignore boot event");
+    			cleanObjects();
+    			stopSelf();
+    		}
     	} else {
     		Log.i(TAG, "Start service");
     		addLog("Service (re)démarré");
@@ -253,6 +261,12 @@ public class RDService extends Service {
         // Cancel the persistent notification.
         notificationMgr.cancel(NOTIFICATION_START);
         super.onDestroy();
+    }
+
+    public void stopAtActivityRequest() {
+    	Log.i(TAG, "Stop service at activity request");
+    	cleanObjects();
+    	stopSelf();
     }
 
     public class LocalBinder extends Binder {

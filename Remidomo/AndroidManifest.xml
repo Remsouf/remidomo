@@ -37,7 +37,7 @@
             android:label="@string/service_label"
             android:exported="false" >
             <intent-filter>
-				<action android:name="com.remo.remidomo.RDService" />
+				<action android:name="com.remi.remidomo.BOOTKICK" />
 			</intent-filter>
             
         </service>

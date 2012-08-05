@@ -8,7 +8,7 @@ public class BootReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
     	Intent serviceIntent = new Intent();
-    	serviceIntent.setAction("com.remo.remidomo.RDService");
+    	serviceIntent.setAction(RDService.ACTION_BOOTKICK);
     	context.startService(serviceIntent);
     }
 }

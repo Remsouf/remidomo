@@ -67,6 +67,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 	private ViewFlipper flipper;
 
 	protected GestureDetector gestureScanner;
+	private SharedPreferences prefs;
 
 	public RDService service;
 	
@@ -105,6 +106,8 @@ public class RDActivity extends Activity implements OnGestureListener {
         setContentView(R.layout.main);
 
         gestureScanner = new GestureDetector(this);
+
+    	prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
         flipper.setInAnimation(this, R.anim.slide_in_left);
@@ -384,8 +387,6 @@ public class RDActivity extends Activity implements OnGestureListener {
     @Override
     protected void onResume() {
     	super.onResume();
-    	
-    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     	ImageButton refresh = (ImageButton) findViewById(R.id.refreshButton);
         ImageButton serverLogButton = (ImageButton) findViewById(R.id.rlog_button);
@@ -420,6 +421,12 @@ public class RDActivity extends Activity implements OnGestureListener {
 
     @Override
     protected void onDestroy() {
+
+    	if (!prefs.getBoolean("keepservice", Preferences.DEFAULT_KEEPSERVICE)) {
+    		if (service != null) {
+    			service.stopAtActivityRequest();
+    		}
+    	}
     	unbindService(serviceConnection);
     	super.onDestroy();
     }
@@ -547,7 +554,6 @@ public class RDActivity extends Activity implements OnGestureListener {
 
 		});
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(RDActivity.this);
 		int port = Integer.parseInt(prefs.getString("port", Preferences.DEFAULT_PORT));
 		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
 

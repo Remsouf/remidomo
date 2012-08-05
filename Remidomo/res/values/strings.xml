@@ -47,8 +47,12 @@
     <string name="pref_meteo_summary">Données mises à jour toutes les %1$d heures</string>
     <string name="pref_meteo_dialog">Nombre d\'heures</string>
     <string name="pref_plots">Graphiques</string>
-    <string name="pref_reset_title">Redémarrer le service</string>
-    <string name="pref_reset_summary">Redémarre le service en quittant les préférences</string>
+    <string name="pref_boot_title">Démarrer au boot</string>
+    <string name="pref_boot_summary_on">Lance le service au démarrage du téléphone</string>
+    <string name="pref_boot_summary_off">Lance le service lorsqu\'il est requis</string>
+    <string name="pref_keepservice_title">Garder le service toujours actif</string>
+    <string name="pref_keepservice_summary_off">Arrete le service en quittant</string>
+    <string name="pref_keepservice_summary_on">Le service reste actif même en quittant</string>
     <string name="pref_night_title">Griser les nuits</string>
     <string name="pref_night_summary_on">Grise la courbe entre 20h et 8h</string>
     <string name="pref_night_summary_off">N\'indique pas les nuits sur les courbes</string>
