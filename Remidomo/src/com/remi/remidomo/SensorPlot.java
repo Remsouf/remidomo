@@ -137,6 +137,13 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		initPlot();
 	}
 
+	public void setAttributes(String units, boolean autoRange, int curveColor) {
+		this.units = units;
+		this.autoRange = autoRange;
+		this.curveColor = curveColor;
+		initPlot();
+	}
+
 	private void initTouchHandling() {
 		this.setOnTouchListener(this);
 	}
