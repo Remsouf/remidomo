@@ -87,7 +87,7 @@ public class PushReceiver extends BroadcastReceiver {
 			HttpClient client = new DefaultHttpClient();
 			HttpGet request = new HttpGet();
 
-			request.setURI(new URI("http://"+ipAddr+":"+port+"/pushreg?key=" + key));
+			request.setURI(new URI(ipAddr+":"+port+"/pushreg?key=" + key));
 			String content = client.execute(request, new BasicResponseHandler());
 			Log.d(TAG, "Registration server: " + content);
 

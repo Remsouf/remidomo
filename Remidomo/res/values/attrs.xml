@@ -10,4 +10,11 @@
         <attr name="tap_enabled" format="boolean"/>
         <attr name="units" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="CustomEditTextPreference">
+        <attr name="validator_ip" format="boolean"/>
+        <attr name="validator_int" format="boolean"/>
+        <attr name="min_integer" format="integer"/>
+        <attr name="max_integer" format="integer"/>
+    </declare-styleable>
 </resources>

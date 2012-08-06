@@ -237,7 +237,7 @@ class Sensors {
 			HttpClient client = new DefaultHttpClient();
 			HttpGet request = new HttpGet();
 
-			String uri = "http://"+ipAddr+":"+port+"/sensors";
+			String uri = ipAddr+":"+port+"/sensors";
 			Date lastTstamp = service.getSensors().getLastUpdate();
 			if (lastTstamp != null) {
 				uri = uri + "?last="+lastTstamp.getTime();

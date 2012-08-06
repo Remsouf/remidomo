@@ -146,7 +146,7 @@ public class Doors {
 			HttpClient client = new DefaultHttpClient();
 			HttpGet request = new HttpGet();
 
-			request.setURI(new URI("http://"+ipAddr+":"+port+"/doors"));
+			request.setURI(new URI(ipAddr+":"+port+"/doors"));
 			String content = client.execute(request, new BasicResponseHandler());
 			JSONObject data = new JSONObject(content);
 

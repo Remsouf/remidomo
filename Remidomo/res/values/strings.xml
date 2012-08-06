@@ -75,7 +75,11 @@
 	<string name="pref_c2dm_password_title">Mot de passe C2DM</string>
     <string name="pref_c2dm_password_summary">Mot de passe du compte C2DM</string>
     <string name="pref_c2dm_password_dialog">Mot de passe</string>
-      
+    <string name="invalid_url">Cette URL n\'est pas valide (http://...)</string>
+    <string name="invalid_int_lower">Doit être supérieur à %1$d</string>
+	<string name="invalid_int_higher">Doit être inférieur à %1$d</string>
+	<string name="invalid_int">Ce n\'est pas un entier valide</string>
+
     <!-- Vues -->
     <string name="pool">Piscine</string>
     <string name="outside">Extérieur</string>

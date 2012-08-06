@@ -5,11 +5,11 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.webkit.URLUtil;
 
 public class Preferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
@@ -21,7 +21,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	public static final String DEFAULT_LOGLIMIT = "365";
 	public static final String DEFAULT_SNCF_POLL = "15";
 	public static final String DEFAULT_GARE = "GOC";
-	public static final String DEFAULT_METEO_POLL = "60";
+	public static final String DEFAULT_METEO_POLL = "4";
 	public static final String DEFAULT_CLIENT_POLL = "30";
 	public static final boolean DEFAULT_NIGHT_HIGHLIGHT = true;
 	public static final boolean DEFAULT_DOTS_HIGHLIGHT = true;
@@ -33,17 +33,17 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 
 	private ListPreference mode;
 	private PreferenceScreen mode_screen;
-	private EditTextPreference ip_address;
-	private EditTextPreference rfx_port;
-	private EditTextPreference port;
-	private EditTextPreference loglimit;
-	private EditTextPreference sncf_poll;
+	private CustomEditTextPreference ip_address;
+	private CustomEditTextPreference rfx_port;
+	private CustomEditTextPreference port;
+	private CustomEditTextPreference loglimit;
+	private CustomEditTextPreference sncf_poll;
 	private ListPreference gare;
-	private EditTextPreference meteo_poll;
-	private EditTextPreference client_poll;
+	private CustomEditTextPreference meteo_poll;
+	private CustomEditTextPreference client_poll;
 	private CheckBoxPreference bootkick;
 	private CheckBoxPreference keepservice;
-	private EditTextPreference plotlimit;
+	private CustomEditTextPreference plotlimit;
 
 	private SharedPreferences prefs;
 	
@@ -60,15 +60,15 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
         keepservice = (CheckBoxPreference) getPreferenceScreen().findPreference("keepservice");
         mode = (ListPreference) getPreferenceScreen().findPreference("mode");
         mode_screen = (PreferenceScreen) getPreferenceScreen().findPreference("mode_screen");
-        ip_address = (EditTextPreference) getPreferenceScreen().findPreference("ip_address");
-        port = (EditTextPreference) getPreferenceScreen().findPreference("port");
-        rfx_port = (EditTextPreference) getPreferenceScreen().findPreference("rfx_port");
-        client_poll = (EditTextPreference) getPreferenceScreen().findPreference("client_poll");
-        loglimit = (EditTextPreference) getPreferenceScreen().findPreference("loglimit");
-        sncf_poll = (EditTextPreference) getPreferenceScreen().findPreference("sncf_poll");
+        ip_address = (CustomEditTextPreference) getPreferenceScreen().findPreference("ip_address");
+        port = (CustomEditTextPreference) getPreferenceScreen().findPreference("port");
+        rfx_port = (CustomEditTextPreference) getPreferenceScreen().findPreference("rfx_port");
+        client_poll = (CustomEditTextPreference) getPreferenceScreen().findPreference("client_poll");
+        loglimit = (CustomEditTextPreference) getPreferenceScreen().findPreference("loglimit");
+        sncf_poll = (CustomEditTextPreference) getPreferenceScreen().findPreference("sncf_poll");
         gare = (ListPreference) getPreferenceScreen().findPreference("gare");
-        meteo_poll = (EditTextPreference) getPreferenceScreen().findPreference("meteo_poll");
-        plotlimit = (EditTextPreference) getPreferenceScreen().findPreference("plot_limit");
+        meteo_poll = (CustomEditTextPreference) getPreferenceScreen().findPreference("meteo_poll");
+        plotlimit = (CustomEditTextPreference) getPreferenceScreen().findPreference("plot_limit");
 
         updateTexts();
     }
@@ -103,7 +103,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // Let's do something when a preference value changes
+    	// Let's do something when a preference value changes
     	updateTexts();
     	
     	// Some prefs don't need a service restart

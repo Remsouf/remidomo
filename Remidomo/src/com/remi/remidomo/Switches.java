@@ -224,7 +224,7 @@ class Switches {
 			HttpClient client = new DefaultHttpClient();
 			HttpGet request = new HttpGet();
 
-			request.setURI(new URI("http://"+ipAddr+":"+port+"/switches/query"));
+			request.setURI(new URI(ipAddr+":"+port+"/switches/query"));
 			String content = client.execute(request, new BasicResponseHandler());
 			JSONArray array = new JSONArray(content);
 			for (int i=0; i<MAX_SWITCHES; i++) {
@@ -263,7 +263,7 @@ class Switches {
 				int port = Integer.parseInt(prefs.getString("port", Preferences.DEFAULT_PORT));
 				String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
 
-				String url = "http://" + ipAddr + ":" + port + "/switches/toggle?id=" + index + "&cmd=";
+				String url = ipAddr + ":" + port + "/switches/toggle?id=" + index + "&cmd=";
 				if (state) {
 					url = url + "on";
 				} else {

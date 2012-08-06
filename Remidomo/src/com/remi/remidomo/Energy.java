@@ -152,7 +152,7 @@ class Energy {
 			HttpClient client = new DefaultHttpClient();
 			HttpGet request = new HttpGet();
 
-			String uri = "http://"+ipAddr+":"+port+"/energy";
+			String uri = ipAddr+":"+port+"/energy";
 			Date lastTstamp = service.getEnergy().getLastUpdate();
 			if (lastTstamp != null) {
 				uri = uri + "?last="+lastTstamp.getTime();

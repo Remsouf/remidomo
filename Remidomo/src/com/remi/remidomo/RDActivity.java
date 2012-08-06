@@ -558,7 +558,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
 
 		remoteContent.clearView();
-		remoteContent.loadUrl("http://" + ipAddr + ":" + port + "/log");
+		remoteContent.loadUrl(ipAddr + ":" + port + "/log");
 	}
 
 	@Override
