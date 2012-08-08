@@ -248,7 +248,14 @@ public class RDService extends Service {
                 unregisterReceiver(wifiBroadcastReceiver);
             } catch (IllegalArgumentException ignored) {}
         }
-        
+
+        // Stop listening to low battery event, if registered
+        if (batteryInfoReceiver != null) {
+            try {
+                unregisterReceiver(batteryInfoReceiver);
+            } catch (IllegalArgumentException ignored) {}
+        }
+
         resetLeds();
     }
     

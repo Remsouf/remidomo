@@ -284,19 +284,19 @@ class Sensors {
 		}
     }
     
-    public void saveToSdcard() {
+    public synchronized void saveToSdcard() {
     	for (SensorData sensor: sensors) {
     		sensor.writeFile(SensorData.DirType.SDCARD, SensorData.FileFormat.ASCII);
     	}
     }
 
-    public void readFromSdcard() {
+    public synchronized void readFromSdcard() {
         for (SensorData sensor: sensors) {
         	sensor.readFile(SensorData.DirType.SDCARD);
         }
     }
 
-    private void checkSensorsConsistency() {
+    private synchronized void checkSensorsConsistency() {
     	// 1st, find the most recent sensor timestamp
     	long maxTime = 0;
     	for (SensorData sensor: sensors) {
