@@ -19,6 +19,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -101,7 +102,9 @@ public class RDActivity extends Activity implements OnGestureListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         // Request landscape orientation (90 or 270)
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        if (Build.VERSION.SDK_INT > 8) {
+        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        }
 
         setContentView(R.layout.main);
 
@@ -262,12 +265,8 @@ public class RDActivity extends Activity implements OnGestureListener {
         ImageButton refresh = (ImageButton) findViewById(R.id.refreshButton);
         refresh.setOnClickListener(new ImageButton.OnClickListener() {
         	public void onClick(View v) {
-        		new Thread(new Runnable() {
-        			public void run() {
-        				RefreshTask refreshTask = new RefreshTask();
-        				refreshTask.execute();
-        			}
-        		}).start();
+        		RefreshTask refreshTask = new RefreshTask();
+        		refreshTask.execute();
         	}
         });
         

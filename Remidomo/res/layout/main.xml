@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.remi.remidomo"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
         
@@ -104,7 +105,7 @@
 
         </RelativeLayout>
 
-        <ViewFlipper
+        <com.remi.remidomo.CustomViewFlipper
             android:id="@+id/viewFlipper"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -118,5 +119,5 @@
 			<include layout="@layout/energy" />
 			<include layout="@layout/log" />
 			
-        </ViewFlipper>
+        </com.remi.remidomo.CustomViewFlipper>
 </RelativeLayout>

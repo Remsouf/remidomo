@@ -125,24 +125,28 @@ class Sensors {
 	}
 	
     public SensorData getData(String name) {
-    	for (SensorData i: sensors) {
-    		if (i.getName().equals(name)) {
-    			return i;
+    	synchronized(sensors) {
+    		for (SensorData i: sensors) {
+    			if (i.getName().equals(name)) {
+    				return i;
+    			}
     		}
     	}
     	return null;
     }
     
     public void updateDataChunk(String name, SensorData newData) {
-    	for (SensorData sensor:sensors) {
-			if (sensor.getName().equals(name)) {
-				sensor.addValuesChunk(newData);
-				return;
-			}
-		}
-		
-		// New sensor
-		sensors.add(newData);
+    	synchronized(sensors) {
+    		for (SensorData sensor:sensors) {
+    			if (sensor.getName().equals(name)) {
+    				sensor.addValuesChunk(newData);
+    				return;
+    			}
+    		}
+
+    		// New sensor
+    		sensors.add(newData);
+    	}
     }
 
     public void updateData(RDService service, xPLMessage msg) {
@@ -170,28 +174,30 @@ class Sensors {
     		service.blinkLeds();
     	}
 
-    	SensorData data = null;
-    	for (SensorData i: sensors) {
-    		if (i.getName().equals(device)) {
-    			data = i;
+    	synchronized(sensors) {
+    		SensorData data = null;
+    		for (SensorData i: sensors) {
+    			if (i.getName().equals(device)) {
+    				data = i;
+    			}
     		}
+    		if (data == null) {
+    			data = new SensorData(device, service, true);
+    			sensors.add(data);
+    		}
+
+    		data.addValue(msg.getFloatNamedValue("current"));
+
+    		String unit = msg.getNamedValue("units");
+    		assert (unit.equals("c"));
+    		String type = msg.getNamedValue("type");
+    		assert (type.equals("temp"));
+
+    		data.writeFile(SensorData.DirType.INTERNAL,
+    				SensorData.FileFormat.BINARY);
+
+    		checkSensorsConsistency();
     	}
-    	if (data == null) {
-    		data = new SensorData(device, service, true);
-    		sensors.add(data);
-    	}
-
-    	data.addValue(msg.getFloatNamedValue("current"));
-
-    	String unit = msg.getNamedValue("units");
-    	assert (unit.equals("c"));
-    	String type = msg.getNamedValue("type");
-    	assert (type.equals("temp"));
-    	
-    	data.writeFile(SensorData.DirType.INTERNAL,
-    				   SensorData.FileFormat.BINARY);
-
-    	checkSensorsConsistency();
     }
 
     public void dumpData(OutputStreamWriter writer, long lastTstamp) throws java.io.IOException {
@@ -256,10 +262,12 @@ class Sensors {
 				service.addLog("Mise à jour des données de '" + name + "' depuis le serveur (" + newData.size() + " nvx points)",
 							   RDService.LogLevel.UPDATE);
 			}
-			for (SensorData sensor: sensors) {
-    			sensor.writeFile(SensorData.DirType.INTERNAL,
-    							 SensorData.FileFormat.BINARY);
-    		}
+			synchronized(sensors) {
+				for (SensorData sensor: sensors) {
+					sensor.writeFile(SensorData.DirType.INTERNAL,
+							SensorData.FileFormat.BINARY);
+				}
+			}
 			if (service.callback != null) {
 				service.callback.updateThermo();
 			}
@@ -284,16 +292,20 @@ class Sensors {
 		}
     }
     
-    public synchronized void saveToSdcard() {
-    	for (SensorData sensor: sensors) {
-    		sensor.writeFile(SensorData.DirType.SDCARD, SensorData.FileFormat.ASCII);
+    public void saveToSdcard() {
+    	synchronized(sensors) {
+    		for (SensorData sensor: sensors) {
+    			sensor.writeFile(SensorData.DirType.SDCARD, SensorData.FileFormat.ASCII);
+    		}
     	}
     }
 
-    public synchronized void readFromSdcard() {
-        for (SensorData sensor: sensors) {
-        	sensor.readFile(SensorData.DirType.SDCARD);
-        }
+    public void readFromSdcard() {
+    	synchronized(sensors) {
+    		for (SensorData sensor: sensors) {
+    			sensor.readFile(SensorData.DirType.SDCARD);
+    		}
+    	}
     }
 
     private synchronized void checkSensorsConsistency() {

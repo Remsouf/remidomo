@@ -104,8 +104,13 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     	// Let's do something when a preference value changes
-    	updateTexts();
-    	
+
+    	// If pref is a hidden key, don't update texts
+    	// (i.e. those committed directly by the service)
+    	if (getPreferenceScreen().findPreference(key) != null) {
+    		updateTexts();
+    	}
+
     	// Some prefs don't need a service restart
     	if ((!"night_highlight".equals(key)) &&
     		(!"dots_highlight".equals(key)) &&

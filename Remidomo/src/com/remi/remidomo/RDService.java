@@ -152,7 +152,7 @@ public class RDService extends Service {
     	} else if ((intent != null) && ACTION_RESTORE_DATA.equals(intent.getAction())) {
     		addLog("Lecture des données depuis la carte SD");
     		new Thread(new Runnable() {
-            	public synchronized void run() {
+            	public void run() {
             		sensors.readFromSdcard();
             		energy.readFromSdcard();
             		if (callback != null) {
