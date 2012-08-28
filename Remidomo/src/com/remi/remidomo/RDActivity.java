@@ -365,12 +365,43 @@ public class RDActivity extends Activity implements OnGestureListener {
     	// Change flipper view + animate buttons
     	flipper.setDisplayedChild(destination);
 
+    	updateMainIcons(button, destination);
+    }
+
+    private void updateMainIcons(View currentButton, int selection) {
+
     	ImageButton poolTemp = (ImageButton) findViewById(R.id.poolButton);
     	ImageButton thermo = (ImageButton) findViewById(R.id.tempButton);
     	ImageButton log = (ImageButton) findViewById(R.id.logButton);
     	ImageButton dashboard = (ImageButton) findViewById(R.id.dashboardButton);
     	ImageButton energy = (ImageButton) findViewById(R.id.energyButton);
     	ImageButton switches = (ImageButton) findViewById(R.id.switchButton);
+
+    	// If clicked button is unknown, guess
+    	if (currentButton == null) {
+    		switch (selection) {
+    		case 0:
+    			currentButton = dashboard;
+    			break;
+    		case 1:
+    			currentButton = thermo;
+    			break;
+    		case 2:
+    			currentButton = poolTemp;
+    			break;
+    		case 3:
+    			currentButton = switches;
+    			break;
+    		case 4:
+    			currentButton = energy;
+    			break;
+    		case 5:
+    			currentButton = log;
+    			break;
+    		default:
+    			currentButton = null;
+    		}
+    	}
 
     	poolTemp.clearAnimation();
     	thermo.clearAnimation();
@@ -379,8 +410,10 @@ public class RDActivity extends Activity implements OnGestureListener {
     	energy.clearAnimation();
     	switches.clearAnimation();
 
-		Animation anim = AnimationUtils.loadAnimation(RDActivity.this, R.anim.icon_select);
-		button.startAnimation(anim);
+    	if (currentButton != null) {
+    		Animation anim = AnimationUtils.loadAnimation(RDActivity.this, R.anim.icon_select);
+    		currentButton.startAnimation(anim);
+    	}
     }
 
     @Override
@@ -450,8 +483,10 @@ public class RDActivity extends Activity implements OnGestureListener {
 			}
             if (e1.getX() > e2.getX() && Math.abs(e1.getX() - e2.getX()) > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
             	flipper.showNext();
+            	updateMainIcons(null, flipper.getDisplayedChild());
             } else if (e1.getX() < e2.getX() && e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
             	flipper.showPrevious();
+            	updateMainIcons(null, flipper.getDisplayedChild());
             }
         } catch (Exception e) {
             // nothing
