@@ -92,6 +92,11 @@ class Switches {
 		if (service.callback != null) {
 			service.callback.updateSwitches();
 		}
+
+		// Also update clients
+		// (in addition to the one sending the request)
+		service.pushToClients("switch", index, Boolean.toString(state));
+
 		return true;
 	}
 
