@@ -137,7 +137,7 @@ public class Doors {
 	}
 	
 	public synchronized void syncWithServer() {
-		int port = Integer.parseInt(prefs.getString("port", Preferences.DEFAULT_PORT));
+		int port = prefs.getInt("port.int", Preferences.DEFAULT_PORT);
 		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
 		Log.d(TAG, "Client switches connecting to " + ipAddr + ":" + port);
 		service.addLog("Connexion au serveur " + ipAddr + ":" + port + " (MAJ portes)");

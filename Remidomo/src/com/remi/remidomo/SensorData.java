@@ -305,7 +305,7 @@ public class SensorData {
 
 		if (service != null) {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.service);
-			int maxHistory = Integer.parseInt(prefs.getString("loglimit", Preferences.DEFAULT_LOGLIMIT));
+			int maxHistory = prefs.getInt("loglimit.int", Preferences.DEFAULT_LOGLIMIT);
 			long tstampLimit = tstampLong - maxHistory*HOURS_24;
 			while ((data.size() > 0) && (data.getFirst().time < tstampLimit)) {
 				data.removeFirst();

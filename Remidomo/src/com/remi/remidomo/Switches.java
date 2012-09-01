@@ -135,7 +135,7 @@ class Switches {
    		new Thread(new Runnable() {
 			public void run() {
 
-				int port = Integer.parseInt(prefs.getString("rfx_port", Preferences.DEFAULT_RFX_PORT));
+				int port = prefs.getInt("rfx_port.int", Preferences.DEFAULT_RFX_PORT);
 				InetAddress destination;
 				try {
 					// Could be ip address of RFX-Lan... save pref !
@@ -220,7 +220,7 @@ class Switches {
 	}
 
 	public synchronized void syncWithServer() {
-		int port = Integer.parseInt(prefs.getString("port", Preferences.DEFAULT_PORT));
+		int port = prefs.getInt("port.int", Preferences.DEFAULT_PORT);
 		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
 		Log.d(TAG, "Client switches connecting to " + ipAddr + ":" + port);
 		service.addLog("Connexion au serveur " + ipAddr + ":" + port + " (MAJ commandes)");
@@ -265,7 +265,7 @@ class Switches {
 	public void sendServerMessage(final int index, final boolean state) {
 		new Thread(new Runnable() {
 			public void run() {
-				int port = Integer.parseInt(prefs.getString("port", Preferences.DEFAULT_PORT));
+				int port = prefs.getInt("port.int", Preferences.DEFAULT_PORT);
 				String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
 
 				String url = ipAddr + ":" + port + "/switches/toggle?id=" + index + "&cmd=";

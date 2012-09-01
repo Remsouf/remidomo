@@ -3,6 +3,7 @@ package com.remi.remidomo;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -12,6 +13,11 @@ import android.util.AttributeSet;
 import android.webkit.URLUtil;
 import android.widget.Button;
 
+/*
+ * Because we cannot override setText() in EditTextPreference,
+ * we cannot prevent the ancestor from persisting value as a string.
+ * If the value is an int, then we persist <key>.int as well.
+ */
 public class CustomEditTextPreference extends EditTextPreference
 {
 	private EditTextWatcher watcher;
@@ -113,5 +119,23 @@ public class CustomEditTextPreference extends EditTextPreference
 		getEditText().addTextChangedListener(watcher);
 
 		//onEditTextChanged();
-	}    
+	}
+
+    @Override
+    protected void onDialogClosed(boolean positiveResult) {
+        super.onDialogClosed(positiveResult);
+
+        if (positiveResult) {
+            String value = getEditText().getText().toString();
+            if (callChangeListener(value)) {
+                setText(value);
+
+                if (isIntegerValidator) {
+                	SharedPreferences.Editor editor = getEditor();
+    				editor.putInt(getKey() + ".int", Integer.parseInt(value));
+    				editor.commit();
+                }
+            }
+        }
+    }
 }

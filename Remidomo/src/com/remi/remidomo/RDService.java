@@ -197,7 +197,7 @@ public class RDService extends Service {
     			pusher = new PushSender(this);
     		} else {
     			clientTimer = new Timer("Client");
-    			int period = Integer.parseInt(prefs.getString("client_poll", Preferences.DEFAULT_CLIENT_POLL));
+    			int period = prefs.getInt("client_poll.int", Preferences.DEFAULT_CLIENT_POLL);
     			// 15s graceful period, to let the service read data from FS,
     			// before attempting updates from the server
     			clientTimer.scheduleAtFixedRate(new ClientTask(this), 15000, 1000L*60*period);
@@ -207,12 +207,12 @@ public class RDService extends Service {
 
     		// Timer for train updates
     		Timer timerTrains = new Timer("Trains");
-    		int period = Integer.parseInt(prefs.getString("sncf_poll", Preferences.DEFAULT_SNCF_POLL));
+    		int period = prefs.getInt("sncf_poll.int", Preferences.DEFAULT_SNCF_POLL);
     		timerTrains.scheduleAtFixedRate(new TrainsTask(), 1, 1000L*60*period);
 
     		// Timer for weather updates
     		Timer timerMeteo = new Timer("Meteo");
-    		period = Integer.parseInt(prefs.getString("meteo_poll", Preferences.DEFAULT_METEO_POLL));
+    		period = prefs.getInt("meteo_poll.int", Preferences.DEFAULT_METEO_POLL);
     		timerMeteo.scheduleAtFixedRate(new MeteoTask(), 1, 1000L*60*60*period);
     	}
     
@@ -375,7 +375,7 @@ public class RDService extends Service {
     public class RfxThread implements Runnable {
     	
     	public void run() {
-    		int port = Integer.parseInt(prefs.getString("rfx_port", Preferences.DEFAULT_RFX_PORT));
+    		int port = prefs.getInt("rfx_port.int", Preferences.DEFAULT_RFX_PORT);
     		
     		rfxSocket = null;
     		

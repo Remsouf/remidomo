@@ -14,19 +14,19 @@ import android.webkit.URLUtil;
 public class Preferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
 	//public static final String DEFAULT_RFX_PORT = "3865";
-	public static final String DEFAULT_RFX_PORT = "1234";
-	public static final String DEFAULT_PORT = "1234";
+	public static final int DEFAULT_RFX_PORT = 1234;
+	public static final int DEFAULT_PORT = 1234;
 	public static final String DEFAULT_IP = "1.2.3.4";
 	public static final String DEFAULT_MODE = "Serveur";
-	public static final String DEFAULT_LOGLIMIT = "365";
-	public static final String DEFAULT_SNCF_POLL = "15";
+	public static final int DEFAULT_LOGLIMIT = 365;
+	public static final int DEFAULT_SNCF_POLL = 15;
 	public static final String DEFAULT_GARE = "GOC";
-	public static final String DEFAULT_METEO_POLL = "4";
-	public static final String DEFAULT_CLIENT_POLL = "30";
+	public static final int DEFAULT_METEO_POLL = 4;
+	public static final int DEFAULT_CLIENT_POLL = 30;
 	public static final boolean DEFAULT_NIGHT_HIGHLIGHT = true;
 	public static final boolean DEFAULT_DOTS_HIGHLIGHT = true;
 	public static final boolean DEFAULT_DAY_LABELS = true;
-	public static final String DEFAULT_PLOTLIMIT = "10";
+	public static final int DEFAULT_PLOTLIMIT = 10;
 	public static final boolean DEFAULT_SOUND = true;
 	public static final boolean DEFAULT_BOOTKICK = true;
 	public static final boolean DEFAULT_KEEPSERVICE = true;
@@ -139,29 +139,29 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     	}
 
         ip_address.setSummary(prefs.getString("ip_address", DEFAULT_IP)); 
-        port.setSummary(prefs.getString("port", DEFAULT_PORT));
-        rfx_port.setSummary(prefs.getString("rfx_port", DEFAULT_RFX_PORT));
+        port.setSummary(String.valueOf(prefs.getInt("port.int", DEFAULT_PORT)));
+        rfx_port.setSummary(String.valueOf(prefs.getInt("rfx_port.int", DEFAULT_RFX_PORT)));
         
-    	int minutes = Integer.parseInt(prefs.getString("client_poll", DEFAULT_CLIENT_POLL));
+    	int minutes = prefs.getInt("client_poll.int", DEFAULT_CLIENT_POLL);
     	String msg = String.format(getString(R.string.pref_poll_summary), minutes);
     	client_poll.setSummary(msg);
   
-    	int days = Integer.parseInt(prefs.getString("loglimit", DEFAULT_LOGLIMIT));
+    	int days = prefs.getInt("loglimit.int", DEFAULT_LOGLIMIT);
     	msg = String.format(getString(R.string.pref_storelimit_summary), days);
     	loglimit.setSummary(msg);
     	
-    	minutes = Integer.parseInt(prefs.getString("sncf_poll", DEFAULT_SNCF_POLL));
+    	minutes = prefs.getInt("sncf_poll.int", DEFAULT_SNCF_POLL);
     	msg = String.format(getString(R.string.pref_poll_summary), minutes);
     	sncf_poll.setSummary(msg);
     	
     	String gare_sel = prefs.getString("gare", DEFAULT_GARE);
     	gare.setSummary(gare_sel);
 
-    	minutes = Integer.parseInt(prefs.getString("meteo_poll", DEFAULT_METEO_POLL));
+    	minutes = prefs.getInt("meteo_poll.int", DEFAULT_METEO_POLL);
     	msg = String.format(getString(R.string.pref_meteo_summary), minutes);
     	meteo_poll.setSummary(msg);
     	
-    	days = Integer.parseInt(prefs.getString("plot_limit", DEFAULT_PLOTLIMIT));
+    	days = prefs.getInt("plot_limit.int", DEFAULT_PLOTLIMIT);
     	msg = String.format(getString(R.string.pref_plotlimit_summary), days);
     	plotlimit.setSummary(msg);
 

@@ -78,7 +78,7 @@ public class PushReceiver extends BroadcastReceiver {
 	public void syncWithServer(Context context, String key) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		
-		int port = Integer.parseInt(prefs.getString("port", Preferences.DEFAULT_PORT));
+		int port = prefs.getInt("port.int", Preferences.DEFAULT_PORT);
 		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
 		Log.d(TAG, "Client push registration connecting to " + ipAddr + ":" + port);
 		//service.addLog("Connexion au serveur " + ipAddr + ":" + port + " (Enregistrement Push)");
