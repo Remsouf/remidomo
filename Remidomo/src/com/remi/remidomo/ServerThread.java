@@ -520,7 +520,7 @@ public class ServerThread implements Runnable {
 
 		private Bitmap getPoolBitmap(RDService service) {
 			SensorPlot plot = new SensorPlot(service, "Fake-pool");
-			plot.setAttributes(service.getString(R.string.degC), true, Color.CYAN);
+			plot.setAttributes(service.getString(R.string.degC), true, Color.CYAN, true, false);
 			SensorData data = service.getSensors().getData(Sensors.ID_POOL_T);
 			plot.addSeries(data, plotDays);
 			return plot.getBitmap(BMP_WIDTH, BMP_HEIGHT);
@@ -528,7 +528,7 @@ public class ServerThread implements Runnable {
 		
 		private Bitmap getThermoBitmap(RDService service) {
 			SensorPlot plot = new SensorPlot(service, "Fake-thermo");
-			plot.setAttributes(service.getString(R.string.degC), true, 0);
+			plot.setAttributes(service.getString(R.string.degC), true, 0, true, false);
 			SensorData data = service.getSensors().getData(Sensors.ID_POOL_T);
 			plot.addSeries(data, plotDays);
 			data = service.getSensors().getData(Sensors.ID_EXT_T);
@@ -540,7 +540,7 @@ public class ServerThread implements Runnable {
 
 		private Bitmap getPowerBitmap(RDService service) {
 			SensorPlot plot = new SensorPlot(service, "Fake-power");
-			plot.setAttributes(service.getString(R.string.kw), true, Color.YELLOW);
+			plot.setAttributes(service.getString(R.string.kw), true, Color.YELLOW, false, true);
 			SensorData data = service.getEnergy().getPowerData();
 			plot.addSeries(data, plotDays);
 			return plot.getBitmap(BMP_WIDTH, BMP_HEIGHT);

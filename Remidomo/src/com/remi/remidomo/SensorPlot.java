@@ -74,6 +74,9 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 	private int axesColor;
 	private int gridColor;
 	private int nightsColor;
+	private boolean nightsCompatible;
+	private int tarifColor;
+	private boolean tarifCompatible;
 	private int dotsColor;
 	private boolean autoRange;
     private boolean tapEnabled;
@@ -93,6 +96,9 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		axesColor = Color.DKGRAY;
 		gridColor = Color.DKGRAY;
 		nightsColor = Color.parseColor("#5A505080");
+		nightsCompatible = true;
+		tarifColor = Color.parseColor("#FF2222");
+		tarifCompatible = false;
 		dotsColor = Color.CYAN;
 		autoRange = true;
 		tapEnabled = false;
@@ -111,6 +117,9 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		axesColor = a.getColor(R.styleable.SensorPlot_axes_color, Color.parseColor("#80000000"));
 		gridColor = a.getColor(R.styleable.SensorPlot_grid_color, Color.parseColor("#400000FF"));
 		nightsColor = a.getColor(R.styleable.SensorPlot_nights_color, Color.parseColor("#5A505080"));
+		nightsCompatible = a.getBoolean(R.styleable.SensorPlot_nights_compatible, true);
+		tarifColor = a.getColor(R.styleable.SensorPlot_tarif_color, Color.parseColor("#5AFF5555"));
+		tarifCompatible = a.getBoolean(R.styleable.SensorPlot_tarif_compatible, true);
 		dotsColor = a.getColor(R.styleable.SensorPlot_dots_color, Color.CYAN);
 		autoRange = a.getBoolean(R.styleable.SensorPlot_auto_range, false);
 		tapEnabled = a.getBoolean(R.styleable.SensorPlot_tap_enabled, false);
@@ -128,6 +137,9 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		axesColor = a.getColor(R.styleable.SensorPlot_axes_color, Color.WHITE);
 		gridColor = a.getColor(R.styleable.SensorPlot_grid_color, Color.WHITE);
 		nightsColor = a.getColor(R.styleable.SensorPlot_nights_color, Color.WHITE);
+		nightsCompatible = a.getBoolean(R.styleable.SensorPlot_nights_compatible, true);
+		tarifColor = a.getColor(R.styleable.SensorPlot_tarif_color, Color.RED);
+		tarifCompatible = a.getBoolean(R.styleable.SensorPlot_tarif_compatible, true);
 		dotsColor = a.getColor(R.styleable.SensorPlot_dots_color, Color.CYAN);
 		autoRange = a.getBoolean(R.styleable.SensorPlot_auto_range, false);
 		tapEnabled = a.getBoolean(R.styleable.SensorPlot_tap_enabled, false);
@@ -137,10 +149,13 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		initPlot();
 	}
 
-	public void setAttributes(String units, boolean autoRange, int curveColor) {
+	public void setAttributes(String units, boolean autoRange, int curveColor,
+							  boolean nightsCompatible, boolean tarifCompatible) {
 		this.units = units;
 		this.autoRange = autoRange;
 		this.curveColor = curveColor;
+		this.nightsCompatible = nightsCompatible;
+		this.tarifCompatible = tarifCompatible;
 		initPlot();
 	}
 
@@ -221,22 +236,29 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 			}
 
 			LineAndPointFormatter formatter  = new LineAndPointFormatter(curveEffectiveColor, dotsEffectiveColor, null);
-			XYRegionFormatter regionFormatter = new XYRegionFormatter(nightsColor);
+			XYRegionFormatter regionFormatter;
+			
+			if (!prefs.getBoolean("dots_highlight", Preferences.DEFAULT_DOTS_HIGHLIGHT)) {
+				formatter.setVertexPaint(null);
+			}
 
 			// Get initial timestamp, and force 20:00 as starting point
-			if (prefs.getBoolean("night_highlight", Preferences.DEFAULT_NIGHT_HIGHLIGHT) &&
-					(filteredSeries.size() > 0)) {
-				Date startDate = new Date(filteredSeries.getX(0).longValue());
-				startDate.setHours(20);
-				startDate.setMinutes(0);
-				long currentX = startDate.getTime();
-				while (currentX < filteredSeries.getX(filteredSeries.size()-1).longValue()) {
-					// Float.[NEGATIVE|POSITIVE]_INFINITY don't work on ICS
-					final float NEGATIVE_INFINITY = 0.0f;
-					final float POSITIVE_INFINITY = 50.0f;
-					formatter.addRegion(new RectRegion(currentX, currentX + HOURS_12, NEGATIVE_INFINITY, POSITIVE_INFINITY), regionFormatter);
-					currentX += HOURS_24;
-				}       		
+			if (nightsCompatible) {
+				regionFormatter = new XYRegionFormatter(nightsColor);
+				if (prefs.getBoolean("night_highlight", Preferences.DEFAULT_NIGHT_HIGHLIGHT) &&
+						(filteredSeries.size() > 0)) {
+					Date startDate = new Date(filteredSeries.getX(0).longValue());
+					startDate.setHours(20);
+					startDate.setMinutes(0);
+					long currentX = startDate.getTime();
+					while (currentX < filteredSeries.getX(filteredSeries.size()-1).longValue()) {
+						// Float.[NEGATIVE|POSITIVE]_INFINITY don't work on ICS
+						final float NEGATIVE_INFINITY = 0.0f;
+						final float POSITIVE_INFINITY = 50.0f;
+						formatter.addRegion(new RectRegion(currentX, currentX + HOURS_12, NEGATIVE_INFINITY, POSITIVE_INFINITY), regionFormatter);
+						currentX += HOURS_24;
+					}
+				}
 			}
 
 			if (prefs.getBoolean("day_labels", Preferences.DEFAULT_DAY_LABELS) &&
@@ -257,7 +279,29 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 					addMarker(marker);
 
 					currentX += HOURS_24;
-				}       		
+				}
+			}
+
+			if (tarifCompatible) {
+				regionFormatter = new XYRegionFormatter(tarifColor);
+				if (prefs.getBoolean("tarif_highlight", Preferences.DEFAULT_TARIF_HIGHLIGHT) &&
+						(filteredSeries.size() > 0)) {
+					Date startDate = new Date(filteredSeries.getX(0).longValue());
+					startDate.setHours(prefs.getInt("hp_hour.hour", Preferences.DEFAULT_HPHOUR));
+					startDate.setMinutes(prefs.getInt("hp_hour.minute", 0));
+					Date endDate = new Date(filteredSeries.getX(0).longValue());
+					endDate.setHours(prefs.getInt("hc_hour.hour", Preferences.DEFAULT_HCHOUR));
+					endDate.setMinutes(prefs.getInt("hc_hour.minute", 0));
+					long deltaTime = endDate.getTime() - startDate.getTime();
+					long currentX = startDate.getTime();
+					while (currentX < filteredSeries.getX(filteredSeries.size()-1).longValue()) {
+						// Float.[NEGATIVE|POSITIVE]_INFINITY doesn't work on ICS
+						final float NEGATIVE_INFINITY = 0.0f;
+						final float POSITIVE_INFINITY = 50000.0f;
+						formatter.addRegion(new RectRegion(currentX, currentX+deltaTime, NEGATIVE_INFINITY, POSITIVE_INFINITY), regionFormatter);
+						currentX += HOURS_24;
+					}
+				}
 			}
 
 			addSeries(filteredSeries, formatter);

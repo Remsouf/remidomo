@@ -2,14 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.remi.remidomo"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
     android:id="@+id/energyView" >
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -30,6 +25,7 @@
             		android:textColor="#FFFF00"
             		android:includeFontPadding="false" />
             	<TextView
+            	    android:id="@+id/power_units"
             	    android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
                 	android:text="@string/kw"
@@ -106,11 +102,12 @@
     		app:curve_color="#FFFF00"
     		app:axes_color="#FF8888FF"
         	app:grid_color="#FF8888FF"
-        	app:nights_color="#5A505080"
-			app:dots_color="#FF5500"
+			app:tarif_color="#5AFF5555"
+			app:tarif_compatible="true"
+			app:nights_compatible="false"
+			app:dots_color="#FFFF5500"
 			app:auto_range="true"
         	app:tap_enabled="false"
         	app:units="@string/kw" />
 
-    </LinearLayout>
 </LinearLayout>

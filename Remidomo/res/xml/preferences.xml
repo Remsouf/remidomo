@@ -183,6 +183,36 @@
                 android:title="@string/pref_sound_title" />
         </PreferenceScreen>
 
+        <PreferenceScreen
+            android:icon="@drawable/pref_energy"
+            android:title="@string/pref_energy" >
+
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="tarif_highlight"
+                android:persistent="true"
+                android:summaryOff="@string/pref_tarif_summary_off"
+                android:summaryOn="@string/pref_tarif_summary_on"
+                android:title="@string/pref_tarif_title" />
+
+            <com.remi.remidomo.CustomTimePickerPreference
+  				android:summary="@string/pref_hchour_summary"
+  				android:dialogLayout="@layout/time_preference"
+  				android:title="@string/pref_hchour_title"
+  				android:key="hc_hour"
+  				android:persistent="true"
+  				app:defaultValue="23" />
+
+            <com.remi.remidomo.CustomTimePickerPreference
+  				android:summary="@string/pref_hphour_summary"
+  				android:dialogLayout="@layout/time_preference"
+  				android:title="@string/pref_hphour_title"
+  				android:key="hp_hour"
+  				android:persistent="true"
+  				app:defaultValue="7" />
+
+        </PreferenceScreen>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

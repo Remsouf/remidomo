@@ -18,6 +18,8 @@
     	app:axes_color="#80000000"
         app:grid_color="#400000FF"
         app:nights_color="#5A505080"
+        app:nights_compatible="true"
+        app:tarif_compatible="false"
 		app:dots_color="#00FFFF"
 		app:auto_range="false"
         app:tap_enabled="true"

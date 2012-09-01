@@ -1,5 +1,7 @@
 package com.remi.remidomo;
 
+import java.text.DecimalFormat;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -9,7 +11,6 @@ import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.webkit.URLUtil;
 
 public class Preferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
@@ -30,6 +31,9 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	public static final boolean DEFAULT_SOUND = true;
 	public static final boolean DEFAULT_BOOTKICK = true;
 	public static final boolean DEFAULT_KEEPSERVICE = true;
+	public static final int DEFAULT_HCHOUR = 23;
+	public static final int DEFAULT_HPHOUR = 7;
+	public static final boolean DEFAULT_TARIF_HIGHLIGHT = true;
 
 	private ListPreference mode;
 	private PreferenceScreen mode_screen;
@@ -44,6 +48,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	private CheckBoxPreference bootkick;
 	private CheckBoxPreference keepservice;
 	private CustomEditTextPreference plotlimit;
+	private CustomTimePickerPreference hchour;
+	private CustomTimePickerPreference hphour;
 
 	private SharedPreferences prefs;
 	
@@ -69,6 +75,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
         gare = (ListPreference) getPreferenceScreen().findPreference("gare");
         meteo_poll = (CustomEditTextPreference) getPreferenceScreen().findPreference("meteo_poll");
         plotlimit = (CustomEditTextPreference) getPreferenceScreen().findPreference("plot_limit");
+        hchour = (CustomTimePickerPreference) getPreferenceScreen().findPreference("hc_hour");
+        hphour = (CustomTimePickerPreference) getPreferenceScreen().findPreference("hp_hour");
 
         updateTexts();
     }
@@ -105,14 +113,23 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     	// Let's do something when a preference value changes
 
+
+    	// Account for time prefs (with .hour / .minute suffix)
+    	String effectiveKey = key;
+    	int dotPos = key.indexOf('.');
+    	if (dotPos >= 0) {
+    		effectiveKey = key.substring(0, key.indexOf('.'));
+    	}
+
     	// If pref is a hidden key, don't update texts
     	// (i.e. those committed directly by the service)
-    	if (getPreferenceScreen().findPreference(key) != null) {
+    	if (getPreferenceScreen().findPreference(effectiveKey) != null) {
     		updateTexts();
     	}
 
     	// Some prefs don't need a service restart
     	if ((!"night_highlight".equals(key)) &&
+    	    (!"tarif_highlight".equals(key)) &&
     		(!"dots_highlight".equals(key)) &&
     		(!"day_labels".equals(key)) &&
     		(!"plot_limit".equals(key)) &&
@@ -178,5 +195,18 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     	} else {
     		keepservice.setSummary(R.string.pref_keepservice_summary_off);
     	}
+
+    	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+        decimalFormat.applyPattern("#00");
+
+    	int hours = prefs.getInt("hc_hour.hour", DEFAULT_HCHOUR);
+    	minutes = prefs.getInt("hc_hour.minute", 0);
+    	msg = String.format(getString(R.string.pref_hchour_summary), hours, decimalFormat.format(minutes));
+    	hchour.setSummary(msg);
+
+    	hours = prefs.getInt("hp_hour.hour", DEFAULT_HPHOUR);
+    	minutes = prefs.getInt("hp_hour.minute", 0);
+    	msg = String.format(getString(R.string.pref_hphour_summary), hours, decimalFormat.format(minutes));
+    	hphour.setSummary(msg);
     }
 }

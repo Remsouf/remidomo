@@ -64,6 +64,8 @@
     		app:axes_color="#888888"
     		app:grid_color="#888888"
 			app:nights_color="#5A505080"
+			app:nights_compatible="true"
+			app:tarif_compatible="false"
 			app:dots_color="#00FFFF"
 			app:auto_range="false"
 	        app:tap_enabled="false"

@@ -5,6 +5,9 @@
         <attr name="axes_color" format="color"/>
         <attr name="grid_color" format="color"/>
         <attr name="nights_color" format="color"/>
+        <attr name="nights_compatible" format="boolean"/>
+        <attr name="tarif_color" format="color"/>
+        <attr name="tarif_compatible" format="boolean"/>
         <attr name="dots_color" format="color"/>
         <attr name="auto_range" format="boolean"/>
         <attr name="tap_enabled" format="boolean"/>
@@ -16,5 +19,9 @@
         <attr name="validator_int" format="boolean"/>
         <attr name="min_integer" format="integer"/>
         <attr name="max_integer" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="CustomTimePickerPreference">
+        <attr name="defaultValue" format="integer"/>
     </declare-styleable>
 </resources>

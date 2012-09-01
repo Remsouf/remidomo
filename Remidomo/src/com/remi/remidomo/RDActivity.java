@@ -17,6 +17,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -424,6 +425,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         ImageButton serverLogButton = (ImageButton) findViewById(R.id.rlog_button);
         ImageButton clientLogButton = (ImageButton) findViewById(R.id.log_button);
         ImageButton switchesHistoryButton = (ImageButton) findViewById(R.id.history_clear);
+        ImageButton resetEnergy = (ImageButton) findViewById(R.id.energyreset_button);
 
     	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
         if ("Serveur".equals(mode)) {
@@ -431,9 +433,11 @@ public class RDActivity extends Activity implements OnGestureListener {
         	serverLogButton.setVisibility(View.GONE);
         	clientLogButton.setVisibility(View.GONE);
         	switchesHistoryButton.setVisibility(View.VISIBLE);
+        	resetEnergy.setVisibility(View.VISIBLE);
         } else {
         	refresh.setVisibility(View.VISIBLE);
         	switchesHistoryButton.setVisibility(View.GONE);
+        	resetEnergy.setVisibility(View.GONE);
         }
 
 		updateListener.startRefreshAnim();
@@ -444,11 +448,13 @@ public class RDActivity extends Activity implements OnGestureListener {
     	updateDoorsView();
     	updateTrainView();
     	updateDashboardThermo();
+    	updateEnergyView();
 		updateListener.stopRefreshAnim();
 
     	updateTrainLastUpdate();
 		updateMeteoLastUpdate();
 		updateThermoLastUpdate();
+		updateEnergyLastUpdate();
     }
 
     @Override
@@ -874,6 +880,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 		plot.redraw();
 
 		TextView power = (TextView) findViewById(R.id.power);
+		TextView units = (TextView) findViewById(R.id.power_units);
 		if ((series != null) && (series.size() > 0)) {
         	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
             decimalFormat.applyPattern("#0.000");
@@ -882,6 +889,24 @@ public class RDActivity extends Activity implements OnGestureListener {
         } else {
         	power.setText("?");
         }
+
+		Date hcHour = new Date();
+		hcHour.setHours(prefs.getInt("hc_hour.hour", Preferences.DEFAULT_HCHOUR));
+		hcHour.setMinutes(prefs.getInt("hc_hour.minute", 0));
+
+		Date hpHour = new Date();
+		hpHour.setHours(prefs.getInt("hp_hour.hour", Preferences.DEFAULT_HPHOUR));
+		hpHour.setMinutes(prefs.getInt("hp_hour.minute", 0));
+
+		Date now = new Date();
+		if ((now.getTime() >= hpHour.getTime()) &&
+			(now.getTime() < hcHour.getTime())) {
+			power.setTextColor(Color.parseColor("#FF5555"));
+			units.setTextColor(Color.parseColor("#FF5555"));
+		} else {
+			power.setTextColor(Color.parseColor("#5555FF"));
+			units.setTextColor(Color.parseColor("#5555FF"));
+		}
 
 		TextView energy = (TextView) findViewById(R.id.energy);
         DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
@@ -905,7 +930,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 	}
 
 	private String deltaToDateString(long delta) {
-		int days = (int) delta / 86400000;
+		int days = (int) (delta / 86400000);
 		return String.format(getString(R.string.days), days);
 	}
 
