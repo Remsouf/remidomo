@@ -38,16 +38,16 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	private ListPreference mode;
 	private PreferenceScreen mode_screen;
 	private CustomEditTextPreference ip_address;
-	private CustomEditTextPreference rfx_port;
-	private CustomEditTextPreference port;
-	private CustomEditTextPreference loglimit;
-	private CustomEditTextPreference sncf_poll;
+	private CustomSpinnerPreference rfx_port;
+	private CustomSpinnerPreference port;
+	private CustomSpinnerPreference loglimit;
+	private CustomSpinnerPreference sncf_poll;
 	private ListPreference gare;
-	private CustomEditTextPreference meteo_poll;
-	private CustomEditTextPreference client_poll;
+	private CustomSpinnerPreference meteo_poll;
+	private CustomSpinnerPreference client_poll;
 	private CheckBoxPreference bootkick;
 	private CheckBoxPreference keepservice;
-	private CustomEditTextPreference plotlimit;
+	private CustomSpinnerPreference plotlimit;
 	private CustomTimePickerPreference hchour;
 	private CustomTimePickerPreference hphour;
 
@@ -67,14 +67,14 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
         mode = (ListPreference) getPreferenceScreen().findPreference("mode");
         mode_screen = (PreferenceScreen) getPreferenceScreen().findPreference("mode_screen");
         ip_address = (CustomEditTextPreference) getPreferenceScreen().findPreference("ip_address");
-        port = (CustomEditTextPreference) getPreferenceScreen().findPreference("port");
-        rfx_port = (CustomEditTextPreference) getPreferenceScreen().findPreference("rfx_port");
-        client_poll = (CustomEditTextPreference) getPreferenceScreen().findPreference("client_poll");
-        loglimit = (CustomEditTextPreference) getPreferenceScreen().findPreference("loglimit");
-        sncf_poll = (CustomEditTextPreference) getPreferenceScreen().findPreference("sncf_poll");
+        port = (CustomSpinnerPreference) getPreferenceScreen().findPreference("port");
+        rfx_port = (CustomSpinnerPreference) getPreferenceScreen().findPreference("rfx_port");
+        client_poll = (CustomSpinnerPreference) getPreferenceScreen().findPreference("client_poll");
+        loglimit = (CustomSpinnerPreference) getPreferenceScreen().findPreference("loglimit");
+        sncf_poll = (CustomSpinnerPreference) getPreferenceScreen().findPreference("sncf_poll");
         gare = (ListPreference) getPreferenceScreen().findPreference("gare");
-        meteo_poll = (CustomEditTextPreference) getPreferenceScreen().findPreference("meteo_poll");
-        plotlimit = (CustomEditTextPreference) getPreferenceScreen().findPreference("plot_limit");
+        meteo_poll = (CustomSpinnerPreference) getPreferenceScreen().findPreference("meteo_poll");
+        plotlimit = (CustomSpinnerPreference) getPreferenceScreen().findPreference("plot_limit");
         hchour = (CustomTimePickerPreference) getPreferenceScreen().findPreference("hc_hour");
         hphour = (CustomTimePickerPreference) getPreferenceScreen().findPreference("hp_hour");
 
@@ -156,29 +156,29 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     	}
 
         ip_address.setSummary(prefs.getString("ip_address", DEFAULT_IP)); 
-        port.setSummary(String.valueOf(prefs.getInt("port.int", DEFAULT_PORT)));
-        rfx_port.setSummary(String.valueOf(prefs.getInt("rfx_port.int", DEFAULT_RFX_PORT)));
+        port.setSummary(String.valueOf(prefs.getInt("port", DEFAULT_PORT)));
+        rfx_port.setSummary(String.valueOf(prefs.getInt("rfx_port", DEFAULT_RFX_PORT)));
         
-    	int minutes = prefs.getInt("client_poll.int", DEFAULT_CLIENT_POLL);
+    	int minutes = prefs.getInt("client_poll", DEFAULT_CLIENT_POLL);
     	String msg = String.format(getString(R.string.pref_poll_summary), minutes);
     	client_poll.setSummary(msg);
   
-    	int days = prefs.getInt("loglimit.int", DEFAULT_LOGLIMIT);
+    	int days = prefs.getInt("loglimit", DEFAULT_LOGLIMIT);
     	msg = String.format(getString(R.string.pref_storelimit_summary), days);
     	loglimit.setSummary(msg);
     	
-    	minutes = prefs.getInt("sncf_poll.int", DEFAULT_SNCF_POLL);
+    	minutes = prefs.getInt("sncf_poll", DEFAULT_SNCF_POLL);
     	msg = String.format(getString(R.string.pref_poll_summary), minutes);
     	sncf_poll.setSummary(msg);
     	
     	String gare_sel = prefs.getString("gare", DEFAULT_GARE);
     	gare.setSummary(gare_sel);
 
-    	minutes = prefs.getInt("meteo_poll.int", DEFAULT_METEO_POLL);
+    	minutes = prefs.getInt("meteo_poll", DEFAULT_METEO_POLL);
     	msg = String.format(getString(R.string.pref_meteo_summary), minutes);
     	meteo_poll.setSummary(msg);
     	
-    	days = prefs.getInt("plot_limit.int", DEFAULT_PLOTLIMIT);
+    	days = prefs.getInt("plot_limit", DEFAULT_PLOTLIMIT);
     	msg = String.format(getString(R.string.pref_plotlimit_summary), days);
     	plotlimit.setSummary(msg);
 

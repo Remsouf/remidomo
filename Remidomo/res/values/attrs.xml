@@ -24,4 +24,11 @@
     <declare-styleable name="CustomTimePickerPreference">
         <attr name="defaultValue" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="CustomSpinnerPreference">
+        <attr name="defaultVal" format="integer"/>
+        <attr name="min" format="integer"/>
+        <attr name="max" format="integer"/>
+    </declare-styleable>
+
 </resources>

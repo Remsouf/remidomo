@@ -90,7 +90,7 @@ public class ServerThread implements Runnable {
 		this.service = service;
 		prefs = PreferenceManager.getDefaultSharedPreferences(service);
 		
-		plotDays = prefs.getInt("plot_limit.int", Preferences.DEFAULT_PLOTLIMIT);
+		plotDays = prefs.getInt("plot_limit", Preferences.DEFAULT_PLOTLIMIT);
 
         // HTTP objects
         httpContext = new BasicHttpContext();
@@ -138,7 +138,7 @@ public class ServerThread implements Runnable {
 	}
 
 	public void run() {
-		int port = prefs.getInt("port.int", Preferences.DEFAULT_PORT);
+		int port = prefs.getInt("port", Preferences.DEFAULT_PORT);
 
 		try {
 			int counter = 10;

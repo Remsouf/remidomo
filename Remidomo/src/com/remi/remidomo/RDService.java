@@ -118,6 +118,7 @@ public class RDService extends Service {
         }
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        upgradeData();
         
         pwrMgr = (PowerManager) getSystemService(Context.POWER_SERVICE);
         if (pwrMgr == null) {
@@ -197,7 +198,7 @@ public class RDService extends Service {
     			pusher = new PushSender(this);
     		} else {
     			clientTimer = new Timer("Client");
-    			int period = prefs.getInt("client_poll.int", Preferences.DEFAULT_CLIENT_POLL);
+    			int period = prefs.getInt("client_poll", Preferences.DEFAULT_CLIENT_POLL);
     			// 15s graceful period, to let the service read data from FS,
     			// before attempting updates from the server
     			clientTimer.scheduleAtFixedRate(new ClientTask(this), 15000, 1000L*60*period);
@@ -207,12 +208,12 @@ public class RDService extends Service {
 
     		// Timer for train updates
     		Timer timerTrains = new Timer("Trains");
-    		int period = prefs.getInt("sncf_poll.int", Preferences.DEFAULT_SNCF_POLL);
+    		int period = prefs.getInt("sncf_poll", Preferences.DEFAULT_SNCF_POLL);
     		timerTrains.scheduleAtFixedRate(new TrainsTask(), 1, 1000L*60*period);
 
     		// Timer for weather updates
     		Timer timerMeteo = new Timer("Meteo");
-    		period = prefs.getInt("meteo_poll.int", Preferences.DEFAULT_METEO_POLL);
+    		period = prefs.getInt("meteo_poll", Preferences.DEFAULT_METEO_POLL);
     		timerMeteo.scheduleAtFixedRate(new MeteoTask(), 1, 1000L*60*60*period);
     	}
     
@@ -375,7 +376,7 @@ public class RDService extends Service {
     public class RfxThread implements Runnable {
     	
     	public void run() {
-    		int port = prefs.getInt("rfx_port.int", Preferences.DEFAULT_RFX_PORT);
+    		int port = prefs.getInt("rfx_port", Preferences.DEFAULT_RFX_PORT);
     		
     		rfxSocket = null;
     		
@@ -856,4 +857,38 @@ public class RDService extends Service {
 		}
     }
 
+    /****************************** UPGRADE ******************************/
+    /*
+     * This method upgrades data such as preferences, to deal with format
+     * changes between versions.
+     */
+    private void upgradeData() {
+    	Log.i(TAG, "Upgrading data...");
+
+    	SharedPreferences.Editor editor = prefs.edit();
+
+    	// 103 : prefs converted to ints
+    	if (prefs.getInt("version", 0) <= 103) {
+    		String keys[] = {"rfx_port", "port", "loglimit", "sncf_poll",
+    				"meteo_poll", "client_poll", "plot_limit" };
+    		for (String key:keys) {
+    			try {
+    				prefs.getInt(key, 0);
+    			} catch (java.lang.ClassCastException e) {
+    				String oldValue = prefs.getString(key, "");
+    				editor.remove(key);
+    				editor.remove(key+".int");
+    				editor.putInt(key, Integer.parseInt(oldValue));
+    			}
+    		}
+    	}
+
+    	int versionCode;
+    	try {
+    		versionCode = getPackageManager().getPackageInfo("com.remi.remidomo", 0).versionCode;
+    		editor.putInt("version", versionCode);
+    	} catch (android.content.pm.PackageManager.NameNotFoundException ignored) {}
+
+    	editor.commit();
+    }
 }

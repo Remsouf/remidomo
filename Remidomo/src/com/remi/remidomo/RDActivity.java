@@ -594,7 +594,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 
 		});
 
-		int port = prefs.getInt("port.int", Preferences.DEFAULT_PORT);
+		int port = prefs.getInt("port", Preferences.DEFAULT_PORT);
 		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
 
 		remoteContent.clearView();
