@@ -68,62 +68,64 @@ class Sensors {
 		// (threaded)
         this.service.addLog("Lecture des données capteurs locales");
         new Thread(new Runnable() {
-        	public synchronized void run() {
+        	public void run() {
         		readyForUpdates = false;
-        		// (Update view everytime a new temp file was read)
-                sensors.add(new SensorData(ID_POOL_T, Sensors.this.service, true));
-                if (Sensors.this.service.callback != null) {
-                	Sensors.this.service.callback.updateThermo();
+        		synchronized (sensors) {
+        			// (Update view everytime a new temp file was read)
+        			sensors.add(new SensorData(ID_POOL_T, Sensors.this.service, true));
+        			if (Sensors.this.service.callback != null) {
+        				Sensors.this.service.callback.updateThermo();
+        			}
+        			sensors.add(new SensorData(ID_EXT_T, Sensors.this.service, true));
+        			sensors.add(new SensorData(ID_EXT_H, Sensors.this.service, true));
+        			if (Sensors.this.service.callback != null) {
+        				Sensors.this.service.callback.updateThermo();
+        			}
+        			sensors.add(new SensorData(ID_VERANDA_T, Sensors.this.service, true));
+        			sensors.add(new SensorData(ID_VERANDA_H, Sensors.this.service, true));
+        			if (Sensors.this.service.callback != null) {
+        				Sensors.this.service.callback.updateThermo();
+        			}
+        			Sensors.this.service.addLog("Lecture terminée", RDService.LogLevel.UPDATE);
+        			readyForUpdates = true;
+
+        			/* Check if all data empty */
+        			boolean allEmpty = true;
+        			for (SensorData i: sensors) {
+        				if (i.size() > 0) {
+        					allEmpty =false;
+        				}
+        			}
+        			if (allEmpty) {
+
+        				CharSequence text = Sensors.this.service.getText(R.string.sensors_restore);
+
+        				// Set the icon, scrolling text and timestamp
+        				Notification notification = new Notification(R.drawable.app_icon, text,
+        						System.currentTimeMillis());
+
+        				// The PendingIntent to launch our activity if the user selects this notification
+        				Intent intent = new Intent(Sensors.this.service, RDService.class);
+        				intent.setAction(RDService.ACTION_RESTORE_DATA);
+        				PendingIntent contentIntent = PendingIntent.getService(Sensors.this.service, 0,
+        						intent, 0);
+
+        				// Set the info for the views that show in the notification panel.
+        				notification.setLatestEventInfo(Sensors.this.service,
+        						Sensors.this.service.getText(R.string.sensors_empty),
+        						text, contentIntent);
+
+        				// Auto-cancel the notification when clicked
+        				notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        				// Send the notification.
+        				notificationMgr.notify(NOTIFICATION_RESTORE, notification);
+        			}
         		}
-                sensors.add(new SensorData(ID_EXT_T, Sensors.this.service, true));
-                sensors.add(new SensorData(ID_EXT_H, Sensors.this.service, true));
-                if (Sensors.this.service.callback != null) {
-                	Sensors.this.service.callback.updateThermo();
-        		}
-                sensors.add(new SensorData(ID_VERANDA_T, Sensors.this.service, true));
-                sensors.add(new SensorData(ID_VERANDA_H, Sensors.this.service, true));
-                if (Sensors.this.service.callback != null) {
-                	Sensors.this.service.callback.updateThermo();
-        		}
-                Sensors.this.service.addLog("Lecture terminée", RDService.LogLevel.UPDATE);
-                readyForUpdates = true;
-                
-                /* Check if all data empty */
-                boolean allEmpty = true;
-                for (SensorData i: sensors) {
-                	if (i.size() > 0) {
-                		allEmpty =false;
-                	}
-                }
-                if (allEmpty) {
-                	
-                	CharSequence text = Sensors.this.service.getText(R.string.sensors_restore);
-
-                    // Set the icon, scrolling text and timestamp
-                    Notification notification = new Notification(R.drawable.app_icon, text,
-                            System.currentTimeMillis());
-
-                    // The PendingIntent to launch our activity if the user selects this notification
-                    Intent intent = new Intent(Sensors.this.service, RDService.class);
-                    intent.setAction(RDService.ACTION_RESTORE_DATA);
-                    PendingIntent contentIntent = PendingIntent.getService(Sensors.this.service, 0,
-                            												intent, 0);
-
-                    // Set the info for the views that show in the notification panel.
-                    notification.setLatestEventInfo(Sensors.this.service,
-                    								Sensors.this.service.getText(R.string.sensors_empty),
-                    								text, contentIntent);
-
-                    // Auto-cancel the notification when clicked
-                    notification.flags |= Notification.FLAG_AUTO_CANCEL;
-                    
-                    // Send the notification.
-                    notificationMgr.notify(NOTIFICATION_RESTORE, notification);
-                }
         	};
         }).start();
 	}
-	
+
     public SensorData getData(String name) {
     	synchronized(sensors) {
     		for (SensorData i: sensors) {
@@ -134,7 +136,7 @@ class Sensors {
     	}
     	return null;
     }
-    
+
     public void updateDataChunk(String name, SensorData newData) {
     	synchronized(sensors) {
     		for (SensorData sensor:sensors) {
@@ -203,10 +205,12 @@ class Sensors {
     public void dumpData(OutputStreamWriter writer, long lastTstamp) throws java.io.IOException {
     	try {
     		JSONObject object = new JSONObject();
-    		for (SensorData sensor: sensors) {
-    			JSONArray array = sensor.getJSONArray(lastTstamp);
-    			if (array != null) {
-    				object.put(sensor.getName(), array);
+    		synchronized (sensors) {
+    			for (SensorData sensor: sensors) {
+    				JSONArray array = sensor.getJSONArray(lastTstamp);
+    				if (array != null) {
+    					object.put(sensor.getName(), array);
+    				}
     			}
     		}
     		writer.write(object.toString());
@@ -214,18 +218,22 @@ class Sensors {
     }
 
     public void dumpCSV(OutputStreamWriter writer) {
-    	for (SensorData sensor: sensors) {
-			sensor.writeCSV(writer);
-		}
+    	synchronized (sensors) {
+    		for (SensorData sensor: sensors) {
+    			sensor.writeCSV(writer);
+    		}
+    	}
     }
   
     public Date getLastUpdate() {
     	Date tstamp = null;
     
-    	for (SensorData i: sensors) {
-    		if (i.lastUpdate != null) {
-    			if (tstamp == null || (i.lastUpdate.getTime() > tstamp.getTime())) {
-    				tstamp = i.lastUpdate;
+    	synchronized (sensors) {
+    		for (SensorData i: sensors) {
+    			if (i.lastUpdate != null) {
+    				if (tstamp == null || (i.lastUpdate.getTime() > tstamp.getTime())) {
+    					tstamp = i.lastUpdate;
+    				}
     			}
     		}
     	}
@@ -233,7 +241,7 @@ class Sensors {
     	return tstamp;
     }
     
-    public synchronized void syncWithServer() {
+    public void syncWithServer() {
 		int port = prefs.getInt("port", Preferences.DEFAULT_PORT);
 		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
 		Log.d(TAG, "Client Thread connecting to " + ipAddr + ":" + port);
@@ -244,7 +252,7 @@ class Sensors {
 			HttpGet request = new HttpGet();
 
 			String uri = ipAddr+":"+port+"/sensors";
-			Date lastTstamp = service.getSensors().getLastUpdate();
+			Date lastTstamp = getLastUpdate();
 			if (lastTstamp != null) {
 				uri = uri + "?last="+lastTstamp.getTime();
 			}
@@ -308,42 +316,44 @@ class Sensors {
     	}
     }
 
-    private synchronized void checkSensorsConsistency() {
-    	// 1st, find the most recent sensor timestamp
-    	long maxTime = 0;
-    	for (SensorData sensor: sensors) {
-    		long tstamp = sensor.getLast().time;
-    		if (tstamp > maxTime) {
-    			maxTime = tstamp;
-    		}
-    	}
-
-    	// Now, see if a sensor has not been updated for 15 min
-    	boolean foundMissingSensor = false;
-    	for (SensorData sensor: sensors) {
-    		long tstamp = sensor.getLast().time;
-
-    		if (maxTime - tstamp > WARN_MISSING_MINS*60*1000) {
-    			// Note: we're necessarily in server mode,
-    			// because the only caller is updateData() from xPL message
-    			if ((service != null) && (!warnedAboutMissingSensor)) {
-        			service.pushToClients("missing_sensor", 0, sensor.getName());
-        			String msg = String.format(service.getString(R.string.missing_sensor), sensor.getName());
-        			service.showAlertNotification(msg, R.raw.garage_alert, new Date());
-        			service.addLog(msg);
-        			warnedAboutMissingSensor = true;
+    private void checkSensorsConsistency() {
+    	synchronized (sensors) {
+    		// 1st, find the most recent sensor timestamp
+    		long maxTime = 0;
+    		for (SensorData sensor: sensors) {
+    			long tstamp = sensor.getLast().time;
+    			if (tstamp > maxTime) {
+    				maxTime = tstamp;
     			}
-
-    			foundMissingSensor = true;
-        		Log.i(TAG, "Sensor " + sensor.getName() + " not updated any more !");
-        		// Warn for 1st sensor found missing
-        		return;
     		}
-    	}
 
-    	// Reset flag when everything's fine
-    	if (!foundMissingSensor) {
-    		warnedAboutMissingSensor = false;
+    		// Now, see if a sensor has not been updated for 15 min
+    		boolean foundMissingSensor = false;
+    		for (SensorData sensor: sensors) {
+    			long tstamp = sensor.getLast().time;
+
+    			if (maxTime - tstamp > WARN_MISSING_MINS*60*1000) {
+    				// Note: we're necessarily in server mode,
+    				// because the only caller is updateData() from xPL message
+    				if ((service != null) && (!warnedAboutMissingSensor)) {
+    					service.pushToClients("missing_sensor", 0, sensor.getName());
+    					String msg = String.format(service.getString(R.string.missing_sensor), sensor.getName());
+    					service.showAlertNotification(msg, R.raw.garage_alert, new Date());
+    					service.addLog(msg);
+    					warnedAboutMissingSensor = true;
+    				}
+
+    				foundMissingSensor = true;
+    				Log.i(TAG, "Sensor " + sensor.getName() + " not updated any more !");
+    				// Warn for 1st sensor found missing
+    				return;
+    			}
+    		}
+
+    		// Reset flag when everything's fine
+    		if (!foundMissingSensor) {
+    			warnedAboutMissingSensor = false;
+    		}
     	}
     }
 }

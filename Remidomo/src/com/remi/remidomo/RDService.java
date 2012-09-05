@@ -505,7 +505,7 @@ public class RDService extends Service {
     	}
     }
 
-	public synchronized Sensors getSensors() {
+	public Sensors getSensors() {
 		return sensors;
 	}
 
