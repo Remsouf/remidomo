@@ -196,6 +196,16 @@
   				android:persistent="true"
   				app:defaultValue="7" />
 
+            <com.remi.remidomo.CustomSpinnerPreference
+            	app:defaultVal="2"
+            	android:dialogTitle="@string/pref_energylimit_dialog"
+            	android:key="energy_limit"
+            	app:min="1"
+            	app:max="10"
+            	android:persistent="true"
+            	android:summary="@string/pref_energylimit_summary"
+            	android:title="@string/pref_energylimit_title" />
+
         </PreferenceScreen>
 
     </PreferenceCategory>

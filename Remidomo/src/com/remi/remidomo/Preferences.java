@@ -33,6 +33,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	public static final boolean DEFAULT_KEEPSERVICE = true;
 	public static final int DEFAULT_HCHOUR = 23;
 	public static final int DEFAULT_HPHOUR = 7;
+	public static final int DEFAULT_ENERGYLIMIT = 2;
 	public static final boolean DEFAULT_TARIF_HIGHLIGHT = true;
 
 	private ListPreference mode;
@@ -50,6 +51,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	private CustomSpinnerPreference plotlimit;
 	private CustomTimePickerPreference hchour;
 	private CustomTimePickerPreference hphour;
+	private CustomSpinnerPreference energylimit;
 
 	private SharedPreferences prefs;
 	
@@ -77,6 +79,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
         plotlimit = (CustomSpinnerPreference) getPreferenceScreen().findPreference("plot_limit");
         hchour = (CustomTimePickerPreference) getPreferenceScreen().findPreference("hc_hour");
         hphour = (CustomTimePickerPreference) getPreferenceScreen().findPreference("hp_hour");
+        energylimit = (CustomSpinnerPreference) getPreferenceScreen().findPreference("energy_limit");
 
         updateTexts();
     }
@@ -134,6 +137,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     		(!"day_labels".equals(key)) &&
     		(!"plot_limit".equals(key)) &&
     		(!"sound".equals(key)) &&
+    		(!"energy_limit".equals(key)) &&
     		(!"bootkick".equals(key)) &&
     		(!"keepservice".equals(key))) {
     		prefChanged = true;
@@ -208,5 +212,9 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     	minutes = prefs.getInt("hp_hour.minute", 0);
     	msg = String.format(getString(R.string.pref_hphour_summary), hours, decimalFormat.format(minutes));
     	hphour.setSummary(msg);
+
+    	days = prefs.getInt("energy_limit", DEFAULT_ENERGYLIMIT);
+    	msg = String.format(getString(R.string.pref_energylimit_summary), days);
+    	energylimit.setSummary(msg);
     }
 }

@@ -64,6 +64,7 @@ public class ServerThread implements Runnable {
     
     // Homepage configuration
     private int plotDays = 5;
+    private int energyDays = 2;
 
     // URLs:
     // log
@@ -91,6 +92,7 @@ public class ServerThread implements Runnable {
 		prefs = PreferenceManager.getDefaultSharedPreferences(service);
 		
 		plotDays = prefs.getInt("plot_limit", Preferences.DEFAULT_PLOTLIMIT);
+		energyDays = prefs.getInt("energy_limit", Preferences.DEFAULT_ENERGYLIMIT);
 
         // HTTP objects
         httpContext = new BasicHttpContext();
@@ -542,7 +544,7 @@ public class ServerThread implements Runnable {
 			SensorPlot plot = new SensorPlot(service, "Fake-power");
 			plot.setAttributes(service.getString(R.string.kw), true, Color.YELLOW, false, true);
 			SensorData data = service.getEnergy().getPowerData();
-			plot.addSeries(data, plotDays);
+			plot.addSeries(data, energyDays);
 			return plot.getBitmap(BMP_WIDTH, BMP_HEIGHT);
 		}
 

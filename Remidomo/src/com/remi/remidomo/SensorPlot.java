@@ -216,8 +216,13 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 			// Remove points before days limit
 			int effDaysBack = daysBack;
 			if (effDaysBack == 0) {
-				effDaysBack = prefs.getInt("plot_limit", Preferences.DEFAULT_PLOTLIMIT);
+				if (tarifCompatible) {
+					effDaysBack = prefs.getInt("energy_limit", Preferences.DEFAULT_ENERGYLIMIT);
+				} else {
+					effDaysBack = prefs.getInt("plot_limit", Preferences.DEFAULT_PLOTLIMIT);
+				}
 			}
+
 			long limit = new Date().getTime() - effDaysBack * HOURS_24;
 			filteredSeries = series.filter(limit);
 
