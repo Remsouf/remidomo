@@ -211,6 +211,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 	public void addSeries(SensorData series, int daysBack) {
 
 		SimpleXYSeries filteredSeries = null;
+		long limit = 0;
 
 		if (series != null) {
 			// Remove points before days limit
@@ -223,7 +224,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 				}
 			}
 
-			long limit = new Date().getTime() - effDaysBack * HOURS_24;
+			limit = new Date().getTime() - effDaysBack * HOURS_24;
 			filteredSeries = series.filter(limit);
 
 			int dotsEffectiveColor = 0;
@@ -318,6 +319,12 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 			minXSeriesValue = filteredSeries.getX(0);
 			maxXSeriesValue = filteredSeries.getX(filteredSeries.size()-1);
 
+			if (newMinX != null && newMinX.longValue() < limit) {
+				newMinX = filteredSeries.getX(0);
+				newMaxX = filteredSeries.getX(filteredSeries.size()-1);
+				setDomainBoundaries(newMinX, newMaxX, BoundaryMode.FIXED);
+				redraw();
+			}
 			newMinX = minXSeriesValue;
 			newMaxX = maxXSeriesValue;
 

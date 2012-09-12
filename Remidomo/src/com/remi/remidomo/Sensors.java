@@ -52,7 +52,7 @@ class Sensors {
     
     // Time in minutes before warning that a sensor
     // stopped being updated.
-    private final static long WARN_MISSING_MINS = 60;
+    private final static long WARN_MISSING_MINS = 120;
 
 	public Sensors(RDService service) {
 		this.service = service;
@@ -321,22 +321,28 @@ class Sensors {
     		// 1st, find the most recent sensor timestamp
     		long maxTime = 0;
     		for (SensorData sensor: sensors) {
-    			long tstamp = sensor.getLast().time;
-    			if (tstamp > maxTime) {
-    				maxTime = tstamp;
+    			if (sensor.size() > 0) {
+    				long tstamp = sensor.getLast().time;
+    				if (tstamp > maxTime) {
+    					maxTime = tstamp;
+    				}
     			}
     		}
 
     		// Now, see if a sensor has not been updated for 15 min
     		boolean foundMissingSensor = false;
     		for (SensorData sensor: sensors) {
+    			if (sensor.size() == 0) {
+    				continue;
+    			}
+
     			long tstamp = sensor.getLast().time;
 
     			if (maxTime - tstamp > WARN_MISSING_MINS*60*1000) {
     				// Note: we're necessarily in server mode,
     				// because the only caller is updateData() from xPL message
     				if ((service != null) && (!warnedAboutMissingSensor)) {
-    					service.pushToClients("missing_sensor", 0, sensor.getName());
+    					service.pushToClients(PushSender.MISSING_SENSOR, 0, sensor.getName());
     					String msg = String.format(service.getString(R.string.missing_sensor), sensor.getName());
     					service.showAlertNotification(msg, R.raw.garage_alert, new Date());
     					service.addLog(msg);
