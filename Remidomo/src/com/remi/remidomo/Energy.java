@@ -11,7 +11,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.remi.remidomo.RDService.LogLevel;
+
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.BatteryManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -22,6 +27,8 @@ class Energy {
 	// Hard-coded values
 	public final static String ID_POWER = "elec2_0xf082-power";
 	public final static String ID_ENERGY = "elec2_0xf082-energy";
+
+	private final static int POWER_LOSS_THRESHOLD = 1000*15; // 15s
 
     private final RDService service;
 
@@ -35,12 +42,17 @@ class Energy {
     private float initialEnergy = -1.0f;
     private Date initialTstamp = null;
 
+    private boolean powerStatus;
+    private long powerLossTimestamp = 0;
+
 	public Energy(RDService service) {
 		this.service = service;
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(service);
 		initialEnergy = prefs.getFloat("initial_energy", -1.0f);
 		initialTstamp = new Date(prefs.getLong("initial_tstamp", new Date().getTime()));
+
+		updatePowerStatus();
 
 		// Fetch data for all sensors
 		// (threaded)
@@ -70,6 +82,44 @@ class Energy {
     	} else {
     		return 0.0f;
     	}
+    }
+
+    public boolean isPoweredOn() {
+    	return powerStatus;
+    }
+
+    public void updatePowerStatus(boolean status) {
+    	powerStatus = status;
+
+    	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
+    	if ("Serveur".equals(mode)) {
+    		if (powerStatus) {
+    			if (powerLossTimestamp != 0) {
+    				long delta = new Date().getTime() - powerLossTimestamp;
+    				if (delta >= POWER_LOSS_THRESHOLD) {
+    					int hours = (int) delta / 3600000;
+    					int minutes = ((int)delta - (hours * 3600000)) / 60000;
+    					String duration = "" + hours + "h" + String.format("%02d", minutes);
+    					service.pushToClients(PushSender.POWER_RESTORE, 0, duration);
+    				}
+    			}
+    			service.addLog(service.getString(R.string.power_restored), LogLevel.HIGH);
+    		} else {
+    			powerLossTimestamp = new Date().getTime();
+    			service.addLog(service.getString(R.string.power_dropped), LogLevel.HIGH);
+    		}
+    	}
+    }
+
+    public void updatePowerStatus() {
+		IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+		Intent batteryStatus = service.registerReceiver(null, ifilter);
+		int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+
+		if (status != -1) {
+			// 0 => On battery
+			powerStatus = (status != 0);
+		}
     }
 
     public void updateData(RDService service, xPLMessage msg) {
@@ -125,6 +175,7 @@ class Energy {
 
     		object.put("initial_energy", initialEnergy);
     		object.put("initial_tstamp", initialTstamp.getTime());
+    		object.put("status", powerStatus);
 
     		writer.write(object.toString());
     	} catch (org.json.JSONException ignored) {}
@@ -196,6 +247,8 @@ class Energy {
 	    	editor.putFloat("initial_energy", initialEnergy);
 	    	editor.putLong("initial_tstamp", initialTstamp.getTime());
 	    	editor.commit();
+
+	    	powerStatus = entries.getBoolean("status");
 
 			if (service.callback != null) {
 				service.callback.updateEnergy();

@@ -288,7 +288,7 @@ public class Doors {
 			eventHistory.add(event);
 
 			if ((newState == State.CLOSED) || (newState == State.OPENED)) {
-				service.pushToClients("door", GARAGE, newState.toString());
+				service.pushToClients(PushSender.DOOR, GARAGE, newState.toString());
 			} else if (newState == State.MOVING) {
 				// TODO: NOT RELIABLE
 				//Timer doorTimer = new Timer();
@@ -306,7 +306,7 @@ public class Doors {
 			if (states[GARAGE] == State.MOVING) {
 				// If still not opened/closed after a delay
 				// there's something wrong.
-				service.pushToClients("door", GARAGE, states[GARAGE].toString());
+				service.pushToClients(PushSender.DOOR, GARAGE, states[GARAGE].toString());
 			}
 		}
 	}

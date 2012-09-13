@@ -6,6 +6,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -24,7 +25,6 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
@@ -56,6 +56,9 @@ public class RDService extends Service {
     
     public final static String ACTION_RESTORE_DATA = "com.remi.remidomo.RESTORE_DATA";
     public final static String ACTION_BOOTKICK = "com.remi.remidomo.BOOTKICK";
+    public final static String ACTION_BATTERYLOW = "com.remi.remidomo.BATLOW";
+    public final static String ACTION_POWERCONNECT = "com.remi.remidomo.POWER_CONN";
+    public final static String ACTION_POWERDISCONNECT = "com.remi.remidomo.POWER_DISC";
 
     private final IBinder mBinder = new LocalBinder();
     public IUpdateListener callback;
@@ -98,18 +101,6 @@ public class RDService extends Service {
     					   LOW,
     					   UPDATE };
 
-    /* Broadcast receiver for low battery */
-    private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver(){
-        @Override
-        public void onReceive(Context context, Intent intent) {
-        	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
-    		if ("Serveur".equals(mode)) {
-    			pushToClients("lowbat", 0, "");
-    			Log.i(TAG, "Sending push for low battery !");
-    		}
-        }
-    };
-
     @Override
     public void onCreate() {
         notificationMgr = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -130,8 +121,6 @@ public class RDService extends Service {
         	}
         }
 
-        registerReceiver(batteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
-
         sensors = new Sensors(this);
         switches = new Switches(this);
         doors = new Doors(this);
@@ -143,7 +132,13 @@ public class RDService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+    	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
+
     	// In case of crash/restart, intent can be null
+    	if (intent != null) {
+    		Log.d(TAG, "ACTION: " + intent.getAction());
+    	}
     	if ((intent != null) && GCMConstants.INTENT_FROM_GCM_REGISTRATION_CALLBACK.equals(intent.getAction())) {
     		registrationKey = intent.getStringExtra("registration_id");
     		Log.d(TAG, "Got GCM registration key");
@@ -168,6 +163,26 @@ public class RDService extends Service {
     			cleanObjects();
     			stopSelf();
     		}
+    	} else if ((intent != null) && ACTION_BATTERYLOW.equals(intent.getAction())) {
+    		if ("Serveur".equals(mode)) {
+    			pushToClients(PushSender.LOWBAT, 0, "");
+    			Log.i(TAG, "Sending push for low battery !");
+    			addLog("Batterie faible", LogLevel.HIGH);
+    		}
+		} else if ((intent != null) && ACTION_POWERCONNECT.equals(intent.getAction())) {
+			if ("Serveur".equals(mode)) {
+				energy.updatePowerStatus(true);
+				if (callback != null) {
+					callback.updateEnergy();
+				}
+			}
+		} else if ((intent != null) && ACTION_POWERDISCONNECT.equals(intent.getAction())) {
+			if ("Serveur".equals(mode)) {
+				energy.updatePowerStatus(false);
+				if (callback != null) {
+					callback.updateEnergy();
+				}
+			}
     	} else {
     		Log.i(TAG, "Start service");
     		addLog("Service (re)démarré");
@@ -181,7 +196,6 @@ public class RDService extends Service {
     		cleanObjects();
 
     		// Start threads
-    		String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
     		if ("Serveur".equals(mode)) {
     			rfxThread = new Thread(new RfxThread(), "rfx");
     			rfxThread.start();
@@ -247,13 +261,6 @@ public class RDService extends Service {
         if (wifiBroadcastReceiver != null) {
             try {
                 unregisterReceiver(wifiBroadcastReceiver);
-            } catch (IllegalArgumentException ignored) {}
-        }
-
-        // Stop listening to low battery event, if registered
-        if (batteryInfoReceiver != null) {
-            try {
-                unregisterReceiver(batteryInfoReceiver);
             } catch (IllegalArgumentException ignored) {}
         }
 
@@ -839,14 +846,30 @@ public class RDService extends Service {
 			Log.d(TAG, "Push received: " + target);
 			addLog("Push reçu: " + target, LogLevel.UPDATE);
 
-			if ("switch".equals(target)) {
+			if (PushSender.SWITCH.equals(target)) {
 				switches.setFromPushedIntent(intent);
-			} else if ("door".equals(target)) {
+			} else if (PushSender.DOOR.equals(target)) {
 				doors.setFromPushedIntent(intent);
-			} else if ("lowbat".equals(target)) {
+			} else if (PushSender.LOWBAT.equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
 				showAlertNotification(getString(R.string.low_bat), R.raw.garage_alert, tstamp);
-			} else if ("missing_sensor".equals(target)) {
+			} else if (PushSender.POWER_DROP.equals(target)) {
+				// In case the server still has connectivity...
+				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
+				showAlertNotification(getString(R.string.power_dropped), R.raw.garage_alert, tstamp);
+				energy.updatePowerStatus(false);
+				if (callback != null) {
+					callback.updateEnergy();
+				}
+			} else if (PushSender.POWER_RESTORE.equals(target)) {
+				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
+				String duration = intent.getStringExtra(PushSender.STATE);
+				showAlertNotification(String.format(getString(R.string.power_restored), duration), R.raw.garage_alert, tstamp);
+				energy.updatePowerStatus(true);
+				if (callback != null) {
+					callback.updateEnergy();
+				}
+			} else if (PushSender.MISSING_SENSOR.equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
 				String sensorName = intent.getStringExtra(PushSender.STATE);
 				showAlertNotification(String.format(getString(R.string.missing_sensor), sensorName), R.raw.garage_alert, tstamp);

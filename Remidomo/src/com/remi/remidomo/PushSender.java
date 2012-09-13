@@ -26,6 +26,14 @@ public class PushSender {
 
 	private final static String GCM_API_KEY = "AIzaSyBBCNs05kxAwiQntfBsga-PujphIsy79AY";
 
+	// Constants for target
+	public final static String SWITCH = "switch";
+	public final static String DOOR = "door";
+	public final static String LOWBAT = "lowbat";
+	public final static String POWER_DROP = "power_drop";
+	public final static String POWER_RESTORE = "power_restore";
+	public final static String MISSING_SENSOR = "missing_sensor";
+
 	private RDService service = null;
 
 	private SecureRandom random = new SecureRandom();

@@ -908,6 +908,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 			units.setTextColor(Color.parseColor("#5555FF"));
 		}
 
+		// Energy
 		TextView energy = (TextView) findViewById(R.id.energy);
         DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
         decimalFormat.applyPattern("#0.0");
@@ -917,6 +918,19 @@ public class RDActivity extends Activity implements OnGestureListener {
         	energy.setText(decimalFormat.format(value));
         } else {
         	energy.setText("?");
+        }
+
+        // Status
+        ImageView statusView = (ImageView) findViewById(R.id.power_status);
+        if (service != null) {
+        	boolean status = service.getEnergy().isPoweredOn();
+        	if (status) {
+        		statusView.setImageResource(R.drawable.power_on);
+        	} else {
+        		statusView.setImageResource(R.drawable.power_off);
+        	}
+        } else {
+        	statusView.setImageResource(R.drawable.meteo_unknown);
         }
 
         updateEnergyLastUpdate();

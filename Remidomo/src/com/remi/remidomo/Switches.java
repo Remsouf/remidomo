@@ -55,7 +55,7 @@ class Switches {
 			String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
 	        if ("Serveur".equals(mode)) {
 	        	sendRfxMessage(index, states[index]);
-	        	service.pushToClients("switch", index, Boolean.toString(states[index]));
+	        	service.pushToClients(PushSender.SWITCH, index, Boolean.toString(states[index]));
 	        } else {
 	        	sendServerMessage(index, states[index]);
 	        }
@@ -95,7 +95,7 @@ class Switches {
 
 		// Also update clients
 		// (in addition to the one sending the request)
-		service.pushToClients("switch", index, Boolean.toString(state));
+		service.pushToClients(PushSender.SWITCH, index, Boolean.toString(state));
 
 		return true;
 	}
