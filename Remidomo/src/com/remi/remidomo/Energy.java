@@ -20,7 +20,7 @@ import android.os.BatteryManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-class Energy {
+public class Energy {
 
 	private final static String TAG = RDService.class.getSimpleName();
 
@@ -72,12 +72,17 @@ class Energy {
         }).start();
 	}
 
+	public boolean isReadyForUpdates() {
+		// For JUnit tests
+		return readyForUpdates;
+	}
+
     public SensorData getPowerData() {
     	return power;
     }
 
     public float getEnergyValue() {
-    	if ((energy != null) && (energy.size() > 0)) {
+    	if ((energy != null) && (energy.size() > 0) && (initialEnergy >= 0.0f)) {
     		return energy.getLast().value - initialEnergy;
     	} else {
     		return 0.0f;
@@ -103,10 +108,10 @@ class Energy {
     					service.pushToClients(PushSender.POWER_RESTORE, 0, duration);
     				}
     			}
-    			service.addLog(service.getString(R.string.power_restored), LogLevel.HIGH);
+    			service.addLog("Alimentation électrique restaurée", LogLevel.HIGH);
     		} else {
     			powerLossTimestamp = new Date().getTime();
-    			service.addLog(service.getString(R.string.power_dropped), LogLevel.HIGH);
+    			service.addLog("Alimentation électrique perdue", LogLevel.HIGH);
     		}
     	}
     }
@@ -138,7 +143,7 @@ class Energy {
     	}
 
     	if ("power".equals(type)) {
-    		power.addValue(msg.getFloatNamedValue("current"));
+    		power.addValue(new Date(), msg.getFloatNamedValue("current"));
     		String unit = msg.getNamedValue("units");
     		assert (unit.equals("kW"));
 
@@ -146,7 +151,7 @@ class Energy {
  				   		    SensorData.FileFormat.BINARY);
     	} else if ("energy".equals(type)) {
     		energy.clearData();
-    		energy.addValue(msg.getFloatNamedValue("current"));
+    		energy.addValue(new Date(), msg.getFloatNamedValue("current"));
     		String unit = msg.getNamedValue("units");
     		assert (unit.equals("kWh"));
 
@@ -158,9 +163,13 @@ class Energy {
     }
 
     public void dumpData(OutputStreamWriter writer, long lastTstamp) throws java.io.IOException {
-    	try {
-    		JSONObject object = new JSONObject();
+    	writer.write(getJSON(lastTstamp).toString());
+    }
 
+    public JSONObject getJSON(long lastTstamp) {
+    	JSONObject object = new JSONObject();
+
+    	try {
     		JSONArray arrayPower = power.getJSONArray(lastTstamp);
     		if (arrayPower != null) {
     			object.put("power", arrayPower);
@@ -177,8 +186,9 @@ class Energy {
     		object.put("initial_tstamp", initialTstamp.getTime());
     		object.put("status", powerStatus);
 
-    		writer.write(object.toString());
     	} catch (org.json.JSONException ignored) {}
+
+    	return object;
     }
 
     public Date getLastUpdate() {
@@ -293,6 +303,6 @@ class Energy {
         editor.commit();
 
         energy.clearData();
-        energy.addValue(initialEnergy);
+        energy.addValue(new Date(), initialEnergy);
     }
 }

@@ -23,7 +23,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-class Sensors {
+public class Sensors {
 	
 	private final static String TAG = RDService.class.getSimpleName();
 
@@ -52,7 +52,7 @@ class Sensors {
     
     // Time in minutes before warning that a sensor
     // stopped being updated.
-    private final static long WARN_MISSING_MINS = 120;
+    public final static long WARN_MISSING_MINS = 120;
 
 	public Sensors(RDService service) {
 		this.service = service;
@@ -152,6 +152,10 @@ class Sensors {
     }
 
     public void updateData(RDService service, xPLMessage msg) {
+    	updateData(service, msg, true);
+    }
+
+    public void updateData(RDService service, xPLMessage msg, boolean compress) {
     	// Ignore msg if we're still reading values from files
     	if (!readyForUpdates) {
     		return;
@@ -188,7 +192,7 @@ class Sensors {
     			sensors.add(data);
     		}
 
-    		data.addValue(msg.getFloatNamedValue("current"));
+    		data.addValue(new Date(), msg.getFloatNamedValue("current"), compress);
 
     		String unit = msg.getNamedValue("units");
     		assert (unit.equals("c"));
@@ -316,7 +320,7 @@ class Sensors {
     	}
     }
 
-    private void checkSensorsConsistency() {
+    public boolean checkSensorsConsistency() {
     	synchronized (sensors) {
     		// 1st, find the most recent sensor timestamp
     		long maxTime = 0;
@@ -352,7 +356,7 @@ class Sensors {
     				foundMissingSensor = true;
     				Log.i(TAG, "Sensor " + sensor.getName() + " not updated any more !");
     				// Warn for 1st sensor found missing
-    				return;
+    				return false;
     			}
     		}
 
@@ -360,6 +364,8 @@ class Sensors {
     		if (!foundMissingSensor) {
     			warnedAboutMissingSensor = false;
     		}
+
+    		return true;
     	}
     }
 }

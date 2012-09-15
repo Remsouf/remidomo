@@ -267,11 +267,7 @@ public class SensorData {
 
 		lastUpdate = new Date(data.getLast().time);
 	}
-	
-	public void addValue(float value) {
-		addValue(new Date(), value);
-	}
-	
+
 	public void addValue(Date tstamp, float value) {
 		addValue(tstamp, value, true);
 	}

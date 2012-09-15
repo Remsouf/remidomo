@@ -32,11 +32,6 @@ public class DoorsTest extends ServiceTestCase<RDService> {
         startIntent.setClass(getContext(), RDService.class);
         startService(startIntent);
 	}
-	
-    public void testStartable() {
-        start();
-        assertNotNull(getService());
-    }
 
 	public void testxPLSequence() throws xPLParseException {
 		xPLMessage msg;
