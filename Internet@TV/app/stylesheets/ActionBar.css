@@ -1,0 +1,103 @@
+#SceneActionBar {
+	position : absolute;
+	left : 360px;
+	top : 490px;
+	width : 300px;
+	height : 45px;
+	background-color : #ffffff;
+}
+
+#SceneActionBar #Button_Dashboard{
+	position : absolute;
+	left : 10px;
+	top : 5px;
+	width : 40px;
+}
+
+#SceneActionBar #Dashboard_Icon{
+	position:absolute;
+	left:15px;
+	top:8px;
+	width:30px;
+	height:30px;
+	border:0;
+	background-position:center;
+	background-image:url('../../images/dashboard.png');
+	z-index:2;
+}
+
+#SceneActionBar #Button_Thermo{
+	position : absolute;
+	left : 60px;
+	top : 5px;
+	width : 40px;
+}
+
+#SceneActionBar #Thermo_Icon{
+	position:absolute;
+	left:65px;
+	top:8px;
+	width:30px;
+	height:30px;
+	border:0;
+	background-position:center;
+	background-image:url('../../images/temperature.png');
+	z-index:2;
+}
+
+#SceneActionBar #Button_Pool{
+	position : absolute;
+	left : 110px;
+	top : 5px;
+	width : 40px;
+}
+
+#SceneActionBar #Pool_Icon{
+	position:absolute;
+	left:115px;
+	top:8px;
+	width:30px;
+	height:30px;
+	border:0;
+	background-position:center;
+	background-image:url('../../images/pool.png');
+	z-index:2;
+}
+
+#SceneActionBar #Button_Elec{
+	position : absolute;
+	left : 160px;
+	top : 5px;
+	width : 40px;
+}
+
+#SceneActionBar #Elec_Icon{
+	position:absolute;
+	left:165px;
+	top:8px;
+	width:30px;
+	height:30px;
+	border:0;
+	background-position:center;
+	background-image:url('../../images/energy.png');
+	z-index:2;
+}
+
+#SceneActionBar #Button_Exit{
+	position : absolute;
+	left : 255px;
+	top : 5px;
+	width : 40px;
+}
+
+#SceneActionBar #Exit_Icon{
+	position:absolute;
+	left:260px;
+	top:8px;
+	width:30px;
+	height:30px;
+	border:0;
+	background-position:center;
+	background-image:url('../../images/exit.png');
+	z-index:2;
+}

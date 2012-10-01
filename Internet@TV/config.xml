@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget>
+	<previewjs itemtype="string"></previewjs>
+	<preicon itemtype="string"></preicon>
+	<ThumbIcon itemtype="string">icon/default_106.png</ThumbIcon>
+	<BigThumbIcon itemtype="string">icon/default_115.png</BigThumbIcon>
+	<ListIcon itemtype="string">icon/default_85.png</ListIcon>
+	<BigListIcon itemtype="string">icon/default_95.png</BigListIcon>
+	<cpname itemtype="string">Remi Peuvergne</cpname>
+	<cplogo itemtype="string"></cplogo>
+	<cpauthjs itemtype="string"></cpauthjs>
+	<ver itemtype="string">0.101</ver>
+	<mgrver itemtype="string"></mgrver>
+	<fullwidget itemtype="string">n</fullwidget>
+	<srcctl itemtype="string">n</srcctl>
+	<ticker itemtype="string">n</ticker>
+	<childlock itemtype="string">n</childlock>
+	<audiomute itemtype="string">n</audiomute>
+	<videomute itemtype="string">n</videomute>
+	<dcont itemtype="string">y</dcont>
+	<type itemtype="string">user</type>
+	<widgetname itemtype="string">Remidomo</widgetname>
+	<description itemtype="string">Domotique</description>
+	<width itemtype="number">960</width>
+	<height itemtype="number">540</height>
+	<author itemtype="group">
+		<name itemtype="string">Remsouf</name>
+		<email itemtype="string">rpeuvergne@free.fr</email>
+		<link itemtype="string"></link>
+		<organization itemtype="string">Miaouland</organization>
+	</author>
+</widget>
