@@ -500,11 +500,11 @@ public class ServerThread implements Runnable {
 		}
 
 		private Bitmap getBitmap(String name, RDService service) {
-			if ("poolplot".equals(name)) {
+			if (name.startsWith("poolplot")) {
 				return getPoolBitmap(service);
-	    	} else if ("thermoplot".equals(name)) {
+	    	} else if (name.startsWith("thermoplot")) {
 	    		return getThermoBitmap(service);
-	    	} else if ("powerplot".equals(name)) {
+	    	} else if (name.startsWith("powerplot")) {
 	    		return getPowerBitmap(service);
 	    	} else {
 	    		// Try with drawable resources

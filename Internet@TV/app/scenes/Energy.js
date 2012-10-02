@@ -12,8 +12,8 @@ SceneEnergy.prototype.initialize = function () {
 }
 
 SceneEnergy.prototype.handleShow = function () {
-	alert("SceneEnergy.handleShow()");
-	// this function will be called when the scene manager show this scene 
+	graph = document.getElementById('GraphEnergy');
+	graph.style.backgroundImage = "url(http://remidomo.hd.free.fr:2012/img/powerplot?dummy=" + new Date().getTime() + ")";
 }
 
 SceneEnergy.prototype.handleHide = function () {

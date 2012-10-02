@@ -12,8 +12,8 @@ SceneThermo.prototype.initialize = function () {
 }
 
 SceneThermo.prototype.handleShow = function () {
-	alert("SceneThermo.handleShow()");
-	// this function will be called when the scene manager show this scene 
+	graph = document.getElementById('GraphThermo');
+	graph.style.backgroundImage = "url(http://remidomo.hd.free.fr:2012/img/thermoplot?dummy=" + new Date().getTime() + ")";
 }
 
 SceneThermo.prototype.handleHide = function () {

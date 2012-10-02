@@ -12,8 +12,8 @@ ScenePool.prototype.initialize = function () {
 }
 
 ScenePool.prototype.handleShow = function () {
-	alert("ScenePool.handleShow()");
-	// this function will be called when the scene manager show this scene 
+	graph = document.getElementById('GraphPool');
+	graph.style.backgroundImage = "url(http://remidomo.hd.free.fr:2012/img/poolplot?dummy=" + new Date().getTime() + ")";
 }
 
 ScenePool.prototype.handleHide = function () {
