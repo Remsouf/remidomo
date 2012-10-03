@@ -1,5 +1,5 @@
 { 
-   "scenes" : [ "ActionBar", "Thermo", "Pool", "Energy"],
+   "scenes" : [ "ActionBar", "Dashboard", "Thermo", "Pool", "Energy"],
    "files" : [],
 
    "changeSource" : false,

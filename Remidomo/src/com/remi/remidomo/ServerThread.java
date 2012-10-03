@@ -6,6 +6,7 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,6 +78,7 @@ public class ServerThread implements Runnable {
     // img/[drawable name|poolplot|thermoplot]
     // pushreg?key=X
 	private static final String ALL_PATTERN = "*";
+	private static final String DASHBOARD_PATTERN = "/dashboard";
 	private static final String LOG_PATTERN = "/log";
 	private static final String SENSORS_PATTERN = "/sensors";
 	private static final String SENSORS_CSV_PATTERN = "/sensors/csv";
@@ -117,6 +119,7 @@ public class ServerThread implements Runnable {
         httpRegistry.register(DOORS_PATTERN, new DoorsHandler());
         httpRegistry.register(PUSHREG_PATTERN, new PushRegHandler());
         httpRegistry.register(CONFIG_PATTERN, new ConfigHandler());
+        httpRegistry.register(DASHBOARD_PATTERN, new DashboardHandler());
         httpRegistry.register(ALL_PATTERN, new HomePageHandler());
 
         httpService.setHandlerResolver(httpRegistry);
@@ -700,6 +703,137 @@ public class ServerThread implements Runnable {
 
 				response.setEntity(entity);
 			}
+		}
+	}
+
+	class DashboardHandler implements HttpRequestHandler {
+
+		public DashboardHandler(){
+			// Do nothing
+		}
+
+		public void handle(HttpRequest request, HttpResponse response, HttpContext httpContext) throws org.apache.http.HttpException, java.io.IOException {
+			service.addLog("Requete HTTP reçue (dashboard)");
+			Log.d(TAG, "Got a HTTP request for server (dashboard)");
+
+			String contentType = "text/html";
+			HttpEntity entity = new EntityTemplate(new ContentProducer() {
+				public void writeTo(final OutputStream outstream) throws java.io.IOException {
+					OutputStreamWriter writer = new OutputStreamWriter(outstream, "UTF-8");
+					JSONObject json = new JSONObject();
+					try {
+						/* Thermo */
+						JSONObject thermo = new JSONObject();
+
+						JSONObject pool = new JSONObject();
+			            SensorData series = service.getSensors().getData(Sensors.ID_POOL_T);
+			            if ((series != null) && (series.size() > 0)) {
+			            	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+			                decimalFormat.applyPattern("#0.0#");
+			                float lastValue = series.getLast().value;
+			            	String poolTemp = decimalFormat.format(lastValue);
+			            	pool.put("temperature", poolTemp);
+			            }
+			            thermo.put("pool", pool);
+
+			            JSONObject ext = new JSONObject();
+			            String extTemp = "?";
+			            series = service.getSensors().getData(Sensors.ID_EXT_T);
+			            if ((series != null) && (series.size() > 0)) {
+			            	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+			                decimalFormat.applyPattern("#0.0#");
+			                float lastValue = series.getLast().value;
+			                extTemp = decimalFormat.format(lastValue);
+			            }
+			            ext.put("temperature", extTemp);
+
+			            String extHumidity = "?";
+			            series = service.getSensors().getData(Sensors.ID_EXT_H);
+			            if ((series != null) && (series.size() > 0)) {
+			            	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+			                decimalFormat.applyPattern("##");
+			                float lastValue = series.getLast().value;
+			                extHumidity = decimalFormat.format(lastValue);
+			            }
+			            ext.put("humidity", extHumidity);
+			            thermo.put("ext", ext);
+
+			            JSONObject veranda = new JSONObject();
+			            String verandaTemp = "?";
+			            series = service.getSensors().getData(Sensors.ID_VERANDA_T);
+			            if ((series != null) && (series.size() > 0)) {
+			            	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+			                decimalFormat.applyPattern("#0.0#");
+			                float lastValue = series.getLast().value;
+			                verandaTemp = decimalFormat.format(lastValue);
+			            }
+			            veranda.put("temperature", verandaTemp);
+
+			            String verandaHumidity = "?";
+			            series = service.getSensors().getData(Sensors.ID_VERANDA_H);
+			            if ((series != null) && (series.size() > 0)) {
+			            	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+			                decimalFormat.applyPattern("##");
+			                float lastValue = series.getLast().value;
+			                verandaHumidity = decimalFormat.format(lastValue);
+			            }
+			            veranda.put("humidity", verandaHumidity);
+			            thermo.put("veranda", veranda);
+
+						json.put("thermo", thermo);
+
+						/* Energy */
+						JSONObject energy = new JSONObject();
+
+						String power = "?";
+						series = service.getEnergy().getPowerData();
+						if ((series != null) && (series.size() > 0)) {
+				        	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+				            decimalFormat.applyPattern("#0.000");
+				            float lastValue = series.getLast().value;
+				            power = decimalFormat.format(lastValue);
+				        }
+						energy.put("power", power);
+
+						String energyValue = "?";
+						DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+				        decimalFormat.applyPattern("#0.0");
+				        float value = 0.0f;
+				        if (service.getEnergy().getEnergyValue() >= 0) {
+				        	value = service.getEnergy().getEnergyValue();
+				        	energyValue = decimalFormat.format(value);
+				        }
+				        energy.put("energy", energyValue);
+
+				        Date hcHour = new Date();
+						hcHour.setHours(prefs.getInt("hc_hour.hour", Preferences.DEFAULT_HCHOUR));
+						hcHour.setMinutes(prefs.getInt("hc_hour.minute", 0));
+
+						Date hpHour = new Date();
+						hpHour.setHours(prefs.getInt("hp_hour.hour", Preferences.DEFAULT_HPHOUR));
+						hpHour.setMinutes(prefs.getInt("hp_hour.minute", 0));
+
+						Date now = new Date();
+						if ((now.getTime() >= hpHour.getTime()) &&
+							(now.getTime() < hcHour.getTime())) {
+							energy.put("tarif", "hp");
+						} else {
+							energy.put("tarif", "hc");
+						}
+
+						json.put("energy", energy);
+					} catch (org.json.JSONException e) {
+						Log.e(TAG, "Failed to format json for dashboard: " + e);
+					}
+
+					writer.write(json.toString());
+					writer.flush();
+				}
+			});
+
+			((EntityTemplate)entity).setContentType(contentType);
+
+			response.setEntity(entity);
 		}
 	}
 }

@@ -65,11 +65,12 @@ SceneActionBar.prototype.handleKeyDown = function (keyCode) {
 
 		case $.sfKey.ENTER:
             if (this.selection == 0) {
-              alert('dashboard');
+              $.sfScene.show('Dashboard');
+			  $.sfScene.focus('Dashboard');
             } else if (this.selection == 1) {
 			  $.sfScene.show('Thermo');
 			  $.sfScene.focus('Thermo');
-            } else if (this.selection == 2) {
+			} else if (this.selection == 2) {
               $.sfScene.show('Pool');
 			  $.sfScene.focus('Pool');
             } else if (this.selection == 3) {
