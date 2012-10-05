@@ -3,9 +3,11 @@ package com.remi.remidomo.test;
 import com.remi.remidomo.RDService;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.test.ServiceTestCase;
-import android.util.Log;
 
 public class RDServiceTest extends ServiceTestCase<RDService> {
 	
@@ -77,5 +79,29 @@ public class RDServiceTest extends ServiceTestCase<RDService> {
 			dummy.addLog("msg2 (en +)");
 		}
 		assertEquals("msg1\nmsg2 (en +) (x10)\n", dummy.getLogMessages().toString());
+	}
+
+	public void testPower() throws InterruptedException {
+        start();
+
+        // Prevent from running on a real target
+        // (would remove preferences and files)
+        assertEquals("Run on emulator !", "sdk", Build.PRODUCT);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getService());
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.putString("mode", "Serveur");
+        editor.commit();
+
+        assertTrue(getService().getEnergy().isPoweredOn());
+
+        Intent down = new Intent(RDService.ACTION_POWERDISCONNECT);
+        startService(down);
+        assertFalse(getService().getEnergy().isPoweredOn());
+
+        Intent up = new Intent(RDService.ACTION_POWERCONNECT);
+        startService(up);
+        assertTrue(getService().getEnergy().isPoweredOn());
 	}
 }
