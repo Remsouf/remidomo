@@ -726,14 +726,15 @@ public class ServerThread implements Runnable {
 						JSONObject thermo = new JSONObject();
 
 						JSONObject pool = new JSONObject();
+						String poolTemp = "?";
 			            SensorData series = service.getSensors().getData(Sensors.ID_POOL_T);
 			            if ((series != null) && (series.size() > 0)) {
 			            	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
 			                decimalFormat.applyPattern("#0.0#");
 			                float lastValue = series.getLast().value;
-			            	String poolTemp = decimalFormat.format(lastValue);
-			            	pool.put("temperature", poolTemp);
+			            	poolTemp = decimalFormat.format(lastValue);
 			            }
+			            pool.put("temperature", poolTemp);
 			            thermo.put("pool", pool);
 
 			            JSONObject ext = new JSONObject();

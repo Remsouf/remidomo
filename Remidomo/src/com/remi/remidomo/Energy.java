@@ -81,6 +81,10 @@ public class Energy {
     	return power;
     }
 
+    public SensorData getEnergyData() {
+    	return energy;
+    }
+
     public float getEnergyValue() {
     	if ((energy != null) && (energy.size() > 0) && (initialEnergy >= 0.0f)) {
     		return energy.getLast().value - initialEnergy;

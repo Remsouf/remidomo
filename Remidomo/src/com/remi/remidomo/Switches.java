@@ -17,7 +17,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-class Switches {
+public class Switches {
 	
 	private final static String TAG = RDService.class.getSimpleName();
 

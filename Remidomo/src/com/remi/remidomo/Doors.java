@@ -25,7 +25,7 @@ public class Doors {
 	private final static String TAG = RDService.class.getSimpleName();
 
 	// Hardcoded values
-	private final static int MAX_DOORS = 1;
+	public final static int MAX_DOORS = 1;
 
 	private SharedPreferences prefs;
 	private RDService service = null;

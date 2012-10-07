@@ -17,7 +17,6 @@ import com.remi.remidomo.Energy;
 import com.remi.remidomo.RDService;
 import com.remi.remidomo.SensorData;
 import com.remi.remidomo.Sensors;
-import com.remi.remidomo.xPLMessage;
 
 public class SensorsTest extends ServiceTestCase<RDService> {
 	
