@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.remi.remidomo"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:id="@+id/energyView" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingBottom="10px">
+
+            	<TextView
+            	    android:id="@+id/status_text"
+            	    android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+                	android:text="Statut "
+                	android:textSize="50px" />
+
+            	<ImageView
+                	android:id="@+id/power_status"
+                	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+            		android:paddingLeft="10px"
+            		android:src="@drawable/meteo_unknown"
+            		android:layout_toRightOf="@id/status_text"
+            		android:layout_centerVertical="true" />
+
+            </RelativeLayout>
+
+            <!-- Instant energy -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+        		android:layout_height="wrap_content" >
+
+            	<TextView
+            	    android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+                	android:id="@+id/power"
+                	android:text="0.0"
+                	android:textSize="50px"
+            		android:textColor="#FFFF00"
+            		android:includeFontPadding="false" />
+            	<TextView
+            	    android:id="@+id/power_units"
+            	    android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+                	android:text="@string/kw"
+                	android:textSize="40px"
+            		android:textColor="#FFFF00"
+            		android:layout_toRightOf="@id/power"
+            		android:layout_alignBottom="@id/power" />
+            	<TextView
+            		android:id="@+id/power_last_update"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textSize="26px"
+            		android:layout_alignParentLeft="true"
+            		android:layout_below="@id/power" />
+
+            </RelativeLayout>
+
+            <!-- Spacer -->
+            <View
+                android:layout_width="1px"
+                android:layout_height="20px"/>
+
+            <!-- Cumulated energy -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:layout_centerVertical="true" >
+
+            	<TextView
+            	    android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+                	android:id="@+id/energy"
+                	android:text="0.0"
+                	android:textSize="50px"
+            		android:textColor="#FFFF00"
+            		android:includeFontPadding="false" />
+            	<TextView
+            	    android:id="@+id/energy_units"
+            	    android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+                	android:text="@string/kwh"
+                	android:textSize="40px"
+            		android:textColor="#FFFF00"
+            		android:layout_toRightOf="@id/energy"
+            		android:layout_alignBottom="@id/energy" />
+            	<TextView
+            		android:id="@+id/energy_last_update"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textSize="26px"
+            		android:layout_alignParentLeft="true"
+            		android:layout_below="@id/energy" />
+
+            	<ImageButton
+            		android:id="@+id/energyreset_button"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:background="@null"
+            		android:layout_toRightOf="@id/energy_units"
+            		android:src="@drawable/trash" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    	<com.remi.remidomo.SensorPlot
+    		android:id="@+id/energyPlot"
+    		android:layout_width="fill_parent"
+    		android:layout_height="550px"
+    		android:layout_marginTop="0dp"
+    		android:layout_marginLeft="0dp"
+    		android:layout_marginRight="0dp"
+    		title="energy"
+    		app:curve_color="#FFFF00"
+    		app:axes_color="#FF8888FF"
+        	app:grid_color="#FF8888FF"
+			app:tarif_color="#5AFF5555"
+			app:tarif_compatible="true"
+			app:nights_compatible="false"
+			app:dots_color="#FFFF5500"
+			app:auto_range="true"
+        	app:tap_enabled="false"
+        	app:units="@string/kw" />
+
+</LinearLayout>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            	android:id="@+id/door_icon"
+            	android:layout_width="50dp"
+            	android:layout_height="50dp"
+            	android:src="@drawable/meteo_unknown"
+            	android:paddingRight="20px"
+            	android:layout_centerVertical="true"
+            	android:paddingLeft="10px" />
+
+        <TextView
+            	android:id="@+id/door_time"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:textSize="30px"
+            	android:textStyle="italic"
+            	android:text=""
+            	android:layout_toRightOf="@id/door_icon"
+            	android:layout_centerVertical="true"
+            	android:paddingRight="20dp" />
+
+</RelativeLayout>

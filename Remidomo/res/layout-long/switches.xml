@@ -9,7 +9,7 @@
     	android:text="@string/switches"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="34px"
+        android:textSize="50px"
         android:gravity="center" />
 
     <TableLayout
@@ -20,19 +20,19 @@
 
         <TableRow
             android:paddingBottom="10dp">
-
+            
             <ImageButton
             	android:id="@+id/switch1_cmd"
             	android:layout_width="wrap_content"
             	android:layout_height="wrap_content"
             	android:src="@drawable/inter_button"
             	android:background="@drawable/switched_off" />
-
+           
             <TextView
     			android:text="@string/switch1_text"
         		android:layout_width="fill_parent"
         		android:layout_height="wrap_content"
-        		android:textSize="24px"
+        		android:textSize="30px"
         		android:paddingLeft="20px"
         		android:layout_gravity="center_vertical" />
 			<!--
@@ -47,7 +47,7 @@
     			android:text="@string/switch2_text"
         		android:layout_width="fill_parent"
         		android:layout_height="wrap_content"
-        		android:textSize="24px"
+        		android:textSize="30px"
         		android:paddingLeft="20px"
         		android:layout_gravity="center_vertical" />
             -->
@@ -81,28 +81,28 @@
     			android:text="@string/portail_text"
         		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
-        		android:textSize="24px"
+        		android:textSize="30px"
         		android:paddingLeft="20px"
         		android:layout_gravity="center_vertical" />
 
             <RelativeLayout
                 android:id="@+id/history_layout"
-                android:layout_width="340dp"
+                android:layout_width="440dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/garage_frame"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp">
 
                 <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                 	android:src="@drawable/history"
             		android:background="@null"
             		android:layout_centerVertical="true"/>
 
             	<ScrollView
                 	android:layout_width="fill_parent"
-                	android:layout_height="50dp"
+                	android:layout_height="55dp"
                 	android:scrollbarStyle="insideInset">
 
                 	<LinearLayout
