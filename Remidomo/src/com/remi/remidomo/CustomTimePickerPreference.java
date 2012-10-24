@@ -69,7 +69,7 @@ public class CustomTimePickerPreference extends DialogPreference {
 				SharedPreferences.Editor editor = getEditor();
 				editor.putInt(getKey() + ".hour", timePicker.getCurrentHour());
 				editor.putInt(getKey() + ".minute", timePicker.getCurrentMinute());
-				editor.commit();
+				editor.apply();
 			}
 
 			if (!callChangeListener(timePicker.getCurrentHour())) {

@@ -37,14 +37,19 @@ public class Switches {
 
 	public Switches(RDService service) {
 		this.service = service;
-		prefs = PreferenceManager.getDefaultSharedPreferences(service);
-		assert (SWITCH_ADDR.size() == MAX_SWITCHES);
-		assert (SWITCH_UNIT.size() == MAX_SWITCHES);
 		
-		for (int i=0; i<MAX_SWITCHES; i++) {
-			boolean state = prefs.getBoolean("switch_" + i, false);
-			states[i] = state;
-		}
+		new Thread(new Runnable() {
+        	public synchronized void run() {
+        		prefs = PreferenceManager.getDefaultSharedPreferences(Switches.this.service);
+        		assert (SWITCH_ADDR.size() == MAX_SWITCHES);
+        		assert (SWITCH_UNIT.size() == MAX_SWITCHES);
+
+        		for (int i=0; i<MAX_SWITCHES; i++) {
+        			boolean state = prefs.getBoolean("switch_" + i, false);
+        			states[i] = state;
+        		}
+        	}
+		}).start();
 	}
 
 	public boolean toggle(int index) {
@@ -62,7 +67,7 @@ public class Switches {
 
 	        SharedPreferences.Editor editor = prefs.edit();
 	        editor.putBoolean("switch_" + index, states[index]);
-	        editor.commit();
+	        editor.apply();
 
 			return true;
 		} else {
@@ -80,7 +85,7 @@ public class Switches {
 		
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("switch_" + index, states[index]);
-        editor.commit();
+        editor.apply();
         
         String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
         if ("Serveur".equals(mode)) {

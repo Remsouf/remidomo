@@ -59,31 +59,36 @@ public class Doors {
 	
 	public Doors(RDService service) {
 		this.service = service;
-		prefs = PreferenceManager.getDefaultSharedPreferences(service);
 
-		states = new State[MAX_DOORS];
-		for (int i=0; i<MAX_DOORS; i++) {
-			String state = prefs.getString("door_" + i, State.UNKNOWN.toString());
-			states[i] = State.valueOf(state);
-		}
+		new Thread(new Runnable() {
+        	public synchronized void run() {
+        		prefs = PreferenceManager.getDefaultSharedPreferences(Doors.this.service);
 
-		if (states[GARAGE] == State.MOVING) {
-			garageStates[0] = true;
-			garageStates[1] = true;
-		} else if (states[GARAGE] == State.OPENED) {
-			garageStates[0] = true;
-			garageStates[1] = false;
-		} else if (states[GARAGE] == State.CLOSED) {
-			garageStates[0] = false;
-			garageStates[1] = true;
-		} else {
-			garageStates[0] = false;
-			garageStates[1] = false;
-		}
+        		states = new State[MAX_DOORS];
+        		for (int i=0; i<MAX_DOORS; i++) {
+        			String state = prefs.getString("door_" + i, State.UNKNOWN.toString());
+        			states[i] = State.valueOf(state);
+        		}
 
-		if (service.callback != null) {
-			service.callback.updateDoors();
-		}
+        		if (states[GARAGE] == State.MOVING) {
+        			garageStates[0] = true;
+        			garageStates[1] = true;
+        		} else if (states[GARAGE] == State.OPENED) {
+        			garageStates[0] = true;
+        			garageStates[1] = false;
+        		} else if (states[GARAGE] == State.CLOSED) {
+        			garageStates[0] = false;
+        			garageStates[1] = true;
+        		} else {
+        			garageStates[0] = false;
+        			garageStates[1] = false;
+        		}
+
+        		if (Doors.this.service.callback != null) {
+        			Doors.this.service.callback.updateDoors();
+        		}
+        	}
+		}).start();
 	}
 	
 	public State getState(int i) {
@@ -99,7 +104,7 @@ public class Doors {
 
 		SharedPreferences.Editor editor = prefs.edit();
         editor.putString("door_" + index, states[index].toString());
-        editor.commit();
+        editor.apply();
 
         if (service.callback != null) {
 			service.callback.updateDoors();

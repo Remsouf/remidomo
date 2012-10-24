@@ -57,18 +57,18 @@ public class Sensors {
 	public Sensors(RDService service) {
 		this.service = service;
 		
-		prefs = PreferenceManager.getDefaultSharedPreferences(service);
-		
-        notificationMgr = (NotificationManager)service.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationMgr == null) {
-            Log.e(TAG, "Failed to get Notification Manager");
-        }
-
-		// Fetch data for all sensors
-		// (threaded)
-        this.service.addLog("Lecture des données capteurs locales");
-        new Thread(new Runnable() {
+		new Thread(new Runnable() {
         	public void run() {
+        		prefs = PreferenceManager.getDefaultSharedPreferences(Sensors.this.service);
+
+        		notificationMgr = (NotificationManager)Sensors.this.service.getSystemService(Context.NOTIFICATION_SERVICE);
+        		if (notificationMgr == null) {
+        			Log.e(TAG, "Failed to get Notification Manager");
+        		}
+
+        		// Fetch data for all sensors
+        		Sensors.this.service.addLog("Lecture des données capteurs locales");
+
         		readyForUpdates = false;
         		synchronized (sensors) {
         			// (Update view everytime a new temp file was read)

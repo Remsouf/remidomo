@@ -42,7 +42,9 @@ import com.androidplot.xy.YPositionMetric;
 public class SensorPlot extends XYPlot implements OnTouchListener {
 	
 //	private final static String TAG = RDActivity.class.getSimpleName();
-	
+
+	private SharedPreferences prefs;
+
 	// Definition of the touch states
 	private final static int NONE = 0;
 	private final static int ONE_FINGER_DRAG = 1;
@@ -82,15 +84,18 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
     private boolean tapEnabled;
     private String units;
 	
-	private SharedPreferences prefs;
-	
 	// Possible temp. display on tap
 	private Toast tempToast = null;
 
 	public SensorPlot(Context context, String title) {
 		super(context, title);
-		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		
+
+		new Thread(new Runnable() {
+        	public void run() {
+        		SensorPlot.this.prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        	}
+		}).start();
+
 		// No attributes -> set defaults
 		curveColor = 0;
 		axesColor = Color.DKGRAY;
@@ -110,8 +115,13 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 
 	public SensorPlot(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		
+
+		new Thread(new Runnable() {
+        	public void run() {
+        		SensorPlot.this.prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        	}
+		}).start();
+
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SensorPlot);
 		curveColor = a.getColor(R.styleable.SensorPlot_curve_color, 0);
 		axesColor = a.getColor(R.styleable.SensorPlot_axes_color, Color.parseColor("#80000000"));
@@ -130,8 +140,13 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 
 	public SensorPlot(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		
+
+		new Thread(new Runnable() {
+        	public void run() {
+        		SensorPlot.this.prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        	}
+		}).start();
+
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SensorPlot);
 		curveColor = a.getColor(R.styleable.SensorPlot_curve_color, 0);
 		axesColor = a.getColor(R.styleable.SensorPlot_axes_color, Color.WHITE);
@@ -209,7 +224,6 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 	}
 
 	public void addSeries(SensorData series, int daysBack) {
-
 		SimpleXYSeries filteredSeries = null;
 		long limit = 0;
 

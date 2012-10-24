@@ -48,17 +48,18 @@ public class Energy {
 	public Energy(RDService service) {
 		this.service = service;
 
-		prefs = PreferenceManager.getDefaultSharedPreferences(service);
-		initialEnergy = prefs.getFloat("initial_energy", -1.0f);
-		initialTstamp = new Date(prefs.getLong("initial_tstamp", new Date().getTime()));
-
 		updatePowerStatus();
 
-		// Fetch data for all sensors
-		// (threaded)
-        this.service.addLog("Lecture des données d'énergie locales");
         new Thread(new Runnable() {
         	public synchronized void run() {
+
+        		prefs = PreferenceManager.getDefaultSharedPreferences(Energy.this.service);
+        		initialEnergy = prefs.getFloat("initial_energy", -1.0f);
+        		initialTstamp = new Date(prefs.getLong("initial_tstamp", new Date().getTime()));
+
+        		// Fetch data for all sensors
+        		Energy.this.service.addLog("Lecture des données d'énergie locales");
+
         		readyForUpdates = false;
         		// (Update view everytime a new temp file was read)
                 power = new SensorData(ID_POWER, Energy.this.service, true);
@@ -260,7 +261,7 @@ public class Energy {
 			SharedPreferences.Editor editor = prefs.edit();
 	    	editor.putFloat("initial_energy", initialEnergy);
 	    	editor.putLong("initial_tstamp", initialTstamp.getTime());
-	    	editor.commit();
+	    	editor.apply();
 
 	    	powerStatus = entries.getBoolean("status");
 
@@ -304,7 +305,7 @@ public class Energy {
     	SharedPreferences.Editor editor = prefs.edit();
     	editor.putFloat("initial_energy", initialEnergy);
     	editor.putLong("initial_tstamp", initialTstamp.getTime());
-        editor.commit();
+        editor.apply();
 
         energy.clearData();
         energy.addValue(new Date(), initialEnergy);

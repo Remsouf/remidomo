@@ -107,9 +107,18 @@ public class RDService extends Service {
             Log.e(TAG, "Failed to get Notification Manager");
         }
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        upgradeData();
-        
+        new Thread(new Runnable() {
+        	public synchronized void run() {
+        		prefs = PreferenceManager.getDefaultSharedPreferences(RDService.this);
+        		upgradeData();
+
+        		sensors = new Sensors(RDService.this);
+        		switches = new Switches(RDService.this);
+        		doors = new Doors(RDService.this);
+        		energy = new Energy(RDService.this);
+        	}
+        }).start();
+
         pwrMgr = (PowerManager) getSystemService(Context.POWER_SERVICE);
         if (pwrMgr == null) {
         	Log.e(TAG, "Failed to get Power Manager");
@@ -119,11 +128,6 @@ public class RDService extends Service {
         		Log.e(TAG, "Failed to create WakeLock");
         	}
         }
-
-        sensors = new Sensors(this);
-        switches = new Switches(this);
-        doors = new Doors(this);
-        energy = new Energy(this);
 
         // Display a notification about us starting.  We put an icon in the status bar.
         showServiceNotification();
@@ -135,9 +139,6 @@ public class RDService extends Service {
     	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
 
     	// In case of crash/restart, intent can be null
-    	if (intent != null) {
-    		Log.d(TAG, "ACTION: " + intent.getAction());
-    	}
     	if ((intent != null) && GCMConstants.INTENT_FROM_GCM_REGISTRATION_CALLBACK.equals(intent.getAction())) {
     		registrationKey = intent.getStringExtra("registration_id");
     		Log.d(TAG, "Got GCM registration key");
@@ -638,34 +639,43 @@ public class RDService extends Service {
     
 	/****************************** LEDs ******************************/
     public synchronized void resetLeds() {
-    	PrintWriter outStream = null;
-        try {
-            FileOutputStream fos = new FileOutputStream(SYSFS_LEDS);
-            outStream = new PrintWriter(new OutputStreamWriter(fos));
-            outStream.println("0 0 0");
-        } catch (Exception ignored) {
-        } finally {
-            if (outStream != null)
-                outStream.close();
-        }
-        
+    	new Thread(new Runnable() {
+        	public void run() {
+
+        		PrintWriter outStream = null;
+        		try {
+        			FileOutputStream fos = new FileOutputStream(SYSFS_LEDS);
+        			outStream = new PrintWriter(new OutputStreamWriter(fos));
+        			outStream.println("0 0 0");
+        		} catch (Exception ignored) {
+        		} finally {
+        			if (outStream != null)
+        				outStream.close();
+        		}
+        	}
+    	}, "LED reset").start();
+
         if (callback != null) {
     		callback.resetLeds();
     	}
     }
     
     public synchronized void errorLeds() {
-    	PrintWriter outStream = null;
-        try {
-            FileOutputStream fos = new FileOutputStream(SYSFS_LEDS);
-            outStream = new PrintWriter(new OutputStreamWriter(fos));
-            outStream.println("1 0 0");
-        } catch (Exception ignored) {
-        } finally {
-            if (outStream != null)
-                outStream.close();
-        }
-        
+    	new Thread(new Runnable() {
+        	public void run() {
+        		PrintWriter outStream = null;
+        		try {
+        			FileOutputStream fos = new FileOutputStream(SYSFS_LEDS);
+        			outStream = new PrintWriter(new OutputStreamWriter(fos));
+        			outStream.println("1 0 0");
+        		} catch (Exception ignored) {
+        		} finally {
+        			if (outStream != null)
+        				outStream.close();
+        		}
+        	}
+        }, "LED error").start();
+
         if (callback != null) {
     		callback.errorLeds();
     	}
@@ -911,6 +921,6 @@ public class RDService extends Service {
     		editor.putInt("version", versionCode);
     	} catch (android.content.pm.PackageManager.NameNotFoundException ignored) {}
 
-    	editor.commit();
+    	editor.apply();
     }
 }

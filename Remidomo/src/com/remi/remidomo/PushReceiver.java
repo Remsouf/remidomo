@@ -35,16 +35,23 @@ public class PushReceiver extends BroadcastReceiver {
 	private String lastMsgKey = null;
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, final Intent intent) {
     	this.context = context;
-    	this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		this.lastMsgKey = prefs.getString(LAST_MSG_KEY, null);
-		if (intent.getAction().equals(GCMConstants.INTENT_FROM_GCM_REGISTRATION_CALLBACK)) {
-	        handleRegistration(intent);
-	        bounceMessage(intent);
-	    } else if (intent.getAction().equals(GCMConstants.INTENT_FROM_GCM_MESSAGE)) {
-	        bounceMessage(intent);
-	    }
+
+    	// Do this in a different thread,
+    	// because it involves disk operations
+    	new Thread(new Runnable() {
+			public void run() {
+				PushReceiver.this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
+				PushReceiver.this.lastMsgKey = prefs.getString(LAST_MSG_KEY, null);
+				if (intent.getAction().equals(GCMConstants.INTENT_FROM_GCM_REGISTRATION_CALLBACK)) {
+					handleRegistration(intent);
+					bounceMessage(intent);
+				} else if (intent.getAction().equals(GCMConstants.INTENT_FROM_GCM_MESSAGE)) {
+					bounceMessage(intent);
+				}
+			}
+		}).start();
     }
     
     private void handleRegistration(Intent intent) {
@@ -57,19 +64,23 @@ public class PushReceiver extends BroadcastReceiver {
 	    	Log.d(TAG, "unregistered");
 	    } else if (registrationKey != null) {
 	    	Log.d(TAG, "registered");
-	    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-	    	Editor editor = prefs.edit();
-            editor.putString(REGISTRATION_KEY, registrationKey);
-    		editor.commit();
 
-    		// Send the registration ID to the 3rd party site that is sending the messages.
-    		// This should be done in a separate thread.
-    		new Thread(new Runnable() {
-    				public void run() {
-    					syncWithServer(context, registrationKey);
-    				}
-    		}).start();
+	    	// Do this in a different thread,
+	    	// because it involves disk operations
+	    	new Thread(new Runnable() {
+				public void run() {
+					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+					Editor editor = prefs.edit();
+					editor.putString(REGISTRATION_KEY, registrationKey);
+					editor.apply();
+
+					// Send the registration ID to the 3rd party site that is sending the messages.
+					// This should be done in a separate thread.
     		
+    				syncWithServer(context, registrationKey);
+    			}
+    		}).start();
+
     		// Save registration key
     		
 	    }
@@ -120,7 +131,7 @@ public class PushReceiver extends BroadcastReceiver {
 				lastMsgKey = uniqueKey;
 		    	Editor editor = prefs.edit();
 		        editor.putString(LAST_MSG_KEY, uniqueKey);
-				editor.commit();
+				editor.apply();
 			}
 			intent.setClass(context, RDService.class);
 			context.startService(intent);

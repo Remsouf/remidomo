@@ -111,7 +111,11 @@ public class RDActivity extends Activity implements OnGestureListener {
 
         gestureScanner = new GestureDetector(this);
 
-    	prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        new Thread(new Runnable() {
+        	public void run() {
+        		prefs = PreferenceManager.getDefaultSharedPreferences(RDActivity.this);
+        	}
+        }).start();
 
         flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
         flipper.setInAnimation(this, R.anim.slide_in_left);
