@@ -173,6 +173,9 @@ class MeteoVilles extends Meteo {
 	                }
 	                eventType = parser.next();
 	            }
+	        } catch (java.net.SocketException e) {
+	        	// Timeout for example
+	        	return new ArrayList<MeteoData>();
 	        } catch (Exception e) {
 	            throw new RuntimeException(e);
 	        }
