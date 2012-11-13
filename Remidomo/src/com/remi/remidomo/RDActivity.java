@@ -65,6 +65,7 @@ public class RDActivity extends Activity implements OnGestureListener {
     private static final int SWITCHES_VIEW_ID = 3;
     private static final int ENERGY_VIEW_ID = 4;
     private static final int LOG_VIEW_ID = 5;
+    private int currentView = DASHBOARD_VIEW_ID;
  
 	private ViewFlipper flipper;
 
@@ -171,16 +172,18 @@ public class RDActivity extends Activity implements OnGestureListener {
         	// Someone else started us (notification for ex.),
         	// asking for a view to be brought to front
         	if (intent.getIntExtra("view", 0) == R.id.dashboardView) {
-        		flipper.setDisplayedChild(DASHBOARD_VIEW_ID);
+        		currentView = DASHBOARD_VIEW_ID;
         	} else if (intent.getIntExtra("view", 0) == R.id.thermoView) {
-        		flipper.setDisplayedChild(TEMP_VIEW_ID);
+        		currentView = TEMP_VIEW_ID;
         	} else if (intent.getIntExtra("view", 0) == R.id.poolView) {
-        		flipper.setDisplayedChild(POOL_VIEW_ID);
+        		currentView = POOL_VIEW_ID;
         	} else if (intent.getIntExtra("view", 0) == R.id.switchesView) {
-        		flipper.setDisplayedChild(SWITCHES_VIEW_ID);
+        		currentView = SWITCHES_VIEW_ID;
         	} else if (intent.getIntExtra("view", 0) == R.id.logView) {
-        		flipper.setDisplayedChild(LOG_VIEW_ID);
+        		currentView = LOG_VIEW_ID;
         	}
+
+        	flipper.setDisplayedChild(currentView);
         }
     }
 
@@ -368,9 +371,20 @@ public class RDActivity extends Activity implements OnGestureListener {
 
     private void changeView(View button, int destination) {
     	// Change flipper view + animate buttons
+    	currentView = destination;
     	flipper.setDisplayedChild(destination);
 
     	updateMainIcons(button, destination);
+
+    	/* Only the visible view will be updated */
+    	updatePoolView();
+    	updateLogView();
+    	updateThermoView();
+    	updateSwitchesView();
+    	updateDoorsView();
+    	updateTrainView();
+    	updateDashboardThermo();
+    	updateEnergyView();
     }
 
     private void updateMainIcons(View currentButton, int selection) {
@@ -669,22 +683,22 @@ public class RDActivity extends Activity implements OnGestureListener {
 		SensorData series = null;
 		
 		// Pool temp
-		if (service != null) {
+		if ((currentView == POOL_VIEW_ID) && (service != null)) {
 			series = service.getSensors().getData(Sensors.ID_POOL_T);
-		}
 
-		SensorPlot plot = (SensorPlot) findViewById(R.id.poolTempPlot);
-		plot.clear();
-		plot.removeMarkers();
-		plot.addSeries(series);
-		plot.redraw();
+			SensorPlot plot = (SensorPlot) findViewById(R.id.poolTempPlot);
+			plot.clear();
+			plot.removeMarkers();
+			plot.addSeries(series);
+			plot.redraw();
+		}
 	}
 	
 	private void updateThermoView() {
 		SensorData series = null;
 
-		if (service != null) {
-
+		/* Update view only if visible */
+		if ((currentView == TEMP_VIEW_ID) && (service != null)) {
 			SensorPlot plot = (SensorPlot) findViewById(R.id.ThermoPlot);
 			plot.clear();
 			plot.removeMarkers();
@@ -871,6 +885,10 @@ public class RDActivity extends Activity implements OnGestureListener {
 
 	private void updateEnergyView() {
 		SensorData series = null;
+
+		if (currentView != ENERGY_VIEW_ID) {
+			return;
+		}
 
 		// Power
 		if (service != null) {
