@@ -136,6 +136,12 @@ public class RDService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+    	try {
+    		while (prefs == null) {
+    			Thread.sleep(100);
+    		}
+    	} catch (java.lang.InterruptedException ignored) {}
+
     	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
 
     	// In case of crash/restart, intent can be null
