@@ -90,11 +90,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 	public SensorPlot(Context context, String title) {
 		super(context, title);
 
-		new Thread(new Runnable() {
-        	public void run() {
-        		SensorPlot.this.prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        	}
-		}).start();
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
 		// No attributes -> set defaults
 		curveColor = 0;
@@ -116,11 +112,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 	public SensorPlot(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		new Thread(new Runnable() {
-        	public void run() {
-        		SensorPlot.this.prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        	}
-		}).start();
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SensorPlot);
 		curveColor = a.getColor(R.styleable.SensorPlot_curve_color, 0);
@@ -141,11 +133,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 	public SensorPlot(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 
-		new Thread(new Runnable() {
-        	public void run() {
-        		SensorPlot.this.prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        	}
-		}).start();
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SensorPlot);
 		curveColor = a.getColor(R.styleable.SensorPlot_curve_color, 0);
@@ -273,7 +261,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 					long currentX = startDate.getTime();
 					while (currentX < filteredSeries.getX(filteredSeries.size()-1).longValue()) {
 						// Float.[NEGATIVE|POSITIVE]_INFINITY don't work on ICS
-						final float NEGATIVE_INFINITY = -30.0f;
+						final float NEGATIVE_INFINITY = -50.0f;
 						final float POSITIVE_INFINITY = 50.0f;
 						formatter.addRegion(new RectRegion(currentX, currentX + HOURS_12, NEGATIVE_INFINITY, POSITIVE_INFINITY), regionFormatter);
 						currentX += HOURS_24;
