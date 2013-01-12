@@ -1,0 +1,158 @@
+<programme>
+    <module start="0">
+        <semaine>
+            <seance repos="60">
+                <serie>2</serie>
+                <serie>3</serie>
+                <serie>3</serie>
+                <serie>2</serie>
+                <serie>2</serie>
+                <serie>4+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>2</serie>
+                <serie>3</serie>
+                <serie>3</serie>
+                <serie>3</serie>
+                <serie>3</serie>
+                <serie>4+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>2</serie>
+                <serie>4</serie>
+                <serie>4</serie>
+                <serie>3</serie>
+                <serie>3</serie>
+                <serie>4+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>3</serie>
+                <serie>4</serie>
+                <serie>4</serie>
+                <serie>3</serie>
+                <serie>3</serie>
+                <serie>4+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>3</serie>
+                <serie>4</serie>
+                <serie>4</serie>
+                <serie>3</serie>
+                <serie>3</serie>
+                <serie>5+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>3</serie>
+                <serie>5</serie>
+                <serie>5</serie>
+                <serie>3</serie>
+                <serie>3</serie>
+                <serie>4+</serie>
+            </seance>
+        </semaine>
+    </module>
+    <module start="11">
+        <semaine>
+            <seance repos="60">
+                <serie>3</serie>
+                <serie>5</serie>
+                <serie>5</serie>
+                <serie>3</serie>
+                <serie>3</serie>
+                <serie>6+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>4</serie>
+                <serie>5</serie>
+                <serie>5</serie>
+                <serie>3</serie>
+                <serie>3</serie>
+                <serie>7+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>4</serie>
+                <serie>5</serie>
+                <serie>5</serie>
+                <serie>4</serie>
+                <serie>4</serie>
+                <serie>7+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>4</serie>
+                <serie>5</serie>
+                <serie>5</serie>
+                <serie>4</serie>
+                <serie>4</serie>
+                <serie>8+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>4</serie>
+                <serie>6</serie>
+                <serie>6</serie>
+                <serie>4</serie>
+                <serie>4</serie>
+                <serie>8+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>5</serie>
+                <serie>6</serie>
+                <serie>6</serie>
+                <serie>4</serie>
+                <serie>4</serie>
+                <serie>8+</serie>
+            </seance>
+        </semaine>
+    </module>
+    <module start="21">
+        <semaine>
+            <seance repos="60">
+                <serie>5</serie>
+                <serie>6</serie>
+                <serie>6</serie>
+                <serie>5</serie>
+                <serie>5</serie>
+                <serie>8+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>5</serie>
+                <serie>7</serie>
+                <serie>7</serie>
+                <serie>5</serie>
+                <serie>5</serie>
+                <serie>8+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>5</serie>
+                <serie>7</serie>
+                <serie>7</serie>
+                <serie>6</serie>
+                <serie>6</serie>
+                <serie>9+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>5</serie>
+                <serie>8</serie>
+                <serie>8</serie>
+                <serie>6</serie>
+                <serie>6</serie>
+                <serie>9+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>6</serie>
+                <serie>8</serie>
+                <serie>8</serie>
+                <serie>7</serie>
+                <serie>7</serie>
+                <serie>9+</serie>
+            </seance>
+            <seance repos="60">
+                <serie>7</serie>
+                <serie>8</serie>
+                <serie>8</serie>
+                <serie>7</serie>
+                <serie>7</serie>
+                <serie>10+</serie>
+            </seance>
+        </semaine>
+    </module>
+</programme>

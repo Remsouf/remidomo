@@ -1,0 +1,613 @@
+<programme>
+    <module start="0">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>2</serie>
+    			<serie>3</serie>
+    			<serie>2</serie>
+    			<serie>2</serie>
+    			<serie>3+</serie>
+    		</seance>
+    		<seance repos="90">
+    			<serie>3</serie>
+    			<serie>4</serie>
+    			<serie>2</serie>
+    			<serie>3</serie>
+    			<serie>4+</serie>
+    		</seance>
+    		<seance repos="120">
+    			<serie>4</serie>
+    			<serie>5</serie>
+    			<serie>4</serie>
+    			<serie>4</serie>
+    			<serie>5+</serie>
+    		</seance>
+    	</semaine>
+    	<semaine>
+    		<seance repos="60">
+    			<serie>5</serie>
+    			<serie>6</serie>
+    			<serie>4</serie>
+    			<serie>4</serie>
+    			<serie>6+</serie>
+    		</seance>
+    		<seance repos="90">
+    			<serie>5</serie>
+    			<serie>6</serie>
+    			<serie>4</serie>
+    			<serie>4</serie>
+    			<serie>7+</serie>
+    		</seance>
+    		<seance repos="120">
+    			<serie>5</serie>
+    			<serie>7</serie>
+    			<serie>5</serie>
+    			<serie>5</serie>
+    			<serie>7+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+    <module start="6">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>5</serie>
+    			<serie>6</serie>
+    			<serie>4</serie>
+    			<serie>4</serie>
+    			<serie>5+</serie>
+    		</seance>
+    		<seance repos="90">
+    			<serie>6</serie>
+    			<serie>7</serie>
+    			<serie>6</serie>
+    			<serie>6</serie>
+    			<serie>7+</serie>
+    		</seance>
+    		<seance repos="120">
+    			<serie>8</serie>
+    			<serie>10</serie>
+    			<serie>7</serie>
+    			<serie>7</serie>
+    			<serie>10+</serie>
+    		</seance>
+    	</semaine>
+    	<semaine>
+    		<seance repos="60">
+    			<serie>9</serie>
+    			<serie>11</serie>
+    			<serie>8</serie>
+    			<serie>8</serie>
+    			<serie>11+</serie>
+    		</seance>
+    		<seance repos="90">
+    			<serie>10</serie>
+    			<serie>12</serie>
+    			<serie>9</serie>
+    			<serie>9</serie>
+    			<serie>13+</serie>
+    		</seance>
+    		<seance repos="120">
+    			<serie>12</serie>
+    			<serie>13</serie>
+    			<serie>10</serie>
+    			<serie>10</serie>
+    			<serie>15+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="11">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>8</serie>
+    			<serie>9</serie>
+    			<serie>7</serie>
+    			<serie>7</serie>
+    			<serie>8+</serie>
+    		</seance>
+    		<seance repos="90">
+    			<serie>9</serie>
+    			<serie>10</serie>
+    			<serie>8</serie>
+    			<serie>8</serie>
+    			<serie>10+</serie>
+    		</seance>
+    		<seance repos="120">
+    			<serie>11</serie>
+    			<serie>13</serie>
+    			<serie>9</serie>
+    			<serie>9</serie>
+    			<serie>13+</serie>
+    		</seance>
+    	</semaine>
+    	<semaine>
+    		<seance repos="60">
+    			<serie>12</serie>
+    			<serie>14</serie>
+    			<serie>10</serie>
+    			<serie>10</serie>
+    			<serie>15+</serie>
+    		</seance>
+    		<seance repos="90">
+    			<serie>13</serie>
+    			<serie>15</serie>
+    			<serie>11</serie>
+    			<serie>11</serie>
+    			<serie>17+</serie>
+    		</seance>
+    		<seance repos="120">
+    			<serie>14</serie>
+    			<serie>16</serie>
+    			<serie>13</serie>
+    			<serie>13</serie>
+    			<serie>19+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="21">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>12</serie>
+    			<serie>17</serie>
+    			<serie>13</serie>
+    			<serie>13</serie>
+    			<serie>17+</serie>
+    		</seance>
+    		<seance repos="90">
+    			<serie>14</serie>
+    			<serie>19</serie>
+    			<serie>14</serie>
+    			<serie>14</serie>
+    			<serie>19+</serie>
+    		</seance>
+    		<seance repos="120">
+    			<serie>16</serie>
+    			<serie>21</serie>
+    			<serie>15</serie>
+    			<serie>15</serie>
+    			<serie>21+</serie>
+    		</seance>
+    	</semaine>
+    	<semaine>
+    		<seance repos="60">
+    			<serie>18</serie>
+    			<serie>22</serie>
+    			<serie>16</serie>
+    			<serie>16</serie>
+    			<serie>21+</serie>
+    		</seance>
+    		<seance repos="90">
+    			<serie>20</serie>
+    			<serie>25</serie>
+    			<serie>20</serie>
+    			<serie>20</serie>
+    			<serie>23+</serie>
+    		</seance>
+    		<seance repos="120">
+    			<serie>23</serie>
+    			<serie>28</serie>
+    			<serie>22</serie>
+    			<serie>22</serie>
+    			<serie>25+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="26">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>14</serie>
+    			<serie>18</serie>
+    			<serie>14</serie>
+    			<serie>14</serie>
+    			<serie>20+</serie>
+    		</seance>
+    		<seance repos="90">
+    			<serie>20</serie>
+    			<serie>25</serie>
+    			<serie>15</serie>
+    			<serie>15</serie>
+    			<serie>23+</serie>
+    		</seance>
+    		<seance repos="120">
+    			<serie>20</serie>
+    			<serie>27</serie>
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>25+</serie>
+    		</seance>
+    	</semaine>
+    	<semaine>
+    		<seance repos="60">
+    			<serie>21</serie>
+    			<serie>25</serie>
+    			<serie>21</serie>
+    			<serie>21</serie>
+    			<serie>27+</serie>
+    		</seance>
+    		<seance repos="90">
+    			<serie>25</serie>
+    			<serie>29</serie>
+    			<serie>25</serie>
+    			<serie>25</serie>
+    			<serie>30+</serie>
+    		</seance>
+    		<seance repos="120">
+    			<serie>29</serie>
+    			<serie>33</serie>
+    			<serie>29</serie>
+    			<serie>29</serie>
+    			<serie>33+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="31">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>17</serie>
+    			<serie>19</serie>
+    			<serie>15</serie>
+    			<serie>15</serie>
+    			<serie>20+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>10</serie>
+    			<serie>10</serie>
+    			<serie>13</serie>
+    			<serie>13</serie>
+    			<serie>10</serie>
+    			<serie>10</serie>
+    			<serie>9</serie>
+    			<serie>25+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>13</serie>
+    			<serie>13</serie>
+    			<serie>15</serie>
+    			<serie>15</serie>
+    			<serie>12</serie>
+    			<serie>12</serie>
+    			<serie>10</serie>
+    			<serie>30+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="36">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>22</serie>
+    			<serie>24</serie>
+    			<serie>20</serie>
+    			<serie>20</serie>
+    			<serie>25+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>15</serie>
+    			<serie>15</serie>
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>15</serie>
+    			<serie>15</serie>
+    			<serie>14</serie>
+    			<serie>30+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>20</serie>
+    			<serie>20</serie>
+    			<serie>17</serie>
+    			<serie>17</serie>
+    			<serie>15</serie>
+    			<serie>35+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="41">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>27</serie>
+    			<serie>29</serie>
+    			<serie>25</serie>
+    			<serie>25</serie>
+    			<serie>35+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>19</serie>
+    			<serie>19</serie>
+    			<serie>22</serie>
+    			<serie>22</serie>
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>22</serie>
+    			<serie>35+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>20</serie>
+    			<serie>20</serie>
+    			<serie>24</serie>
+    			<serie>24</serie>
+    			<serie>20</serie>
+    			<serie>20</serie>
+    			<serie>22</serie>
+    			<serie>40+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="46">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>30</serie>
+    			<serie>34</serie>
+    			<serie>30</serie>
+    			<serie>30</serie>
+    			<serie>40+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>19</serie>
+    			<serie>19</serie>
+    			<serie>23</serie>
+    			<serie>23</serie>
+    			<serie>19</serie>
+    			<serie>19</serie>
+    			<serie>22</serie>
+    			<serie>37+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>20</serie>
+    			<serie>20</serie>
+    			<serie>27</serie>
+    			<serie>27</serie>
+    			<serie>21</serie>
+    			<serie>21</serie>
+    			<serie>21</serie>
+    			<serie>44+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="51">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>30</serie>
+    			<serie>39</serie>
+    			<serie>35</serie>
+    			<serie>35</serie>
+    			<serie>42+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>20</serie>
+    			<serie>20</serie>
+    			<serie>23</serie>
+    			<serie>23</serie>
+    			<serie>20</serie>
+    			<serie>20</serie>
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>53+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>22</serie>
+    			<serie>22</serie>
+    			<serie>30</serie>
+    			<serie>30</serie>
+    			<serie>25</serie>
+    			<serie>25</serie>
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>55+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="56">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>30</serie>
+    			<serie>44</serie>
+    			<serie>40</serie>
+    			<serie>40</serie>
+    			<serie>55+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>22</serie>
+    			<serie>22</serie>
+    			<serie>27</serie>
+    			<serie>27</serie>
+    			<serie>24</serie>
+    			<serie>23</serie>
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>58+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>26</serie>
+    			<serie>26</serie>
+    			<serie>33</serie>
+    			<serie>33</serie>
+    			<serie>26</serie>
+    			<serie>26</serie>
+    			<serie>22</serie>
+    			<serie>22</serie>
+    			<serie>60+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="60">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>35</serie>
+    			<serie>49</serie>
+    			<serie>45</serie>
+    			<serie>45</serie>
+    			<serie>55+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>22</serie>
+    			<serie>22</serie>
+    			<serie>30</serie>
+    			<serie>30</serie>
+    			<serie>24</serie>
+    			<serie>24</serie>
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>59+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>28</serie>
+    			<serie>28</serie>
+    			<serie>35</serie>
+    			<serie>35</serie>
+    			<serie>27</serie>
+    			<serie>27</serie>
+    			<serie>23</serie>
+    			<serie>23</serie>
+    			<serie>60+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<!-- Repeats previous module until 100 -->
+	<module start="70">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>35</serie>
+    			<serie>49</serie>
+    			<serie>45</serie>
+    			<serie>45</serie>
+    			<serie>55+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>22</serie>
+    			<serie>22</serie>
+    			<serie>30</serie>
+    			<serie>30</serie>
+    			<serie>24</serie>
+    			<serie>24</serie>
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>59+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>28</serie>
+    			<serie>28</serie>
+    			<serie>35</serie>
+    			<serie>35</serie>
+    			<serie>27</serie>
+    			<serie>27</serie>
+    			<serie>23</serie>
+    			<serie>23</serie>
+    			<serie>60+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="80">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>35</serie>
+    			<serie>49</serie>
+    			<serie>45</serie>
+    			<serie>45</serie>
+    			<serie>55+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>22</serie>
+    			<serie>22</serie>
+    			<serie>30</serie>
+    			<serie>30</serie>
+    			<serie>24</serie>
+    			<serie>24</serie>
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>59+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>28</serie>
+    			<serie>28</serie>
+    			<serie>35</serie>
+    			<serie>35</serie>
+    			<serie>27</serie>
+    			<serie>27</serie>
+    			<serie>23</serie>
+    			<serie>23</serie>
+    			<serie>60+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="90">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>35</serie>
+    			<serie>49</serie>
+    			<serie>45</serie>
+    			<serie>45</serie>
+    			<serie>55+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>22</serie>
+    			<serie>22</serie>
+    			<serie>30</serie>
+    			<serie>30</serie>
+    			<serie>24</serie>
+    			<serie>24</serie>
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>59+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>28</serie>
+    			<serie>28</serie>
+    			<serie>35</serie>
+    			<serie>35</serie>
+    			<serie>27</serie>
+    			<serie>27</serie>
+    			<serie>23</serie>
+    			<serie>23</serie>
+    			<serie>60+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+
+	<module start="100">
+    	<semaine>
+    		<seance repos="60">
+    			<serie>35</serie>
+    			<serie>49</serie>
+    			<serie>45</serie>
+    			<serie>45</serie>
+    			<serie>55+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>22</serie>
+    			<serie>22</serie>
+    			<serie>30</serie>
+    			<serie>30</serie>
+    			<serie>24</serie>
+    			<serie>24</serie>
+    			<serie>18</serie>
+    			<serie>18</serie>
+    			<serie>59+</serie>
+    		</seance>
+    		<seance repos="45">
+    			<serie>28</serie>
+    			<serie>28</serie>
+    			<serie>35</serie>
+    			<serie>35</serie>
+    			<serie>27</serie>
+    			<serie>27</serie>
+    			<serie>23</serie>
+    			<serie>23</serie>
+    			<serie>60+</serie>
+    		</seance>
+    	</semaine>
+    </module>
+</programme>

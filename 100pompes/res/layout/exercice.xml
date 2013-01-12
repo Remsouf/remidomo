@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@null"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="0dp" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:max="100"
+        android:progress="50"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:layout_below="@id/icon" />
+
+    <TextView android:id="@+id/seance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/progress"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView android:id="@+id/detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textStyle="italic"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/seance"
+        android:layout_marginBottom="10dp"/>
+
+    <GridLayout
+        android:id="@+id/series"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:rowCount="2"
+        android:columnCount="5"
+        android:layout_below="@id/detail">
+
+        <!-- Placeholder for series -->
+
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_below="@id/series"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center">
+
+    	<TextView
+        	android:id="@+id/timer"
+        	android:textSize="50dp"
+        	android:gravity="center"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content" />
+	</LinearLayout>
+
+    <ImageButton
+        android:id="@+id/abandon"
+        android:contentDescription="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="2dp"
+        android:src="@drawable/stop"
+        android:background="@null" />
+
+</RelativeLayout>

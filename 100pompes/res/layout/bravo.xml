@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/toast_layout_root"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:padding="8dp"
+              android:background="@drawable/bravo_background" >
+
+    <ImageView
+        android:src="@drawable/bravo"
+        android:contentDescription="@null"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="20dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical" >
+
+    	<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/bravo"
+			android:textSize="50dp" />
+
+    	<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/next_serie"
+			android:textSize="25dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

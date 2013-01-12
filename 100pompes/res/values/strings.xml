@@ -1,0 +1,37 @@
+<resources>
+
+    <!-- Appli -->
+    <string name="app_name">640 Muscles</string>
+    <string name="title_abdos">Abdos</string>
+    <string name="title_tractions">Tractions</string>
+    <string name="title_pompes">Pompes</string>
+    <string name="title_activity_welcome">640 Muscles</string>
+
+    <!-- Vues -->
+    <string name="seance">Semaine %1$d - Séance %2$d</string>
+	<string name="go">Go !</string>
+	<string name="bravo">Bravo !</string>
+	<string name="next_serie">Série suivante !</string>
+	<string name="complete">C\'était la dernière série !</string>
+	<string name="complete_next">Répétez-là jusqu\'à atteindre votre but</string>
+	<string name="abandon">Courage !</string>
+	<string name="abandon_next">N\'oubliez pas de vous reposer</string>
+
+	<!-- Menu -->
+	<string name="menu_reset">Recommencer</string>
+	<string name="menu_test">Evaluation</string>
+
+    <!-- Dialog evaluation -->
+    <string name="test_dialog">Combien %1$s ?</string>
+    <string name="de_pompes">de pompes</string>
+    <string name="de_tractions">de tractions</string>
+    <string name="de_abdos">d\'abdos</string>
+    
+    <!-- Reset dialog -->
+    <string name="reset_dialog">Oublier toute la progression pour les %1$s ?</string>
+    
+    <!-- Calendar entries -->
+    <string name="calendar_title">Prochaine seance :\u0020</string>
+    <string name="calendar_description">N\'oubliez pas votre prochaine séance d\'exercices !</string>
+
+</resources>
