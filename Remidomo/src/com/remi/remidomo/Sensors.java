@@ -31,8 +31,8 @@ public class Sensors {
 	public final static String ID_EXT_T = "th2_0x9b05-temp";
 	public final static String ID_EXT_H = "th2_0x9b05-humidity";
 	public final static String ID_POOL_T = "temp3-temp";
-	public final static String ID_VERANDA_T = "th1_0xe902-temp";
-	public final static String ID_VERANDA_H = "th1_0xe902-humidity";
+	public final static String ID_VERANDA_T = "th1_0xe102-temp";
+	public final static String ID_VERANDA_H = "th1_0xe102-humidity";
 
 	public final static ArrayList<String> IGNORED =
 			new ArrayList<String>(Arrays.asList("temp4_0xc01-temp"));
