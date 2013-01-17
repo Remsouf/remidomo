@@ -67,7 +67,7 @@ public class Switches {
 
 	        SharedPreferences.Editor editor = prefs.edit();
 	        editor.putBoolean("switch_" + index, states[index]);
-	        editor.apply();
+	        editor.commit();
 
 			return true;
 		} else {
@@ -85,7 +85,7 @@ public class Switches {
 		
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("switch_" + index, states[index]);
-        editor.apply();
+        editor.commit();
         
         String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
         if ("Serveur".equals(mode)) {

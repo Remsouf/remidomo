@@ -72,7 +72,7 @@ public class PushReceiver extends BroadcastReceiver {
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 					Editor editor = prefs.edit();
 					editor.putString(REGISTRATION_KEY, registrationKey);
-					editor.apply();
+					editor.commit();
 
 					// Send the registration ID to the 3rd party site that is sending the messages.
 					// This should be done in a separate thread.
@@ -131,7 +131,7 @@ public class PushReceiver extends BroadcastReceiver {
 				lastMsgKey = uniqueKey;
 		    	Editor editor = prefs.edit();
 		        editor.putString(LAST_MSG_KEY, uniqueKey);
-				editor.apply();
+				editor.commit();
 			}
 			intent.setClass(context, RDService.class);
 			context.startService(intent);

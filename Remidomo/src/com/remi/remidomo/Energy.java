@@ -261,7 +261,7 @@ public class Energy {
 			SharedPreferences.Editor editor = prefs.edit();
 	    	editor.putFloat("initial_energy", initialEnergy);
 	    	editor.putLong("initial_tstamp", initialTstamp.getTime());
-	    	editor.apply();
+	    	editor.commit();
 
 	    	powerStatus = entries.getBoolean("status");
 
@@ -305,7 +305,7 @@ public class Energy {
     	SharedPreferences.Editor editor = prefs.edit();
     	editor.putFloat("initial_energy", initialEnergy);
     	editor.putLong("initial_tstamp", initialTstamp.getTime());
-        editor.apply();
+        editor.commit();
 
         energy.clearData();
         energy.addValue(new Date(), initialEnergy);

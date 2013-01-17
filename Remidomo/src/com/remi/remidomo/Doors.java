@@ -104,7 +104,7 @@ public class Doors {
 
 		SharedPreferences.Editor editor = prefs.edit();
         editor.putString("door_" + index, states[index].toString());
-        editor.apply();
+        editor.commit();
 
         if (service.callback != null) {
 			service.callback.updateDoors();

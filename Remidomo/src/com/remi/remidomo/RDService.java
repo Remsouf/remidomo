@@ -927,6 +927,6 @@ public class RDService extends Service {
     		editor.putInt("version", versionCode);
     	} catch (android.content.pm.PackageManager.NameNotFoundException ignored) {}
 
-    	editor.apply();
+    	editor.commit();
     }
 }

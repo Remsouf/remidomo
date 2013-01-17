@@ -133,7 +133,7 @@ public class CustomEditTextPreference extends EditTextPreference
                 if (isIntegerValidator) {
                 	SharedPreferences.Editor editor = getEditor();
     				editor.putInt(getKey() + ".int", Integer.parseInt(value));
-    				editor.apply();
+    				editor.commit();
                 }
             }
         }
