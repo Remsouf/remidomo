@@ -430,7 +430,7 @@ public class RDService extends Service {
     				rfxSocket.receive(packet);
     				readMessage(packet);
     			} catch (Exception e) {
-    				Log.e(TAG, "Error receiving: " + e.getLocalizedMessage());
+    				Log.e(TAG, "Error receiving: ", e);
     				addLog("Erreur socket RFX (rx): " + e.getLocalizedMessage(), LogLevel.HIGH);
     				errorLeds();
     				break;

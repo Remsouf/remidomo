@@ -214,6 +214,8 @@ public class Energy {
 		Log.d(TAG, "Client Thread connecting to " + ipAddr + ":" + port);
 		service.addLog("Connexion au serveur " + ipAddr + ":" + port + " (MAJ sondes)");
 
+		boolean graph = prefs.getBoolean("energy_graph", Preferences.DEFAULT_ENERGY_GRAPH);
+
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpGet request = new HttpGet();
@@ -227,13 +229,18 @@ public class Energy {
 			String content = client.execute(request, new BasicResponseHandler());
 			JSONObject entries = new JSONObject(content);
 
-			JSONArray tablePower = entries.getJSONArray("power");
-			SensorData newPowerData = new SensorData(ID_POWER, service, false);
-			newPowerData.readJSON(tablePower);
-			if (power == null) {
-				power = newPowerData;
+			if (graph) {
+				JSONArray tablePower = entries.getJSONArray("power");
+				SensorData newPowerData = new SensorData(ID_POWER, service, false);
+				newPowerData.readJSON(tablePower);
+				if (power == null) {
+					power = newPowerData;
+				} else {
+					power.addValuesChunk(newPowerData);
+				}
 			} else {
-				power.addValuesChunk(newPowerData);
+				// Clear everything possibly downloaded before
+				power = new SensorData(ID_POWER, service, false);
 			}
 
 			JSONArray tableEnergy = entries.getJSONArray("energy");

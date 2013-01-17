@@ -206,6 +206,14 @@
             	android:summary="@string/pref_energylimit_summary"
             	android:title="@string/pref_energylimit_title" />
 
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="energy_graph"
+                android:persistent="true"
+                android:summaryOff="@string/pref_energy_graph_off"
+                android:summaryOn="@string/pref_energy_graph_on"
+                android:title="@string/pref_energy_graph_title" />
+
         </PreferenceScreen>
 
     </PreferenceCategory>

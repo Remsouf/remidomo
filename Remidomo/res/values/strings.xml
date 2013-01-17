@@ -77,6 +77,9 @@
 	<string name="pref_tarif_title">Afficher les heures pleines</string>
     <string name="pref_tarif_summary_on">Affiche les heures pleines</string>
     <string name="pref_tarif_summary_off">N\'affiche pas les heures pleines</string>
+    <string name="pref_energy_graph_title">Afficher la courbe de puissance</string>
+    <string name="pref_energy_graph_on">Affiche la courbe</string>
+    <string name="pref_energy_graph_off">N\'affiche pas la courbe (économise la mémoire)</string>
     <string name="pref_energylimit_title">Historique des courbes</string>
     <string name="pref_energylimit_summary">Tracé des courbes %1$d jours en arrière</string>
     <string name="pref_energylimit_dialog">Nombre de jours</string>

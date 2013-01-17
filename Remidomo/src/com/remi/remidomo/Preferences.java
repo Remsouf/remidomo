@@ -34,6 +34,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	public static final int DEFAULT_HCHOUR = 23;
 	public static final int DEFAULT_HPHOUR = 7;
 	public static final int DEFAULT_ENERGYLIMIT = 2;
+	public static final boolean DEFAULT_ENERGY_GRAPH = true;
 	public static final boolean DEFAULT_TARIF_HIGHLIGHT = true;
 
 	private ListPreference mode;
@@ -52,6 +53,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	private CustomTimePickerPreference hchour;
 	private CustomTimePickerPreference hphour;
 	private CustomSpinnerPreference energylimit;
+	private CheckBoxPreference energy_graph;
 
 	private SharedPreferences prefs;
 	
@@ -80,7 +82,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
         hchour = (CustomTimePickerPreference) getPreferenceScreen().findPreference("hc_hour");
         hphour = (CustomTimePickerPreference) getPreferenceScreen().findPreference("hp_hour");
         energylimit = (CustomSpinnerPreference) getPreferenceScreen().findPreference("energy_limit");
-
+        energy_graph = (CheckBoxPreference) getPreferenceScreen().findPreference("energy_graph");
         updateTexts();
     }
     
@@ -216,5 +218,12 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     	days = prefs.getInt("energy_limit", DEFAULT_ENERGYLIMIT);
     	msg = String.format(getString(R.string.pref_energylimit_summary), days);
     	energylimit.setSummary(msg);
+
+    	boolean graph = prefs.getBoolean("energy_graph", DEFAULT_ENERGY_GRAPH);
+    	if (graph) {
+    		energy_graph.setSummary(R.string.pref_energy_graph_on);
+    	} else {
+    		energy_graph.setSummary(R.string.pref_energy_graph_off);
+    	}
     }
 }
