@@ -2,36 +2,37 @@
 
     <!-- Appli -->
     <string name="app_name">640 Muscles</string>
-    <string name="title_abdos">Abdos</string>
-    <string name="title_tractions">Tractions</string>
-    <string name="title_pompes">Pompes</string>
+    <string name="title_abdos">Sit-ups</string>
+    <string name="title_tractions">Pullups</string>
+    <string name="title_pompes">Push-ups</string>
     <string name="title_activity_welcome">640 Muscles</string>
 
     <!-- Vues -->
-    <string name="seance">Semaine %1$d - Séance %2$d</string>
+    <string name="seance">Week %1$d - Session %2$d</string>
 	<string name="go">Go !</string>
-	<string name="bravo">Bravo !</string>
-	<string name="next_serie">Série suivante !</string>
-	<string name="complete">C\'était la dernière série !</string>
-	<string name="complete_next">Répétez-là jusqu\'à atteindre votre but</string>
-	<string name="abandon">Courage !</string>
-	<string name="abandon_next">N\'oubliez pas de vous reposer</string>
+	<string name="bravo">Well done !</string>
+	<string name="next_serie">Next set !</string>
+	<string name="complete">It was the last set !</string>
+	<string name="complete_next">Repeat until you reach your goal.</string>
+	<string name="abandon">Cheer up !</string>
+	<string name="abandon_next">Don\'t forget to rest.</string>
+	<string name="excentrique">Descending training</string>
 
 	<!-- Menu -->
-	<string name="menu_reset">Recommencer</string>
+	<string name="menu_reset">Reset</string>
 	<string name="menu_test">Evaluation</string>
 
     <!-- Dialog evaluation -->
-    <string name="test_dialog">Combien %1$s ?</string>
-    <string name="de_pompes">de pompes</string>
-    <string name="de_tractions">de tractions</string>
-    <string name="de_abdos">d\'abdos</string>
-    
+    <string name="test_dialog">How many %1$s ?</string>
+    <string name="de_pompes">push-ups</string>
+    <string name="de_tractions">pull-ups</string>
+    <string name="de_abdos">sit-ups</string>
+
     <!-- Reset dialog -->
-    <string name="reset_dialog">Oublier toute la progression pour les %1$s ?</string>
-    
+    <string name="reset_dialog">Forget all the progress for %1$s ?</string>
+
     <!-- Calendar entries -->
-    <string name="calendar_title">Prochaine seance :\u0020</string>
-    <string name="calendar_description">N\'oubliez pas votre prochaine séance d\'exercices !</string>
+    <string name="calendar_title">Next session :\u0020</string>
+    <string name="calendar_description">Don\'t forget your next exercises session !</string>
 
 </resources>

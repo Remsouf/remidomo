@@ -105,6 +105,8 @@ public class ExerciceFragment extends Fragment {
 			image.setImageResource(R.drawable.abdos);
 			name = getString(R.string.title_abdos).toLowerCase();
 			nameOf = getString(R.string.de_abdos);
+		} else {
+			assert(false);
 		}
 		
 		ImageButton abandon = (ImageButton) view.findViewById(R.id.abandon);
@@ -291,7 +293,8 @@ public class ExerciceFragment extends Fragment {
 			progress.setProgress(module.getStart());
 
 			if (module.getDetail() != null) {
-				detailText.setText(module.getDetail());
+				int resourceId = Integer.parseInt(module.getDetail(), 16);
+				detailText.setText(getString(resourceId));
 				detailText.setVisibility(View.VISIBLE);
 			}
 

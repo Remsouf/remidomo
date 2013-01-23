@@ -107,6 +107,8 @@ public class WelcomeActivity extends FragmentActivity implements ActionBar.TabLi
         		builder.setMessage(String.format(getString(R.string.reset_dialog), fragment.getName()))
         		.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
         			public void onClick(DialogInterface dialog, int id) {
+        				ExerciceFragment fragment = (ExerciceFragment) mSectionsPagerAdapter.getItem(mViewPager.getCurrentItem());
+        				fragment.resetCurrentProgress();
         			}
         		})
         		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
