@@ -177,14 +177,34 @@ public class RDService extends Service {
     		}
 		} else if ((intent != null) && ACTION_POWERCONNECT.equals(intent.getAction())) {
 			if ("Serveur".equals(mode)) {
-				energy.updatePowerStatus(true);
+				try {
+					while (true) {
+						if (energy == null) {
+							Thread.sleep(1000);
+						} else {
+							energy.updatePowerStatus(true);
+							break;
+						}
+					}
+				} catch (java.lang.InterruptedException e) {}
+
 				if (callback != null) {
 					callback.updateEnergy();
 				}
 			}
 		} else if ((intent != null) && ACTION_POWERDISCONNECT.equals(intent.getAction())) {
 			if ("Serveur".equals(mode)) {
-				energy.updatePowerStatus(false);
+				try {
+					while (true) {
+						if (energy == null) {
+							Thread.sleep(1000);
+						} else {
+							energy.updatePowerStatus(false);
+							break;
+						}
+					}
+				} catch (java.lang.InterruptedException e) {}
+
 				if (callback != null) {
 					callback.updateEnergy();
 				}
