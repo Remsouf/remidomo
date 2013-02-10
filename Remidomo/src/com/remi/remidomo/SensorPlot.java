@@ -273,7 +273,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 					long currentX = startDate.getTime();
 					while (currentX < filteredSeries.getX(filteredSeries.size()-1).longValue()) {
 						// Float.[NEGATIVE|POSITIVE]_INFINITY don't work on ICS
-						final float NEGATIVE_INFINITY = 0.0f;
+						final float NEGATIVE_INFINITY = -30.0f;
 						final float POSITIVE_INFINITY = 50.0f;
 						formatter.addRegion(new RectRegion(currentX, currentX + HOURS_12, NEGATIVE_INFINITY, POSITIVE_INFINITY), regionFormatter);
 						currentX += HOURS_24;
