@@ -202,14 +202,14 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
         
         // draw a domain tick every 3 values
         setDomainStep(XYStepMode.INCREMENT_BY_PIXELS, 200);
-        
+
         // domain/range labels
         setDomainLabel("");
         setRangeLabel(units);
  
         setPlotMargins(0, 0, 0, 0);
-        setPlotPadding(0, 0, 0, 0);
-        
+        setPlotPadding(0, 0, 0, 30.0f);
+
         // Range / domain format
         setRangeValueFormat(new DecimalFormat("0.0"));
         setDomainValueFormat(new PoolDateFormat());

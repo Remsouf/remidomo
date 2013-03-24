@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" >
+
+    <!-- DAY1 -->
+    	<LinearLayout
+    	    	android:id="@+id/meteo1"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_centerVertical="true"
+    	    	android:paddingLeft="10px"
+    	    	android:orientation="vertical">
+    	    	
+        	<ImageView
+            		android:id="@+id/meteo_pic1"
+            		android:layout_width="160dp"
+            		android:layout_height="160dp"
+            		android:paddingRight="10px"
+            		android:paddingLeft="10px"
+            		android:src="@drawable/meteo_unknown" />
+        
+       		<TextView
+            		android:id="@+id/meteo_day1"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:layout_gravity="center"
+            		android:textSize="46px"
+            		android:text="" />
+		</LinearLayout>
+		<LinearLayout
+    	    	android:id="@+id/temp1"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_centerVertical="true"
+    	    	android:orientation="vertical"
+    	    	android:layout_toRightOf="@id/meteo1" >
+
+    		<TextView 
+    	    	android:id="@+id/meteo_max1"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:textSize="46px"
+    	    	android:textStyle="italic"
+    	    	android:paddingRight="10px"
+    	    	android:text="" />
+    	
+    		<TextView 
+    	    	android:id="@+id/meteo_min1"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:textSize="46px"
+    	    	android:textStyle="italic"
+    	    	android:paddingRight="10px"
+    	    	android:text="" />
+    	</LinearLayout>
+    		
+		<LinearLayout
+		    android:id="@+id/divider1"
+    		android:layout_width="1dp"
+    		android:layout_height="120px"
+    		android:paddingLeft="2dp"
+    		android:paddingRight="2dp"
+    		android:layout_marginTop="15dp"
+    		android:layout_marginBottom="15dp"
+    		android:scaleType="fitXY"
+    		android:background="#333333"
+    		android:orientation="vertical"
+    		android:layout_centerVertical="true"
+    		android:layout_toRightOf="@id/temp1" />
+
+	<!-- DAY2 -->
+    	<LinearLayout
+    	    	android:id="@+id/meteo2"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_centerVertical="true"
+    	    	android:orientation="vertical"
+    	    	android:layout_toRightOf="@id/divider1" >
+       		
+        	<ImageView
+            		android:id="@+id/meteo_pic2"
+            		android:layout_width="160dp"
+            		android:layout_height="160dp"
+            		android:paddingRight="10px"
+            		android:paddingLeft="10px"
+            		android:src="@drawable/meteo_unknown" />
+        
+       		<TextView
+            		android:id="@+id/meteo_day2"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textSize="46px"
+            		android:layout_gravity="center"
+            		android:text="" />
+		</LinearLayout>
+		<LinearLayout
+    	    	android:id="@+id/temp2"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_centerVertical="true"
+    	    	android:orientation="vertical"
+    	    	android:layout_toRightOf="@id/meteo2" >
+
+    		<TextView 
+    	    	android:id="@+id/meteo_max2"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:textSize="46px"
+    	    	android:textStyle="italic"
+    	    	android:paddingRight="10px"
+    	    	android:text="" />
+    	
+    		<TextView 
+    	    	android:id="@+id/meteo_min2"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:textSize="46px"
+    	    	android:textStyle="italic"
+    	    	android:paddingRight="10px"
+    	    	android:text="" />
+    	</LinearLayout>
+
+		<LinearLayout
+		    android:id="@+id/divider2"
+    		android:layout_width="1dp"
+    		android:layout_height="120px"
+    		android:paddingLeft="2dp"
+    		android:paddingRight="2dp"
+    		android:layout_marginTop="15dp"
+    		android:layout_marginBottom="15dp"
+    		android:scaleType="fitXY"
+    		android:background="#333333"
+    		android:orientation="vertical"
+    		android:layout_centerVertical="true"
+    		android:layout_toRightOf="@id/temp2" />			
+		
+	<!-- DAY3 -->
+    	<LinearLayout
+    	    	android:id="@+id/meteo3"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_centerVertical="true"
+    	    	android:orientation="vertical"
+    	    	android:layout_toRightOf="@id/divider2" >
+       		
+        	<ImageView
+            		android:id="@+id/meteo_pic3"
+            		android:layout_width="160dp"
+            		android:layout_height="160dp"
+            		android:paddingRight="10px"
+            		android:paddingLeft="10px"
+            		android:src="@drawable/meteo_unknown" />
+        
+       		<TextView
+            		android:id="@+id/meteo_day3"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textSize="46px"
+            		android:layout_gravity="center"
+            		android:text="" />
+		</LinearLayout>
+		<LinearLayout
+    	    	android:id="@+id/temp3"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_centerVertical="true"
+    	    	android:orientation="vertical"
+    	    	android:layout_toRightOf="@id/meteo3" >
+
+    		<TextView 
+    	    	android:id="@+id/meteo_max3"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:textSize="46px"
+    	    	android:textStyle="italic"
+    	    	android:paddingRight="10px"
+    	    	android:text="" />
+    	
+    		<TextView 
+    	    	android:id="@+id/meteo_min3"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:textSize="46px"
+    	    	android:textStyle="italic"
+    	    	android:paddingRight="10px"
+    	    	android:text="" />
+    	</LinearLayout>
+
+		<LinearLayout
+		    android:id="@+id/divider3"
+    		android:layout_width="1dp"
+    		android:layout_height="120px"
+    		android:paddingLeft="2dp"
+    		android:paddingRight="2dp"
+    		android:layout_marginTop="15dp"
+    		android:layout_marginBottom="15dp"
+    		android:scaleType="fitXY"
+    		android:background="#333333"
+    		android:orientation="vertical"
+    		android:layout_centerVertical="true"
+    		android:layout_toRightOf="@id/temp3" />			
+	
+	<!-- DAY4 -->
+    	<LinearLayout
+    	    	android:id="@+id/meteo4"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_centerVertical="true"
+    	    	android:orientation="vertical"
+    	    	android:layout_toRightOf="@id/divider3" >
+       		
+        	<ImageView
+            		android:id="@+id/meteo_pic4"
+            		android:layout_width="160dp"
+            		android:layout_height="160dp"
+            		android:paddingRight="10px"
+            		android:paddingLeft="10px"
+            		android:src="@drawable/meteo_unknown" />
+        
+       		<TextView
+            		android:id="@+id/meteo_day4"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textSize="46px"
+            		android:layout_gravity="center"
+            		android:text="" />
+		</LinearLayout>
+		<LinearLayout
+    	    	android:id="@+id/temp4"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_centerVertical="true"
+    	    	android:orientation="vertical"
+    	    	android:layout_toRightOf="@id/meteo4" >
+
+    		<TextView 
+    	    	android:id="@+id/meteo_max4"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:textSize="46px"
+    	    	android:textStyle="italic"
+    	    	android:paddingRight="10px"
+    	    	android:text="" />
+    	
+    		<TextView 
+    	    	android:id="@+id/meteo_min4"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:textSize="46px"
+    	    	android:textStyle="italic"
+    	    	android:paddingRight="10px"
+    	    	android:text="" />
+    	</LinearLayout>
+    			
+		<LinearLayout
+		    android:id="@+id/divider4"
+    		android:layout_width="1dp"
+    		android:layout_height="120px"
+    		android:paddingLeft="2dp"
+    		android:paddingRight="2dp"
+    		android:layout_marginTop="15dp"
+    		android:layout_marginBottom="15dp"
+    		android:scaleType="fitXY"
+    		android:background="#333333"
+    		android:orientation="vertical"
+    		android:layout_centerVertical="true"
+    		android:layout_toRightOf="@id/temp4" />
+			
+	<!-- DAY5 -->
+    	<LinearLayout
+    	    	android:id="@+id/meteo5"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_centerVertical="true"
+    	    	android:orientation="vertical"
+    	    	android:layout_toRightOf="@id/divider4" >
+       		
+        	<ImageView
+            		android:id="@+id/meteo_pic5"
+            		android:layout_width="160dp"
+            		android:layout_height="160dp"
+            		android:paddingRight="10px"
+            		android:paddingLeft="10px"
+            		android:src="@drawable/meteo_unknown" />
+        
+       		<TextView
+            		android:id="@+id/meteo_day5"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textSize="46px"
+            		android:layout_gravity="center"
+            		android:text="" />
+		</LinearLayout>
+		<LinearLayout
+    	    	android:id="@+id/temp5"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_centerVertical="true"
+    	    	android:orientation="vertical"
+    	    	android:layout_toRightOf="@id/meteo5" >
+
+    		<TextView 
+    	    	android:id="@+id/meteo_max5"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:textSize="46px"
+    	    	android:textStyle="italic"
+    	    	android:paddingRight="10px"
+    	    	android:text="" />
+
+    		<TextView
+    	    	android:id="@+id/meteo_min5"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:textSize="46px"
+    	    	android:textStyle="italic"
+    	    	android:paddingRight="10px"
+    	    	android:text="" />
+    	</LinearLayout>
+    				
+</RelativeLayout>

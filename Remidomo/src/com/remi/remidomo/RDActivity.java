@@ -26,6 +26,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -535,6 +536,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 		View layout = inflater.inflate(R.layout.splash,
 					(ViewGroup) findViewById(R.id.splash));
 		Toast toast = new Toast(this);
+		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.setDuration(Toast.LENGTH_LONG);
 		toast.setView(layout);
 		toast.show();

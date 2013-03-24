@@ -14,9 +14,8 @@ import android.preference.PreferenceScreen;
 
 public class Preferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
-	//public static final String DEFAULT_RFX_PORT = "3865";
-	public static final int DEFAULT_RFX_PORT = 1234;
-	public static final int DEFAULT_PORT = 1234;
+	public static final int DEFAULT_RFX_PORT = 3865;
+	public static final int DEFAULT_PORT = 2012;
 	public static final String DEFAULT_IP = "1.2.3.4";
 	public static final String DEFAULT_MODE = "Serveur";
 	public static final int DEFAULT_LOGLIMIT = 365;
