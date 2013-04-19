@@ -14,13 +14,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class Sensors {
@@ -97,29 +99,25 @@ public class Sensors {
         				}
         			}
         			if (allEmpty) {
-
-        				CharSequence text = Sensors.this.service.getText(R.string.sensors_restore);
-
-        				// Set the icon, scrolling text and timestamp
-        				Notification notification = new Notification(R.drawable.app_icon, text,
-        						System.currentTimeMillis());
-
         				// The PendingIntent to launch our activity if the user selects this notification
         				Intent intent = new Intent(Sensors.this.service, RDService.class);
-        				intent.setAction(RDService.ACTION_RESTORE_DATA);
-        				PendingIntent contentIntent = PendingIntent.getService(Sensors.this.service, 0,
-        						intent, 0);
+                        intent.setAction(RDService.ACTION_RESTORE_DATA);
+                        PendingIntent contentIntent = PendingIntent.getService(Sensors.this.service, 0, intent, 0);
 
-        				// Set the info for the views that show in the notification panel.
-        				notification.setLatestEventInfo(Sensors.this.service,
-        						Sensors.this.service.getText(R.string.sensors_empty),
-        						text, contentIntent);
+        		        NotificationCompat.Builder builder = new NotificationCompat.Builder(Sensors.this.service)
+        		            .setSmallIcon(R.drawable.app_icon)
+        		            .setContentIntent(contentIntent)
+        		            .setTicker(Sensors.this.service.getText(R.string.sensors_empty))
+        		            .setContentText(Sensors.this.service.getText(R.string.sensors_restore))
+        		            .setContentTitle(Sensors.this.service.getText(R.string.sensors_empty))
+        		            .setWhen(System.currentTimeMillis())
+        		            .setAutoCancel(true);
 
-        				// Auto-cancel the notification when clicked
-        				notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        		        Bitmap largeIcon = BitmapFactory.decodeResource(Sensors.this.service.getResources(), R.drawable.sdcard);
+        		        builder.setLargeIcon(largeIcon);
 
-        				// Send the notification.
-        				notificationMgr.notify(NOTIFICATION_RESTORE, notification);
+        		        // Send the notification.
+        		        notificationMgr.notify(NOTIFICATION_RESTORE, builder.build());
         			}
         		}
         	};
@@ -348,7 +346,7 @@ public class Sensors {
     				if ((service != null) && (!warnedAboutMissingSensor)) {
     					service.pushToClients(PushSender.MISSING_SENSOR, 0, sensor.getName());
     					String msg = String.format(service.getString(R.string.missing_sensor), sensor.getName());
-    					service.showAlertNotification(msg, R.raw.garage_alert, new Date());
+    					service.showAlertNotification(msg, R.raw.garage_alert, R.drawable.temperature2, RDActivity.TEMP_VIEW_ID, new Date());
     					service.addLog(msg);
     					warnedAboutMissingSensor = true;
     				}

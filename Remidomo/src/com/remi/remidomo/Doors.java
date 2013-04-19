@@ -117,10 +117,10 @@ public class Doors {
 			if (index == GARAGE) {
 				if (states[GARAGE] == State.CLOSED) {
 					service.showAlertNotification(service.getString(R.string.garage_closed),
-												  R.raw.garage_ok, tstamp);
+												  R.raw.garage_ok, R.drawable.garage_closed, RDActivity.SWITCHES_VIEW_ID, tstamp);
 				} else if (states[GARAGE] == State.OPENED) {
 					service.showAlertNotification(service.getString(R.string.garage_opened),
-												  R.raw.garage_ok, tstamp);
+												  R.raw.garage_ok, R.drawable.garage_opened, RDActivity.SWITCHES_VIEW_ID, tstamp);
 				}
 			}
 		}
@@ -137,7 +137,7 @@ public class Doors {
 			// if it's not temporary. In that case, it's an
 			// anomaly !
 			service.showAlertNotification(service.getString(R.string.garage_moving),
-									      R.raw.garage_alert, tstamp);
+									      R.raw.garage_alert, R.drawable.garage_moving, RDActivity.SWITCHES_VIEW_ID, tstamp);
 		}
 	}
 	

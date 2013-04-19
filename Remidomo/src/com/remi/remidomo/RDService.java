@@ -17,7 +17,6 @@ import java.util.TimerTask;
 
 import com.google.android.gcm.GCMConstants;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -25,6 +24,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Binder;
@@ -32,6 +33,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -335,63 +337,60 @@ public class RDService extends Service {
      * Show a notification while this service is running.
      */
     public void showServiceNotification() {
-        CharSequence text = getText(R.string.service_started);
-
-        // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.service_icon, text,
-                System.currentTimeMillis());
-
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, RDActivity.class), 0);
+        Intent intent = new Intent(this, RDActivity.class);
+        intent.putExtra("view", RDActivity.DASHBOARD_VIEW_ID);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(this, getText(R.string.service_label),
-                       text, contentIntent);
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.service_icon);
 
-        // Never clear notif, even if user clicks Clear button
-        notification.flags |= Notification.FLAG_NO_CLEAR;
-
-        /*
-        notification.flags |= Notification.FLAG_SHOW_LIGHTS;
-        notification.ledARGB = 0xFF0000ff;
-        notification.ledOnMS = 50;
-        notification.ledOffMS = 100;
-        */
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+            .setContentText(getText(R.string.service_started))
+            .setTicker(getText(R.string.service_label))
+            .setWhen(System.currentTimeMillis())
+            .setLargeIcon(largeIcon)
+            .setSmallIcon(R.drawable.app_icon)
+            .setContentIntent(contentIntent)
+            .setContentTitle(getString(R.string.app_name))
+            .setOngoing(true);
 
         // Send the notification.
-        notificationMgr.notify(NOTIFICATION_START, notification);
+        notificationMgr.notify(NOTIFICATION_START, builder.build());
     }
 
     /**
      * Alert notifications
      */
-    public void showAlertNotification(String text, int soundResId, Date tstamp) {
-        // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.app_icon, text,
-                									 tstamp.getTime());
+    public void showAlertNotification(String text, int soundResId, int iconResId, int destinationView, Date tstamp) {
 
         // The PendingIntent to launch our activity if the user selects this notification
         Intent intent = new Intent(this, RDActivity.class);
-        intent.putExtra("view", R.id.switchesView);
+        intent.putExtra("view", destinationView);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
         														intent,
         														PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(this, getText(R.string.service_alert),
-                       text, contentIntent);
-
-        // Auto-cancel the notification when clicked
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+    	NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+    		.setSmallIcon(R.drawable.app_icon)
+    		.setContentIntent(contentIntent)
+    		.setTicker(text)
+    		.setContentText(text)
+    		.setContentTitle(getText(R.string.service_alert))
+    		.setWhen(tstamp.getTime())
+    		.setAutoCancel(true);
+    	
+    	if (iconResId != 0) {
+    	    Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), iconResId);
+    	    builder.setLargeIcon(largeIcon);
+    	}
 
         // Set sound if any (and if prefs allow)
         if ((soundResId != 0) && prefs.getBoolean("notif_sound", true)) {
-        	notification.sound = Uri.parse("android.resource://"+getPackageName()+"/"+soundResId);
+        	builder.setSound(Uri.parse("android.resource://"+getPackageName()+"/"+soundResId));
         }
 
         // Send the notification.
-        notificationMgr.notify(NOTIFICATION_ALERT++, notification);
+        notificationMgr.notify(NOTIFICATION_ALERT++, builder.build());
     }
 	
 	public void forceRefresh() {
@@ -887,11 +886,11 @@ public class RDService extends Service {
 				doors.setFromPushedIntent(intent);
 			} else if (PushSender.LOWBAT.equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
-				showAlertNotification(getString(R.string.low_bat), R.raw.garage_alert, tstamp);
+				showAlertNotification(getString(R.string.low_bat), R.raw.garage_alert, R.drawable.battery_low, RDActivity.TEMP_VIEW_ID, tstamp);
 			} else if (PushSender.POWER_DROP.equals(target)) {
 				// In case the server still has connectivity...
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
-				showAlertNotification(getString(R.string.power_dropped), R.raw.garage_alert, tstamp);
+				showAlertNotification(getString(R.string.power_dropped), R.raw.garage_alert, R.drawable.energy, RDActivity.DASHBOARD_VIEW_ID, tstamp);
 				energy.updatePowerStatus(false);
 				if (callback != null) {
 					callback.updateEnergy();
@@ -899,7 +898,7 @@ public class RDService extends Service {
 			} else if (PushSender.POWER_RESTORE.equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
 				String duration = intent.getStringExtra(PushSender.STATE);
-				showAlertNotification(String.format(getString(R.string.power_restored), duration), R.raw.garage_alert, tstamp);
+				showAlertNotification(String.format(getString(R.string.power_restored), duration), R.raw.garage_alert, R.drawable.energy, RDActivity.DASHBOARD_VIEW_ID, tstamp);
 				energy.updatePowerStatus(true);
 				if (callback != null) {
 					callback.updateEnergy();
@@ -907,7 +906,7 @@ public class RDService extends Service {
 			} else if (PushSender.MISSING_SENSOR.equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
 				String sensorName = intent.getStringExtra(PushSender.STATE);
-				showAlertNotification(String.format(getString(R.string.missing_sensor), sensorName), R.raw.garage_alert, tstamp);
+				showAlertNotification(String.format(getString(R.string.missing_sensor), sensorName), R.raw.garage_alert, R.drawable.temperature2, RDActivity.TEMP_VIEW_ID, tstamp);
 			} else {
 				Log.e(TAG, "Unknown push target: " + target);
 				addLog("Cible push inconnue: " + target, LogLevel.HIGH);

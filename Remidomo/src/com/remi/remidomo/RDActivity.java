@@ -60,12 +60,12 @@ public class RDActivity extends Activity implements OnGestureListener {
 	private static final int SWIPE_MIN_DISTANCE = 60;
     private static final int SWIPE_THRESHOLD_VELOCITY = 100;
     
-    private static final int DASHBOARD_VIEW_ID = 0;
-    private static final int TEMP_VIEW_ID = 1;
-    private static final int POOL_VIEW_ID = 2;
-    private static final int SWITCHES_VIEW_ID = 3;
-    private static final int ENERGY_VIEW_ID = 4;
-    private static final int LOG_VIEW_ID = 5;
+    public static final int DASHBOARD_VIEW_ID = 0;
+    public static final int TEMP_VIEW_ID = 1;
+    public static final int POOL_VIEW_ID = 2;
+    public static final int SWITCHES_VIEW_ID = 3;
+    public static final int ENERGY_VIEW_ID = 4;
+    public static final int LOG_VIEW_ID = 5;
     private int currentView = DASHBOARD_VIEW_ID;
  
 	private ViewFlipper flipper;
@@ -172,19 +172,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         if (intent.hasExtra("view")) {
         	// Someone else started us (notification for ex.),
         	// asking for a view to be brought to front
-        	if (intent.getIntExtra("view", 0) == R.id.dashboardView) {
-        		currentView = DASHBOARD_VIEW_ID;
-        	} else if (intent.getIntExtra("view", 0) == R.id.thermoView) {
-        		currentView = TEMP_VIEW_ID;
-        	} else if (intent.getIntExtra("view", 0) == R.id.poolView) {
-        		currentView = POOL_VIEW_ID;
-        	} else if (intent.getIntExtra("view", 0) == R.id.switchesView) {
-        		currentView = SWITCHES_VIEW_ID;
-        	} else if (intent.getIntExtra("view", 0) == R.id.logView) {
-        		currentView = LOG_VIEW_ID;
-        	}
-
-        	flipper.setDisplayedChild(currentView);
+        	changeView(null, intent.getIntExtra("view", DASHBOARD_VIEW_ID));
         }
     }
 
