@@ -80,8 +80,9 @@ public class ServerThread implements Runnable {
 	private static final String ALL_PATTERN = "*";
 	private static final String DASHBOARD_PATTERN = "/dashboard";
 	private static final String LOG_PATTERN = "/log";
-	private static final String SENSORS_PATTERN = "/sensors";
+	private static final String SENSORS_JSON_PATTERN = "/sensors";
 	private static final String SENSORS_CSV_PATTERN = "/sensors/csv";
+	private static final String SENSORS_CHARTS_PATTERN = "/sensors/charts";
 	private static final String ENERGY_PATTERN = "/energy";
 	private static final String SWITCHES_PATTERN = "/switches*";
 	private static final String DOORS_PATTERN = "/doors";
@@ -113,7 +114,8 @@ public class ServerThread implements Runnable {
         httpRegistry.register(IMAGES_PATTERN, new ImagesHandler());
         httpRegistry.register(LOG_PATTERN, new ServiceLogHandler());
         httpRegistry.register(SENSORS_CSV_PATTERN, new SensorsCsvHandler());
-        httpRegistry.register(SENSORS_PATTERN, new SensorsHandler());
+        httpRegistry.register(SENSORS_CHARTS_PATTERN, new SensorsChartsHandler());
+        httpRegistry.register(SENSORS_JSON_PATTERN, new SensorsJsonHandler());
         httpRegistry.register(ENERGY_PATTERN, new EnergyHandler());
         httpRegistry.register(SWITCHES_PATTERN, new SwitchesHandler());
         httpRegistry.register(DOORS_PATTERN, new DoorsHandler());
@@ -301,9 +303,9 @@ public class ServerThread implements Runnable {
 		}
 	}
 
-	class SensorsHandler implements HttpRequestHandler {
+	class SensorsJsonHandler implements HttpRequestHandler {
 
-		public SensorsHandler(){
+		public SensorsJsonHandler(){
 			// Do nothing
 		}
 
@@ -354,6 +356,54 @@ public class ServerThread implements Runnable {
 				public void writeTo(final OutputStream outstream) throws java.io.IOException {
 					OutputStreamWriter writer = new OutputStreamWriter(outstream, "UTF-8");
 					service.getSensors().dumpCSV(writer);
+					writer.flush();
+				}
+			});
+
+			((EntityTemplate)entity).setContentType(contentType);
+
+			response.setEntity(entity);
+		}
+	}
+
+	class SensorsChartsHandler implements HttpRequestHandler {
+
+		public SensorsChartsHandler(){
+			// Do nothing
+		}
+
+		private String[] parseIds(String Uri) {
+			Pattern pattern = Pattern.compile("/sensors/charts\\?id=(.+)");
+			Matcher matcher = pattern.matcher(Uri);
+			if (matcher.matches()) {
+				String ids = matcher.group(1);
+				try {
+					return ids.split("&");
+				} catch (java.util.regex.PatternSyntaxException e) {
+					return null;
+				}
+			} else {
+				return null;
+			}
+		}
+
+		public void handle(HttpRequest request, HttpResponse response, HttpContext httpContext) throws org.apache.http.HttpException, java.io.IOException {
+			service.addLog("Requete HTTP reçue (capteurs)");
+			Log.d(TAG, "Got a HTTP request for server (sensors)");
+
+			String Uri = request.getRequestLine().getUri();
+			final String[] ids = parseIds(Uri);
+
+			String contentType = "text/html";
+			HttpEntity entity = new EntityTemplate(new ContentProducer() {
+				public void writeTo(final OutputStream outstream) throws java.io.IOException {
+					OutputStreamWriter writer = new OutputStreamWriter(outstream, "UTF-8");
+					if ((ids.length == 1) &&
+						(Energy.ID_POWER.equals(ids[0]))) {
+						writer.write(service.getEnergy().getJSONChart(plotDays).toString());
+					} else {
+						writer.write(service.getSensors().getJSONChart(plotDays, ids).toString());
+					}
 					writer.flush();
 				}
 			});
@@ -503,52 +553,16 @@ public class ServerThread implements Runnable {
 		}
 
 		private Bitmap getBitmap(String name, RDService service) {
-			if (name.startsWith("poolplot")) {
-				return getPoolBitmap(service);
-	    	} else if (name.startsWith("thermoplot")) {
-	    		return getThermoBitmap(service);
-	    	} else if (name.startsWith("powerplot")) {
-	    		return getPowerBitmap(service);
-	    	} else {
-	    		// Try with drawable resources
-	    		int id = service.getResources().getIdentifier(name, "drawable", service.getPackageName());
-	    		if (id != 0) {
-	    			BitmapDrawable bd = (BitmapDrawable) service.getResources().getDrawable(id);
-	    			return bd.getBitmap();
-	    		} else {
-	    			Bitmap bitmap = Bitmap.createBitmap(BMP_WIDTH, BMP_HEIGHT, Bitmap.Config.ARGB_8888);
-	    			bitmap.eraseColor(Color.BLACK);
-	    			return bitmap;
-	    		}
-	    	}
-		}
-
-		private Bitmap getPoolBitmap(RDService service) {
-			SensorPlot plot = new SensorPlot(service, "Fake-pool");
-			plot.setAttributes(service.getString(R.string.degC), true, Color.CYAN, true, false);
-			SensorData data = service.getSensors().getData(Sensors.ID_POOL_T);
-			plot.addSeries(data, plotDays);
-			return plot.getBitmap(BMP_WIDTH, BMP_HEIGHT);
-		}
-		
-		private Bitmap getThermoBitmap(RDService service) {
-			SensorPlot plot = new SensorPlot(service, "Fake-thermo");
-			plot.setAttributes(service.getString(R.string.degC), true, 0, true, false);
-			SensorData data = service.getSensors().getData(Sensors.ID_POOL_T);
-			plot.addSeries(data, plotDays);
-			data = service.getSensors().getData(Sensors.ID_EXT_T);
-			plot.addSeries(data, plotDays);
-			data = service.getSensors().getData(Sensors.ID_VERANDA_T);
-			plot.addSeries(data, plotDays);
-			return plot.getBitmap(BMP_WIDTH, BMP_HEIGHT);
-		}
-
-		private Bitmap getPowerBitmap(RDService service) {
-			SensorPlot plot = new SensorPlot(service, "Fake-power");
-			plot.setAttributes(service.getString(R.string.kw), true, Color.YELLOW, false, true);
-			SensorData data = service.getEnergy().getPowerData();
-			plot.addSeries(data, energyDays);
-			return plot.getBitmap(BMP_WIDTH, BMP_HEIGHT);
+			// Try with drawable resources
+			int id = service.getResources().getIdentifier(name, "drawable", service.getPackageName());
+			if (id != 0) {
+				BitmapDrawable bd = (BitmapDrawable) service.getResources().getDrawable(id);
+				return bd.getBitmap();
+			} else {
+				Bitmap bitmap = Bitmap.createBitmap(BMP_WIDTH, BMP_HEIGHT, Bitmap.Config.ARGB_8888);
+				bitmap.eraseColor(Color.BLACK);
+				return bitmap;
+			}
 		}
 
 		public void handle(HttpRequest request, HttpResponse response, HttpContext httpContext) throws org.apache.http.HttpException, java.io.IOException {

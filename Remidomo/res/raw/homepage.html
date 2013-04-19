@@ -1,8 +1,95 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="robots" content="noindex">
     <title>Remidomo</title>
     <link rel="icon" type="image/png" href="/img/app_icon" />
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var temp_formatter = new google.visualization.NumberFormat({fractionDigits:1, suffix:' degC'});
+		var date_formatter = new google.visualization.DateFormat({pattern: 'd MMM à H:mm'});
+		var power_formatter = new google.visualization.NumberFormat({fractionDigits:1, suffix:' kW'});
+
+      	var json_pool = $.ajax({url: "sensors/charts?id=temp3-temp",
+                                dataType:"json",
+                                async: false
+                               }).responseText;
+        var data_pool = new google.visualization.DataTable(json_pool);
+        date_formatter.format(data_pool, 0);
+		temp_formatter.format(data_pool, 1);
+
+        var json_all = $.ajax({url: "sensors/charts?id=temp3-temp&th2_0x9b05-temp&th1_0xe902-temp",
+                               dataType:"json",
+                               async: false
+                              }).responseText;
+
+        var data_all = new google.visualization.DataTable(json_all);
+        date_formatter.format(data_all, 0);
+		temp_formatter.format(data_all, 1);
+		temp_formatter.format(data_all, 2);
+		temp_formatter.format(data_all, 3);
+
+		var json_power = $.ajax({url: "sensors/charts?id=elec2_0xf082-power",
+                               dataType:"json",
+                               async: false
+                              }).responseText;
+
+		var data_power = new google.visualization.DataTable(json_power);
+		date_formatter.format(data_power, 0);
+		power_formatter.format(data_power, 1);
+
+        var options_temp = {
+          titlePosition: 'none',
+          backgroundColor: 'black',
+          legend: {position: 'none'},
+          axisTitlesPosition: 'in',
+          lineWidth: 1,
+          hAxis: {gridlines: {color: '#333333'},
+                  maxTextLines: 5,
+                  titleTextStyle: {color: '#555555' },
+                 },
+          vAxis: {title: 'degC',
+                  gridlines: {color: '#333333'},
+                  minorGridlines: {count: 2, color:'#111111'}
+                 },
+          series: [{color: 'cyan', visibleInLegend: false},
+          		   {color: 'green', visibleInLegend: false},
+          		   {color: 'yellow', visibleInLegend: false}]
+        };
+
+        var options_power = {
+          titlePosition: 'none',
+          backgroundColor: 'black',
+          legend: {position: 'none'},
+          axisTitlesPosition: 'in',
+          lineWidth: 1,
+          hAxis: {gridlines: {color: '#333333'},
+                  maxTextLines: 5,
+                  titleTextStyle: {color: '#555555' },
+                 },
+          vAxis: {title: 'kW',
+                  gridlines: {color: '#333333'},
+                  minorGridlines: {count: 2, color:'#111111'}
+                 },
+          series: [{color: 'red', visibleInLegend: false}]
+        };
+
+        var pool_chart = new google.visualization.LineChart(document.getElementById('pool_div'));
+        pool_chart.draw(data_pool, options_temp);
+
+        var all_chart = new google.visualization.LineChart(document.getElementById('all_div'));
+        all_chart.draw(data_all, options_temp);
+
+        var power_chart = new google.visualization.LineChart(document.getElementById('power_div'));
+        power_chart.draw(data_power, options_power);
+      }
+    </script>
   </head>
   <body bgcolor="black">
       <table border="0" align="center" width="40%%">
@@ -17,15 +104,15 @@
         </td></tr>
         <tr>
             <td width="80px" align="center"><img src="img/veranda" border="1" style="border-color:yellow; padding:5px" height="48px" vspace="10px"><img src="img/garden" border="1" style="border-color:green; padding:5px" height="48px" vspace="10px"><img src="img/pool" border="1" style="border-color:cyan; padding:5px" height="48px" vspace="10px"></td>
-            <td align="center"><img src="img/thermoplot"></td>
+            <td align="center"><div id="all_div" style="width: 1000px; height: 500px;"></div></td>
         </tr>
         <tr>
             <td width="80px" align="center"><img src="img/pool" border="1" style="border-color:cyan; padding:5px" height="48px"></td>
-            <td align="center" valign="center"><img src="img/poolplot"></td>
+            <td align="center" valign="center"><div id="pool_div" style="width: 1000px; height: 500px;"></div></td>
         </tr>
         <tr>
             <td width="80px" align="center"><img src="img/energy" border="1" style="border-color:yellow; padding:5px" height="48px"></td>
-            <td align="center" valign="center"><img src="img/powerplot"></td>
+            <td align="center" valign="center"><div id="power_div" style="width: 1000px; height: 500px;"></div></td>
         </tr>
       </table>
 

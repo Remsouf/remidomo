@@ -320,4 +320,33 @@ public class Energy {
         energy.clearData();
         energy.addValue(new Date(), initialEnergy);
     }
+
+    public synchronized JSONObject getJSONChart(int daysBack) {
+    	JSONObject dict = new JSONObject();
+
+    	long pastDate = new Date(new Date().getTime() - daysBack*SensorData.HOURS_24).getTime();
+
+    	try {
+    		JSONArray columns = new JSONArray();
+
+    		JSONObject dates = new JSONObject();
+    		dates.put("label", "dates");
+    		dates.put("type", "datetime");
+    		columns.put(dates);
+
+    		JSONObject values = new JSONObject();
+    		values.put("label", service.getString(R.string.power));
+    		values.put("type", "number");
+    		columns.put(values);
+
+    		dict.put("cols", columns);
+
+    		JSONArray rows = power.getJSONChart(pastDate);
+
+    		dict.put("rows", rows);
+    	} catch (org.json.JSONException e) {
+			Log.d(TAG, "Failed generating JSON for charts: ", e);
+		}
+    	return dict;
+    }
 }

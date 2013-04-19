@@ -368,4 +368,180 @@ public class Sensors {
     		return true;
     	}
     }
+
+	public synchronized JSONObject getJSONChart(int daysBack, String[] names) {
+		JSONObject dict = new JSONObject();
+		if (names == null) {
+			return dict;
+		}
+
+		long pastDate = new Date(new Date().getTime() - daysBack*SensorData.HOURS_24).getTime();
+
+		try {
+			JSONArray columns = new JSONArray();
+
+			JSONObject dates = new JSONObject();
+			dates.put("label", "dates");
+			dates.put("type", "datetime");
+			columns.put(dates);
+
+			for (int i=0; i<names.length; ++i) {
+				JSONObject values = new JSONObject();
+				if (ID_POOL_T.equals(names[i])) {
+					values.put("label", service.getString(R.string.pool));
+				} else if (ID_EXT_T.equals(names[i])) {
+					values.put("label", service.getString(R.string.outside));
+				} else if (ID_VERANDA_T.equals(names[i])) {
+					values.put("label", service.getString(R.string.veranda));
+				} else {
+					values.put("label", service.getString(R.string.temperature));
+				}
+				values.put("type", "number");
+				columns.put(values);
+			}
+
+			dict.put("cols", columns);
+
+			JSONArray rows = new JSONArray();
+
+			// Indices into each sensor data
+			ArrayList<Integer> positions = new ArrayList<Integer> ();
+
+			// Current values and times for each sensor
+			ArrayList<Float> currentValues = new ArrayList<Float> ();
+			ArrayList<Long> currentTimes = new ArrayList<Long> ();
+
+			/* Initialization phase:
+			 * Find 1st values at relevant dates (later than pastDate)
+			 */
+			int index = 0;
+			for (SensorData sensor: sensors) {
+				if (sensor.size() == 0) {
+					continue;
+				}
+
+				boolean match = false;
+				for (String name: names) {
+					if (sensor.getName().equals(name)) {
+						match = true;
+						break;
+					}
+				}
+				if (!match) {
+					continue;
+				}
+
+				currentTimes.add(0L);
+				currentValues.add(0.0f);
+				for (int i=0; i<sensor.size(); i++) {
+					final Pair pair = sensor.get(i);
+					currentTimes.set(index, pair.time);
+					currentValues.set(index, pair.value);
+
+					if (pair.time >= pastDate) {
+						positions.add(i);
+						break;
+					}
+				}
+
+				index++;
+			}
+
+			/* Traversal phase */
+			while (true) {
+				index = 0;
+				boolean endReached = true;
+				for (SensorData sensor: sensors) {
+
+					// Ignore this sensor
+					if (sensor.size() == 0) {
+						continue;
+					}
+
+					boolean match = false;
+					for (String name: names) {
+						if (sensor.getName().equals(name)) {
+							match = true;
+							break;
+						}
+					}
+					if (!match) {
+						continue;
+					}
+
+					// Move one point forward, if too far in the past
+					int position = positions.get(index);
+					if (position >= sensor.size()) {
+						// Exhausted data for this sensor, skip
+						index++;
+						continue;
+					}
+
+					final Pair pair = sensor.get(position);
+
+					if (position < sensor.size()) {
+						// See if we can increment position
+						// (only if sensor is the last in time)
+						long currentTime = currentTimes.get(index);
+						boolean isLast = true;
+						for (int i=0; i<names.length; i++) {
+							if (currentTimes.get(i) < currentTime) {
+								isLast = false;
+								break;
+							}
+						}
+
+						if (isLast) {
+							positions.set(index, position+1);
+						} else {
+							index++;
+							continue;
+						}
+					}
+
+					// Remember current value for this sensor
+					currentValues.set(index, pair.value);
+					currentTimes.set(index, pair.time);
+
+					// Exit clause, if all indices reached the end
+					if (positions.get(index) < sensor.size()) {
+						endReached = false;
+					}
+
+					// Next sensor
+					index++;
+				} // end sensors loop
+
+				if (names.length > 0) {
+					JSONArray entry = new JSONArray();
+
+					JSONObject time = new JSONObject();
+					Date date = new Date(currentTimes.get(0));
+					String dateJSON = "Date("+(date.getYear()+1900)+","+date.getMonth()+","+date.getDate()+
+							          ","+date.getHours()+","+date.getMinutes()+","+date.getSeconds()+")";
+					time.put("v", dateJSON);
+					entry.put(time);
+
+					for (int i=0; i<names.length; i++) {
+						JSONObject value = new JSONObject();
+						value.put("v", currentValues.get(i));
+						entry.put(value);
+					}
+
+					JSONObject row = new JSONObject();
+					row.put("c", entry);
+					rows.put(row);
+				}
+
+				if (endReached) {
+					break;
+				}
+			} // end outer while
+
+			dict.put("rows", rows);
+		} catch (org.json.JSONException e) {
+			Log.d(TAG, "Failed generating JSON for charts: ", e);
+		}
+		return dict;
+	}
 }

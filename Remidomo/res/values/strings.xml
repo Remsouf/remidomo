@@ -100,6 +100,8 @@
     <string name="ilya">Il y a %1$s</string>
     <string name="depuis">Depuis %1$s</string>
     <string name="days">%1$d jours</string>
+    <string name="temperature">Température</string>
+	<string name="power">Puissance</string>
 
     <!-- Trains -->
     <string name="supprime">SUPPR.</string>

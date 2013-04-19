@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.androidplot.xy.SimpleXYSeries;
 
@@ -25,8 +26,8 @@ public class SensorData {
 
 	private final static String TAG = RDService.class.getSimpleName();
 
-	private static final long HOURS_24 = 24*60*60*1000;
-	private static final long MINS_10 = 10*60*1000;
+	public static final long HOURS_24 = 24*60*60*1000;
+	public static final long MINS_10 = 10*60*1000;
 	public static final long SAMPLING_PERIOD = 3*MINS_10;
 
 	private RDService service;
@@ -217,7 +218,37 @@ public class SensorData {
 			return null;
 		}
 	}
-	
+
+	public synchronized JSONArray getJSONChart(long lastTstamp) {
+		try {
+			JSONArray rows = new JSONArray();
+			for (Pair pair:data) {
+				if (pair.time >= lastTstamp) {
+					JSONArray entry = new JSONArray();
+
+					JSONObject time = new JSONObject();
+					Date date = new Date(pair.time);
+					String dateJSON = "Date("+(date.getYear()+1900)+","+date.getMonth()+","+date.getDate()+
+							          ","+date.getHours()+","+date.getMinutes()+","+date.getSeconds()+")";
+					time.put("v", dateJSON);
+					entry.put(time);
+
+					JSONObject value = new JSONObject();
+					value.put("v", pair.value);
+					entry.put(value);
+
+					JSONObject row = new JSONObject();
+					row.put("c", entry);
+					rows.put(row);
+				}
+			}
+			return rows;
+		} catch (org.json.JSONException e) {
+			Log.e(TAG, "Failed creating JSON chart data for sensor " + this.name);
+			return null;
+		}
+	}
+
 	public synchronized void readJSON(JSONArray input) {
 		data.clear();
 		
