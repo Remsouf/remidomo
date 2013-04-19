@@ -4,7 +4,7 @@
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
-  <com.remi.remidomo.CustomSpinner
+  <com.remi.remidomo.reloaded.CustomSpinner
     android:id="@+id/prefSpinner"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent" />

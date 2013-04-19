@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/com.remi.remidomo"
+    xmlns:app="http://schemas.android.com/apk/res/com.remi.remidomo.reloaded"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:id="@+id/poolView"
     android:orientation="vertical" >
 
-    <com.remi.remidomo.SensorPlot
+    <com.remi.remidomo.reloaded.SensorPlot
     	android:id="@+id/poolTempPlot"
     	android:layout_width="fill_parent"
     	android:layout_height="1330px"

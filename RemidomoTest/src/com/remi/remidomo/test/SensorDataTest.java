@@ -8,8 +8,8 @@ import java.io.StringWriter;
 import java.util.Date;
 import java.util.Scanner;
 
-import com.remi.remidomo.SensorData;
-import com.remi.remidomo.SensorData.DirType;
+import com.remi.remidomo.reloaded.SensorData;
+import com.remi.remidomo.reloaded.SensorData.DirType;
 
 import android.test.AndroidTestCase;
 import android.util.Log;

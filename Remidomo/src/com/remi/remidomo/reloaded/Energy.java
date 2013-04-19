@@ -1,4 +1,4 @@
-package com.remi.remidomo;
+package com.remi.remidomo.reloaded;
 
 import java.io.OutputStreamWriter;
 import java.net.URI;
@@ -10,8 +10,6 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import com.remi.remidomo.RDService.LogLevel;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -113,10 +111,10 @@ public class Energy {
     					service.pushToClients(PushSender.POWER_RESTORE, 0, duration);
     				}
     			}
-    			service.addLog("Alimentation électrique restaurée", LogLevel.HIGH);
+    			service.addLog("Alimentation électrique restaurée", RDService.LogLevel.HIGH);
     		} else {
     			powerLossTimestamp = new Date().getTime();
-    			service.addLog("Alimentation électrique perdue", LogLevel.HIGH);
+    			service.addLog("Alimentation électrique perdue", RDService.LogLevel.HIGH);
     		}
     	}
     }

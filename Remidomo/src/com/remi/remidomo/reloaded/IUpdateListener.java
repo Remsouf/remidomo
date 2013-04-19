@@ -1,4 +1,4 @@
-package com.remi.remidomo;
+package com.remi.remidomo.reloaded;
 
 public interface IUpdateListener {
 	void updateLog();

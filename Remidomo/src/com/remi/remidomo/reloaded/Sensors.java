@@ -1,4 +1,4 @@
-package com.remi.remidomo;
+package com.remi.remidomo.reloaded;
 
 import java.io.OutputStreamWriter;
 import java.net.URI;
@@ -13,6 +13,8 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.remi.remidomo.reloaded.SensorData.Pair;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -150,10 +152,10 @@ public class Sensors {
     }
 
     public void updateData(RDService service, xPLMessage msg) {
-    	updateData(service, msg, true);
+    	updateData(service, msg, SensorData.CompressionType.TIME_BASED);
     }
 
-    public void updateData(RDService service, xPLMessage msg, boolean compress) {
+    public void updateData(RDService service, xPLMessage msg, SensorData.CompressionType compress) {
     	// Ignore msg if we're still reading values from files
     	if (!readyForUpdates) {
     		return;

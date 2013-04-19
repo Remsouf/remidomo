@@ -1,4 +1,4 @@
-package com.remi.remidomo;
+package com.remi.remidomo.reloaded;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,11 +55,11 @@ public class RDService extends Service {
     private final int NOTIFICATION_START = 1;
     private int NOTIFICATION_ALERT = 3; // Not final !
     
-    public final static String ACTION_RESTORE_DATA = "com.remi.remidomo.RESTORE_DATA";
-    public final static String ACTION_BOOTKICK = "com.remi.remidomo.BOOTKICK";
-    public final static String ACTION_BATTERYLOW = "com.remi.remidomo.BATLOW";
-    public final static String ACTION_POWERCONNECT = "com.remi.remidomo.POWER_CONN";
-    public final static String ACTION_POWERDISCONNECT = "com.remi.remidomo.POWER_DISC";
+    public final static String ACTION_RESTORE_DATA = "com.remi.remidomo.reloaded.RESTORE_DATA";
+    public final static String ACTION_BOOTKICK = "com.remi.remidomo.reloaded.BOOTKICK";
+    public final static String ACTION_BATTERYLOW = "com.remi.remidomo.reloaded.BATLOW";
+    public final static String ACTION_POWERCONNECT = "com.remi.remidomo.reloaded.POWER_CONN";
+    public final static String ACTION_POWERDISCONNECT = "com.remi.remidomo.reloaded.POWER_DISC";
 
     private final IBinder mBinder = new LocalBinder();
     public IUpdateListener callback;

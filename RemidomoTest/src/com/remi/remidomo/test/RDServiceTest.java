@@ -1,6 +1,6 @@
 package com.remi.remidomo.test;
 
-import com.remi.remidomo.RDService;
+import com.remi.remidomo.reloaded.RDService;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

@@ -1,4 +1,4 @@
-package com.remi.remidomo;
+package com.remi.remidomo.reloaded;
 
 /*
  * http://www.twodee.org/weblog/?p=1037

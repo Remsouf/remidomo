@@ -3,11 +3,11 @@ package com.remi.remidomo.test;
 import java.io.File;
 import java.util.Date;
 
-import com.remi.remidomo.Energy;
-import com.remi.remidomo.RDService;
-import com.remi.remidomo.SensorData;
-import com.remi.remidomo.Sensors;
-import com.remi.remidomo.xPLMessage;
+import com.remi.remidomo.reloaded.Energy;
+import com.remi.remidomo.reloaded.RDService;
+import com.remi.remidomo.reloaded.SensorData;
+import com.remi.remidomo.reloaded.Sensors;
+import com.remi.remidomo.reloaded.xPLMessage;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

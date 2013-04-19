@@ -1,4 +1,4 @@
-package com.remi.remidomo;
+package com.remi.remidomo.reloaded;
 
 import android.content.Context;
 import android.graphics.Canvas;

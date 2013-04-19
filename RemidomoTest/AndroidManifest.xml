@@ -8,7 +8,7 @@
 
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
-        android:targetPackage="com.remi.remidomo" />
+        android:targetPackage="com.remi.remidomo.reloaded" />
 
     <application
         android:icon="@drawable/ic_launcher"

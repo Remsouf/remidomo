@@ -53,7 +53,7 @@
             android:layout_alignParentLeft="true"
             android:scaleType="centerCrop" />
         
-        <com.remi.remidomo.TrainsView
+        <com.remi.remidomo.reloaded.TrainsView
             android:id="@+id/trains"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

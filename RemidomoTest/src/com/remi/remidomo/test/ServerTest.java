@@ -24,13 +24,13 @@ import android.preference.PreferenceManager;
 import android.test.ServiceTestCase;
 import android.util.Log;
 
-import com.remi.remidomo.Doors;
-import com.remi.remidomo.Energy;
-import com.remi.remidomo.Preferences;
-import com.remi.remidomo.RDService;
-import com.remi.remidomo.SensorData;
-import com.remi.remidomo.Sensors;
-import com.remi.remidomo.ServerThread;
+import com.remi.remidomo.reloaded.Doors;
+import com.remi.remidomo.reloaded.Energy;
+import com.remi.remidomo.reloaded.Preferences;
+import com.remi.remidomo.reloaded.RDService;
+import com.remi.remidomo.reloaded.SensorData;
+import com.remi.remidomo.reloaded.Sensors;
+import com.remi.remidomo.reloaded.ServerThread;
 
 public class ServerTest extends ServiceTestCase<RDService> {
 	

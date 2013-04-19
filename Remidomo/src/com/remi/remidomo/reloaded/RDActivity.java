@@ -1,4 +1,4 @@
-package com.remi.remidomo;
+package com.remi.remidomo.reloaded;
 
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -129,7 +129,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         boolean serviceRunning = false;
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if ("com.remi.remidomo.RDService".equals(service.service.getClassName())) {
+            if ("com.remi.remidomo.reloaded.RDService".equals(service.service.getClassName())) {
                 serviceRunning = true;
                 break;
             }

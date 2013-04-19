@@ -2,7 +2,7 @@ package com.remi.remidomo.test;
 
 import org.json.JSONObject;
 
-import com.remi.remidomo.Trains;
+import com.remi.remidomo.reloaded.Trains;
 
 import android.test.AndroidTestCase;
 

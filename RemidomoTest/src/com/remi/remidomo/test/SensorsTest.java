@@ -13,10 +13,10 @@ import android.preference.PreferenceManager;
 import android.test.ServiceTestCase;
 import android.util.Log;
 
-import com.remi.remidomo.Energy;
-import com.remi.remidomo.RDService;
-import com.remi.remidomo.SensorData;
-import com.remi.remidomo.Sensors;
+import com.remi.remidomo.reloaded.Energy;
+import com.remi.remidomo.reloaded.RDService;
+import com.remi.remidomo.reloaded.SensorData;
+import com.remi.remidomo.reloaded.Sensors;
 
 public class SensorsTest extends ServiceTestCase<RDService> {
 	
