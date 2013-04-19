@@ -21,7 +21,7 @@ public class SensorPlotTest extends AndroidTestCase {
 		float value = 0.0f;
 		
 		for (int i=0; i<number; i++) {
-			series.addValue(new Date(tstamp), value, false);
+			series.addValue(new Date(tstamp), value, SensorData.CompressionType.NONE);
 			tstamp = tstamp + SAMPLE_PERIOD;
 			value = value + 0.1f;
 		}

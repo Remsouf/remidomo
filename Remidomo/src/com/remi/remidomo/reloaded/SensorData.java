@@ -29,6 +29,7 @@ public class SensorData {
 	public static final long HOURS_24 = 24*60*60*1000;
 	public static final long MINS_10 = 10*60*1000;
 	public static final long SAMPLING_PERIOD = 3*MINS_10;
+	public static final long SAMPLING_PERIOD_MEAN = MINS_10;
 
 	private RDService service;
 	
@@ -36,8 +37,11 @@ public class SensorData {
 	
 	private String name = null;
 	
+	private boolean meanCompressionToggle = false;
+
 	public enum DirType {INTERNAL, SDCARD};
 	public enum FileFormat {ASCII, BINARY};
+	public enum CompressionType {NONE, TIME_BASED, MEAN};
 	
 	public static class Pair {
 		public long time;
@@ -300,14 +304,14 @@ public class SensorData {
 	}
 
 	public void addValue(Date tstamp, float value) {
-		addValue(tstamp, value, true);
+		addValue(tstamp, value, CompressionType.NONE);
 	}
 
-	public synchronized void addValue(Date tstamp, float value, boolean compress) {
+	public synchronized void addValue(Date tstamp, float value, CompressionType compress) {
 		long tstampLong = tstamp.getTime();
 		
-		if (compress) {
-			// If not later than 10min, and below 0.5 delta,
+		if (compress == CompressionType.TIME_BASED) {
+			// If not later than 30min, and below 0.5 delta,
 			// just replace last value
 			if (data.size() >= 2) {
 				long lastLong1 = data.getLast().time;
@@ -325,8 +329,37 @@ public class SensorData {
 			} else {
 				data.addLast(new Pair(tstampLong, value));
 			}
-		} else {
+		} else if (compress == CompressionType.MEAN) {
+			float newValue = value;
+
+			if ((data.size() > 0) && meanCompressionToggle) {
+				newValue = (value + data.getLast().value) / 2;
+				data.removeLast();
+			}
+			data.addLast(new Pair(tstampLong, newValue));
+
+			meanCompressionToggle = !meanCompressionToggle;
+
+			// Now compress the usual way
+			// (here with 10min and below 50 delta)
+			if (data.size() >= 3) {
+				long lastLong1 = data.get(data.size()-2).time;
+				float lastVal1 = data.get(data.size()-2).value;
+				long lastLong2 = data.get(data.size()-3).time;
+				float lastVal2 = data.get(data.size()-3).value;
+				if ((tstampLong-lastLong1 < SAMPLING_PERIOD_MEAN) &&
+						(Math.abs(lastVal1 - newValue) < 50.0f) &&
+						(lastLong1-lastLong2 < SAMPLING_PERIOD_MEAN) &&
+						(Math.abs(lastVal2 - lastVal1) < 50.0f)) {
+					data.removeLast();
+					data.removeLast();
+					data.addLast(new Pair(tstampLong, newValue));
+				}
+			}
+		} else if (compress == CompressionType.NONE){
 			data.addLast(new Pair(tstampLong, value));
+		} else {
+			assert(false);
 		}
 		lastUpdate = tstamp;
 

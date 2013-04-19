@@ -2,7 +2,6 @@ package com.remi.remidomo.test;
 
 import java.io.DataInputStream;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringWriter;
 import java.util.Date;
@@ -18,6 +17,7 @@ public class SensorDataTest extends AndroidTestCase {
 
 	private final long MINS_1  = 1*60*1000;
 	private final long SAMPLING_P_EPSILON = SensorData.SAMPLING_PERIOD + MINS_1;
+	private final long SAMPLING_MEAN_EPSILON = SensorData.SAMPLING_PERIOD_MEAN + MINS_1;
 
 	private static SensorData data = null;
 	public void testAdd01() {
@@ -27,13 +27,13 @@ public class SensorDataTest extends AndroidTestCase {
 	}
 
 	public void testAdd02() {
-		data.addValue(new Date(0), 1.0f);
+		data.addValue(new Date(0), 1.0f, SensorData.CompressionType.TIME_BASED);
 		assertEquals(0, data.getFirst().time);
 		assertEquals(1.0f, data.getFirst().value);
 	}
 	
 	public void testAdd03() {
-		data.addValue(new Date(SAMPLING_P_EPSILON), 1.2f);
+		data.addValue(new Date(SAMPLING_P_EPSILON), 1.2f, SensorData.CompressionType.TIME_BASED);
 		assertEquals(0, data.getFirst().time);
 		assertEquals(1.0f, data.getFirst().value);
 		assertEquals(SAMPLING_P_EPSILON, data.get(1).time);
@@ -41,7 +41,7 @@ public class SensorDataTest extends AndroidTestCase {
 	}
 		
 	public void testAdd04() {
-		data.addValue(new Date(SAMPLING_P_EPSILON+5*MINS_1), 1.4f);
+		data.addValue(new Date(SAMPLING_P_EPSILON+5*MINS_1), 1.4f, SensorData.CompressionType.TIME_BASED);
 		assertEquals(0, data.getFirst().time);
 		assertEquals(1.0f, data.getFirst().value);
 		assertEquals(SAMPLING_P_EPSILON, data.get(1).time);
@@ -51,7 +51,7 @@ public class SensorDataTest extends AndroidTestCase {
 	}
 		
 	public void testAdd05() {
-		data.addValue(new Date(2*SAMPLING_P_EPSILON), 1.6f);
+		data.addValue(new Date(2*SAMPLING_P_EPSILON), 1.6f, SensorData.CompressionType.TIME_BASED);
 		assertEquals(0, data.getFirst().time);
 		assertEquals(1.0f, data.getFirst().value);
 		assertEquals(SAMPLING_P_EPSILON, data.get(1).time);
@@ -61,7 +61,7 @@ public class SensorDataTest extends AndroidTestCase {
 	}
 		
 	public void testAdd06() {
-		data.addValue(new Date(2*SAMPLING_P_EPSILON+MINS_1), 1.8f);
+		data.addValue(new Date(2*SAMPLING_P_EPSILON+MINS_1), 1.8f, SensorData.CompressionType.TIME_BASED);
 		assertEquals(0, data.getFirst().time);
 		assertEquals(1.0f, data.getFirst().value);
 		assertEquals(SAMPLING_P_EPSILON, data.get(1).time);
@@ -73,7 +73,7 @@ public class SensorDataTest extends AndroidTestCase {
 	}
 	
 	public void testAdd07() {
-		data.addValue(new Date(2*SAMPLING_P_EPSILON+2*MINS_1), 1.81f);
+		data.addValue(new Date(2*SAMPLING_P_EPSILON+2*MINS_1), 1.81f, SensorData.CompressionType.TIME_BASED);
 		assertEquals(0, data.getFirst().time);
 		assertEquals(1.0f, data.getFirst().value);
 		assertEquals(SAMPLING_P_EPSILON, data.get(1).time);
@@ -85,7 +85,7 @@ public class SensorDataTest extends AndroidTestCase {
 	}
 		
 	public void testAdd08() {
-		data.addValue(new Date(2*SAMPLING_P_EPSILON+3*MINS_1), 1.82f);
+		data.addValue(new Date(2*SAMPLING_P_EPSILON+3*MINS_1), 1.82f, SensorData.CompressionType.TIME_BASED);
 		assertEquals(2*SAMPLING_P_EPSILON, data.get(2).time);
 		assertEquals(1.6f, data.get(2).value);		
 		assertEquals(2*SAMPLING_P_EPSILON+3*MINS_1, data.get(3).time);
@@ -93,7 +93,7 @@ public class SensorDataTest extends AndroidTestCase {
 	}
 	
 	public void testAdd09() {
-		data.addValue(new Date(3*SAMPLING_P_EPSILON), 1.8f);
+		data.addValue(new Date(3*SAMPLING_P_EPSILON), 1.8f, SensorData.CompressionType.TIME_BASED);
 		assertEquals(2*SAMPLING_P_EPSILON, data.get(2).time);
 		assertEquals(1.6f, data.get(2).value);		
 		assertEquals(3*SAMPLING_P_EPSILON, data.get(3).time);
@@ -101,7 +101,7 @@ public class SensorDataTest extends AndroidTestCase {
 	}
 	
 	public void testAdd10() {
-		data.addValue(new Date(3*SAMPLING_P_EPSILON+MINS_1), 5.0f);
+		data.addValue(new Date(3*SAMPLING_P_EPSILON+MINS_1), 5.0f, SensorData.CompressionType.TIME_BASED);
 		assertEquals(2*SAMPLING_P_EPSILON, data.get(2).time);
 		assertEquals(1.6f, data.get(2).value);		
 		assertEquals(3*SAMPLING_P_EPSILON, data.get(3).time);
@@ -111,7 +111,7 @@ public class SensorDataTest extends AndroidTestCase {
 	}
 	
 	public void testAdd11() {
-		data.addValue(new Date(3*SAMPLING_P_EPSILON+2*MINS_1), 8.0f);
+		data.addValue(new Date(3*SAMPLING_P_EPSILON+2*MINS_1), 8.0f, SensorData.CompressionType.TIME_BASED);
 		assertEquals(2*SAMPLING_P_EPSILON, data.get(2).time);
 		assertEquals(1.6f, data.get(2).value);		
 		assertEquals(3*SAMPLING_P_EPSILON, data.get(3).time);
@@ -122,6 +122,54 @@ public class SensorDataTest extends AndroidTestCase {
 		assertEquals(8.0f, data.get(5).value);
 	}
 	
+	public void testMean01() {
+		// Only mean/original value alternance
+		data = new SensorData("testAdd1", null, false);
+		data.addValue(new Date(0), 0.0f, SensorData.CompressionType.MEAN);
+		assertEquals(0.0f, data.get(0).value);
+
+		data.addValue(new Date(SAMPLING_MEAN_EPSILON), 100.0f, SensorData.CompressionType.MEAN);
+		assertEquals(1, data.size());
+		assertEquals(50.0f, data.get(0).value);
+
+		data.addValue(new Date(2*SAMPLING_MEAN_EPSILON), 200.0f, SensorData.CompressionType.MEAN);
+		assertEquals(2, data.size());
+		assertEquals(50.0f, data.get(0).value);
+		assertEquals(200.0f, data.get(1).value);
+
+		data.addValue(new Date(3*SAMPLING_MEAN_EPSILON), 300.0f, SensorData.CompressionType.MEAN);
+		assertEquals(2, data.size());
+		assertEquals(50.0f, data.get(0).value);
+		assertEquals(250.0f, data.get(1).value);
+
+		data.addValue(new Date(4*SAMPLING_MEAN_EPSILON), 400.0f, SensorData.CompressionType.MEAN);
+		assertEquals(3, data.size());
+		assertEquals(50.0f, data.get(0).value);
+		assertEquals(250.0f, data.get(1).value);
+		assertEquals(400.0f, data.get(2).value);
+
+		data.addValue(new Date(5*SAMPLING_MEAN_EPSILON), 500.0f, SensorData.CompressionType.MEAN);
+		assertEquals(3, data.size());
+		assertEquals(50.0f, data.get(0).value);
+		assertEquals(250.0f, data.get(1).value);
+		assertEquals(450.0f, data.get(2).value);
+	}
+
+	public void testMean02() {
+		// With time-based compression
+		data = new SensorData("testAdd1", null, false);
+		data.addValue(new Date(0), 0.0f, SensorData.CompressionType.MEAN);
+		data.addValue(new Date(SAMPLING_MEAN_EPSILON/2), 100.0f, SensorData.CompressionType.MEAN);
+		data.addValue(new Date(SAMPLING_MEAN_EPSILON), 0.0f, SensorData.CompressionType.MEAN);
+		data.addValue(new Date(3*SAMPLING_MEAN_EPSILON/2), 100.0f, SensorData.CompressionType.MEAN);
+		data.addValue(new Date(2*SAMPLING_MEAN_EPSILON), 0.0f, SensorData.CompressionType.MEAN);
+		data.addValue(new Date(5*SAMPLING_MEAN_EPSILON/2), 100.0f, SensorData.CompressionType.MEAN);
+		assertEquals(3, data.size());
+		assertEquals(50.0f, data.get(0).value);
+		assertEquals(50.0f, data.get(1).value);
+		assertEquals(50.0f, data.get(2).value);
+	}
+
 	public void testWriteJSON() {
 		data = new SensorData("testJSON", null, false);
 		data.addValue(new Date(0), 1.0f);

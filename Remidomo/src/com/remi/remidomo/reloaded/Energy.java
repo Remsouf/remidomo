@@ -146,12 +146,7 @@ public class Energy {
     	}
 
     	if ("power".equals(type)) {
-    		/* DISABLED
-    		 * Avoid memory issues...
-    		 */
-    		power.clearData();
-
-    		power.addValue(new Date(), msg.getFloatNamedValue("current"));
+    		power.addValue(new Date(), msg.getFloatNamedValue("current"), SensorData.CompressionType.MEAN);
     		String unit = msg.getNamedValue("units");
     		assert (unit.equals("kW"));
 

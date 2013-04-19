@@ -87,7 +87,7 @@ public class ThreadingTest extends ServiceTestCase<RDService> {
     			}
 
     			// No data compression
-    			sensors.updateData(service, msg, false);
+    			sensors.updateData(service, msg, SensorData.CompressionType.NONE);
     			assertEquals(20.0f, sensors.getData(Sensors.ID_POOL_T).getLast().value);
     		}
     	}
