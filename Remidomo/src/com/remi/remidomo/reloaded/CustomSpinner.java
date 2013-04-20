@@ -1,16 +1,21 @@
 package com.remi.remidomo.reloaded;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
-import android.graphics.Rect;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class CustomSpinner extends View {
 
@@ -35,10 +40,39 @@ public class CustomSpinner extends View {
 	private int max=100;
 
 	private Paint paint;
-	private Rect textBounds;
+
+	// Resource id for the related EditText
+	private int linkedEditTextId;
+	private EditText linkedEditText;
+
+	// Watcher for the optional EditText
+	private TextView.OnEditorActionListener editListener = new TextView.OnEditorActionListener() {
+	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+	        if (actionId == EditorInfo.IME_ACTION_DONE) {
+	        	try {
+					value = Integer.parseInt(v.getText().toString());
+					value = Math.max(value, min);
+					value = Math.min(value, max);
+
+					// Update in case of boundary fix
+					if (!String.valueOf(getCurrent()).equals(v.getText().toString())) {
+						updateEditText();
+						return true;
+					}
+				} catch (NumberFormatException ignored) {}
+	        }
+	        return false;
+	    }
+	};
 
 	public CustomSpinner(Context context, AttributeSet attrs) {
 		super(context, attrs);
+
+		TypedArray a = context.obtainStyledAttributes(attrs,
+				R.styleable.CustomSpinner);
+		linkedEditTextId = a.getResourceId(R.styleable.CustomSpinner_linked_edit_text, -1);
+		a.recycle();
+
 		initSpinner();
 	}
 
@@ -46,8 +80,6 @@ public class CustomSpinner extends View {
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paint.setTextAlign(Paint.Align.CENTER);
 		paint.setTextSize(TEXT_SIZE);
-
-		textBounds = new Rect();
 	}
 
 	public void setMinimum(int min) {
@@ -64,9 +96,15 @@ public class CustomSpinner extends View {
 
 	public void setCurrent(int value) {
 		this.value = value;
-
+		updateEditText();
 		requestLayout();
 		invalidate();
+	}
+
+	private void updateEditText() {
+		if (linkedEditText != null) {
+			linkedEditText.setText(String.valueOf((int)Math.round(value)));
+		}
 	}
 
 	@Override
@@ -120,15 +158,23 @@ public class CustomSpinner extends View {
 		drawWidth = w;
 		drawHeight = h;
 		super.onSizeChanged(w, h, oldw, oldh);
+
+		/* Take the opportunity to establish link with EditText */
+		RelativeLayout parent = (RelativeLayout) getParent();
+		linkedEditText = (EditText) parent.findViewById(linkedEditTextId);
+		if (linkedEditText != null) {
+			linkedEditText.setOnEditorActionListener(editListener);
+			updateEditText();
+		}
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {      
 
-		String centralText = String.valueOf((int)value);
+		//String centralText = String.valueOf((int)value);
 		int minSize = Math.min(drawWidth,  drawHeight);
 
-		paint.getTextBounds(centralText, 0, centralText.length(), textBounds);
+		//paint.getTextBounds(centralText, 0, centralText.length(), textBounds);
 
 		// Outer circle
 		circleRadius = (minSize-CIRCLE_THICKNESS)/2;
@@ -141,12 +187,6 @@ public class CustomSpinner extends View {
 		Shader shader = new LinearGradient(drawWidth/2, drawHeight/2, drawWidth, drawHeight, colors, null, Shader.TileMode.MIRROR);
 		paint.setShader(shader);
 		canvas.drawCircle(drawWidth/2, drawHeight/2, circleRadius, paint);
-
-		// Central text
-		paint.setColor(Color.WHITE);
-		paint.setStrokeWidth(0);
-		paint.setShader(null);
-		canvas.drawText(centralText, drawWidth/2, drawHeight/2-textBounds.centerY(), paint);
 
 		// Knob
 		paint.setColor(Color.BLACK);
@@ -210,9 +250,11 @@ public class CustomSpinner extends View {
 
 			angle = newAngle;
 
+			updateEditText();
 			invalidate();
+			return true;
+		} else {
+			return false;
 		}
-
-		return true;
 	}
 }

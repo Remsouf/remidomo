@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res/com.remi.remidomo.reloaded"
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
+
+ <EditText
+    android:id="@+id/prefSpinnerEdit"
+    android:layout_width="75dp"
+    android:layout_height="wrap_content"
+    android:inputType="number"
+    android:layout_centerInParent="true" />
+
   <com.remi.remidomo.reloaded.CustomSpinner
     android:id="@+id/prefSpinner"
     android:layout_height="fill_parent"
-    android:layout_width="fill_parent" />
-</LinearLayout>
+    android:layout_width="fill_parent"
+    app:linked_edit_text="@id/prefSpinnerEdit" />
+
+</RelativeLayout>

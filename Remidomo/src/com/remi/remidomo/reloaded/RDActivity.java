@@ -60,6 +60,8 @@ public class RDActivity extends Activity implements OnGestureListener {
 	private static final int SWIPE_MIN_DISTANCE = 60;
     private static final int SWIPE_THRESHOLD_VELOCITY = 100;
     
+    // Not an enum, because it also represents
+    // index into the flipper view
     public static final int DASHBOARD_VIEW_ID = 0;
     public static final int TEMP_VIEW_ID = 1;
     public static final int POOL_VIEW_ID = 2;
