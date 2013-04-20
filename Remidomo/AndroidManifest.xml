@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.remi.remidomo.reloaded"
-    android:versionCode="200"
-    android:versionName="2.0" >
+    android:versionCode="201"
+    android:versionName="2.01" >
 
-    <uses-sdk android:minSdkVersion="10"
-              android:targetSdkVersion="10" />
+    <uses-sdk android:minSdkVersion="15"
+              android:targetSdkVersion="17" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
