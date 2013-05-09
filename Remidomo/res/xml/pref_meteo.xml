@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.remi.remidomo.reloaded"
+    android:icon="@drawable/pref_meteo"
+    android:title="@string/pref_meteo" >
+
+    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+        android:dialogTitle="@string/pref_meteo_dialog"
+        android:key="meteo_poll"
+        android:persistent="true"
+        android:summary="@string/pref_meteo_summary"
+        android:title="@string/pref_meteo_title"
+        app:defaultVal="4"
+        app:max="12"
+        app:min="1" />
+
+</PreferenceScreen>

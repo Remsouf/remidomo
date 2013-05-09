@@ -1,0 +1,38 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.remi.remidomo.reloaded"
+    android:icon="@drawable/pref_plots"
+    android:title="@string/pref_plots" >
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="night_highlight"
+        android:persistent="true"
+        android:summaryOff="@string/pref_night_summary_off"
+        android:summaryOn="@string/pref_night_summary_on"
+        android:title="@string/pref_night_title" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="dots_highlight"
+        android:persistent="true"
+        android:summaryOff="@string/pref_dots_summary_off"
+        android:summaryOn="@string/pref_dots_summary_on"
+        android:title="@string/pref_dots_title" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="day_labels"
+        android:persistent="true"
+        android:summaryOff="@string/pref_days_summary_off"
+        android:summaryOn="@string/pref_days_summary_on"
+        android:title="@string/pref_days_title" />
+
+    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+        android:dialogTitle="@string/pref_plotlimit_dialog"
+        android:key="plot_limit"
+        android:persistent="true"
+        android:summary="@string/pref_plotlimit_summary"
+        android:title="@string/pref_plotlimit_title"
+        app:defaultVal="10"
+        app:max="30"
+        app:min="1" />
+
+</PreferenceScreen>

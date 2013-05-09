@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.androidplot.xy.SimpleXYSeries;
+import com.remi.remidomo.reloaded.prefs.PrefsGeneral;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -365,7 +366,7 @@ public class SensorData {
 
 		if (service != null) {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.service);
-			int maxHistory = prefs.getInt("loglimit", Preferences.DEFAULT_LOGLIMIT);
+			int maxHistory = prefs.getInt("loglimit", PrefsGeneral.DEFAULT_LOGLIMIT);
 			long tstampLimit = tstampLong - maxHistory*HOURS_24;
 			while ((data.size() > 0) && (data.getFirst().time < tstampLimit)) {
 				data.removeFirst();

@@ -32,6 +32,10 @@ import org.apache.http.protocol.ResponseServer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.remi.remidomo.reloaded.prefs.PrefsEnergy;
+import com.remi.remidomo.reloaded.prefs.PrefsPlots;
+import com.remi.remidomo.reloaded.prefs.PrefsService;
+
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -94,8 +98,8 @@ public class ServerThread implements Runnable {
 		this.service = service;
 		prefs = PreferenceManager.getDefaultSharedPreferences(service);
 		
-		plotDays = prefs.getInt("plot_limit", Preferences.DEFAULT_PLOTLIMIT);
-		energyDays = prefs.getInt("energy_limit", Preferences.DEFAULT_ENERGYLIMIT);
+		plotDays = prefs.getInt("plot_limit", PrefsPlots.DEFAULT_PLOTLIMIT);
+		energyDays = prefs.getInt("energy_limit", PrefsEnergy.DEFAULT_ENERGYLIMIT);
 
         // HTTP objects
         httpContext = new BasicHttpContext();
@@ -145,7 +149,7 @@ public class ServerThread implements Runnable {
 	}
 
 	public void run() {
-		int port = prefs.getInt("port", Preferences.DEFAULT_PORT);
+		int port = prefs.getInt("port", PrefsService.DEFAULT_PORT);
 
 		try {
 			int counter = 10;
@@ -821,11 +825,11 @@ public class ServerThread implements Runnable {
 				        energy.put("energy", energyValue);
 
 				        Date hcHour = new Date();
-						hcHour.setHours(prefs.getInt("hc_hour.hour", Preferences.DEFAULT_HCHOUR));
+						hcHour.setHours(prefs.getInt("hc_hour.hour", PrefsEnergy.DEFAULT_HCHOUR));
 						hcHour.setMinutes(prefs.getInt("hc_hour.minute", 0));
 
 						Date hpHour = new Date();
-						hpHour.setHours(prefs.getInt("hp_hour.hour", Preferences.DEFAULT_HPHOUR));
+						hpHour.setHours(prefs.getInt("hp_hour.hour", PrefsEnergy.DEFAULT_HPHOUR));
 						hpHour.setMinutes(prefs.getInt("hp_hour.minute", 0));
 
 						Date now = new Date();

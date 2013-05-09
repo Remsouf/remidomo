@@ -1,5 +1,7 @@
 package com.remi.remidomo.reloaded;
 
+import com.remi.remidomo.reloaded.prefs.PrefsService;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +12,7 @@ public class BatteryReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
+		String mode = prefs.getString("mode", PrefsService.DEFAULT_MODE);
 		if ("Serveur".equals(mode)) {
 			// Just bounce the same action to the service
 			Intent serviceIntent = new Intent();

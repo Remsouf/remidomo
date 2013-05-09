@@ -1,0 +1,27 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.remi.remidomo.reloaded"
+    android:icon="@drawable/pref_general"
+    android:title="@string/pref_general" >
+
+    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+        android:dialogTitle="@string/pref_storelimit_dialog"
+        android:key="loglimit"
+        android:persistent="true"
+        android:summary="@string/pref_storelimit_summary"
+        android:title="@string/pref_storelimit_title"
+        app:defaultVal="365"
+        app:max="1000"
+        app:min="30" />
+
+    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+        android:dialogTitle="@string/pref_poll_dialog"
+        android:key="client_poll"
+        android:persistent="true"
+        android:summary="@string/pref_poll_summary"
+        android:title="@string/pref_client_poll_title"
+        app:defaultVal="60"
+        app:max="500"
+        app:min="5" />
+
+</PreferenceScreen>

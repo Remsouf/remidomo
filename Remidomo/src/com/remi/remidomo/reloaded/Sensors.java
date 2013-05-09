@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.remi.remidomo.reloaded.SensorData.Pair;
+import com.remi.remidomo.reloaded.prefs.PrefsService;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -246,8 +247,8 @@ public class Sensors {
     }
     
     public void syncWithServer() {
-		int port = prefs.getInt("port", Preferences.DEFAULT_PORT);
-		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
+		int port = prefs.getInt("port", PrefsService.DEFAULT_PORT);
+		String ipAddr = prefs.getString("ip_address", PrefsService.DEFAULT_IP);
 		Log.d(TAG, "Client Thread connecting to " + ipAddr + ":" + port);
 		service.addLog("Connexion au serveur " + ipAddr + ":" + port + " (MAJ sondes)");
 

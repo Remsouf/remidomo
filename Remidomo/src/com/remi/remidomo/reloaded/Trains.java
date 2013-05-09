@@ -14,6 +14,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.remi.remidomo.reloaded.prefs.PrefsTrain;
+
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -95,7 +97,7 @@ public class Trains {
 	public void updateData(RDService service) {
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(service);
-		String gare = prefs.getString("gare", Preferences.DEFAULT_GARE);
+		String gare = prefs.getString("gare", PrefsTrain.DEFAULT_GARE);
 
 		JSONObject gareGOC = getStationData(service, "GOC");
 		JSONObject gareGRE = getStationData(service, "GRE");

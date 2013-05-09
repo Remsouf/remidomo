@@ -26,15 +26,15 @@ import android.util.Log;
 
 import com.remi.remidomo.reloaded.Doors;
 import com.remi.remidomo.reloaded.Energy;
-import com.remi.remidomo.reloaded.Preferences;
 import com.remi.remidomo.reloaded.RDService;
 import com.remi.remidomo.reloaded.SensorData;
 import com.remi.remidomo.reloaded.Sensors;
 import com.remi.remidomo.reloaded.ServerThread;
+import com.remi.remidomo.reloaded.prefs.PrefsService;
 
 public class ServerTest extends ServiceTestCase<RDService> {
 	
-	private final static String URL = "http://localhost:" + Preferences.DEFAULT_PORT;
+	private final static String URL = "http://localhost:" + PrefsService.DEFAULT_PORT;
 
 	public ServerTest() {
 		super(RDService.class);

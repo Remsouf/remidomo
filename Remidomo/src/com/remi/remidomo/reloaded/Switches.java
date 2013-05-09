@@ -12,6 +12,8 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 
+import com.remi.remidomo.reloaded.prefs.PrefsService;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -57,7 +59,7 @@ public class Switches {
 		if ((index >= 0) && (index < MAX_SWITCHES)) {
 			states[index] = ! states[index];
 		
-			String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
+			String mode = prefs.getString("mode", PrefsService.DEFAULT_MODE);
 	        if ("Serveur".equals(mode)) {
 	        	sendRfxMessage(index, states[index]);
 	        	service.pushToClients(PushSender.SWITCH, index, Boolean.toString(states[index]));
@@ -86,8 +88,8 @@ public class Switches {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("switch_" + index, states[index]);
         editor.commit();
-        
-        String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
+
+        String mode = prefs.getString("mode", PrefsService.DEFAULT_MODE);
         if ("Serveur".equals(mode)) {
         	sendRfxMessage(index, states[index]);
         }
@@ -140,7 +142,7 @@ public class Switches {
    		new Thread(new Runnable() {
 			public void run() {
 
-				int port = prefs.getInt("rfx_port", Preferences.DEFAULT_RFX_PORT);
+				int port = prefs.getInt("rfx_port", PrefsService.DEFAULT_RFX_PORT);
 				InetAddress destination;
 				try {
 					// Could be ip address of RFX-Lan... save pref !
@@ -225,8 +227,8 @@ public class Switches {
 	}
 
 	public synchronized void syncWithServer() {
-		int port = prefs.getInt("port", Preferences.DEFAULT_PORT);
-		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
+		int port = prefs.getInt("port", PrefsService.DEFAULT_PORT);
+		String ipAddr = prefs.getString("ip_address", PrefsService.DEFAULT_IP);
 		Log.d(TAG, "Client switches connecting to " + ipAddr + ":" + port);
 		service.addLog("Connexion au serveur " + ipAddr + ":" + port + " (MAJ commandes)");
 
@@ -270,8 +272,8 @@ public class Switches {
 	public void sendServerMessage(final int index, final boolean state) {
 		new Thread(new Runnable() {
 			public void run() {
-				int port = prefs.getInt("port", Preferences.DEFAULT_PORT);
-				String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
+				int port = prefs.getInt("port", PrefsService.DEFAULT_PORT);
+				String ipAddr = prefs.getString("ip_address", PrefsService.DEFAULT_IP);
 
 				String url = ipAddr + ":" + port + "/switches/toggle?id=" + index + "&cmd=";
 				if (state) {

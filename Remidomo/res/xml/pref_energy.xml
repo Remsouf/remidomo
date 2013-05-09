@@ -1,0 +1,48 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.remi.remidomo.reloaded"
+    android:icon="@drawable/pref_energy"
+    android:title="@string/pref_energy" >
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="tarif_highlight"
+        android:persistent="true"
+        android:summaryOff="@string/pref_tarif_summary_off"
+        android:summaryOn="@string/pref_tarif_summary_on"
+        android:title="@string/pref_tarif_title" />
+
+    <com.remi.remidomo.reloaded.CustomTimePickerPreference
+        android:dialogLayout="@layout/time_preference"
+        android:key="hc_hour"
+        android:persistent="true"
+        android:summary="@string/pref_hchour_summary"
+        android:title="@string/pref_hchour_title"
+        app:defaultValue="23" />
+    <com.remi.remidomo.reloaded.CustomTimePickerPreference
+        android:dialogLayout="@layout/time_preference"
+        android:key="hp_hour"
+        android:persistent="true"
+        android:summary="@string/pref_hphour_summary"
+        android:title="@string/pref_hphour_title"
+        app:defaultValue="7" />
+
+    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+        android:dialogTitle="@string/pref_energylimit_dialog"
+        android:key="energy_limit"
+        android:persistent="true"
+        android:summary="@string/pref_energylimit_summary"
+        android:title="@string/pref_energylimit_title"
+        app:defaultVal="2"
+        app:max="10"
+        app:min="1" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="energy_graph"
+        android:persistent="true"
+        android:summaryOff="@string/pref_energy_graph_off"
+        android:summaryOn="@string/pref_energy_graph_on"
+        android:title="@string/pref_energy_graph_title" />
+
+</PreferenceScreen>

@@ -11,6 +11,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.remi.remidomo.reloaded.prefs.PrefsEnergy;
+import com.remi.remidomo.reloaded.prefs.PrefsService;
+
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -99,7 +102,7 @@ public class Energy {
     public void updatePowerStatus(boolean status) {
     	powerStatus = status;
 
-    	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
+    	String mode = prefs.getString("mode", PrefsService.DEFAULT_MODE);
     	if ("Serveur".equals(mode)) {
     		if (powerStatus) {
     			if (powerLossTimestamp != 0) {
@@ -207,12 +210,12 @@ public class Energy {
     }
 
     public synchronized void syncWithServer() {
-		int port = prefs.getInt("port", Preferences.DEFAULT_PORT);
-		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
+		int port = prefs.getInt("port", PrefsService.DEFAULT_PORT);
+		String ipAddr = prefs.getString("ip_address", PrefsService.DEFAULT_IP);
 		Log.d(TAG, "Client Thread connecting to " + ipAddr + ":" + port);
 		service.addLog("Connexion au serveur " + ipAddr + ":" + port + " (MAJ sondes)");
 
-		boolean graph = prefs.getBoolean("energy_graph", Preferences.DEFAULT_ENERGY_GRAPH);
+		boolean graph = prefs.getBoolean("energy_graph", PrefsEnergy.DEFAULT_ENERGY_GRAPH);
 
 		try {
 			HttpClient client = new DefaultHttpClient();

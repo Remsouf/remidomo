@@ -1,0 +1,14 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:icon="@drawable/pref_notif"
+    android:title="@string/pref_notifications" >
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="notif_sound"
+        android:persistent="true"
+        android:summaryOff="@string/pref_sound_summary_off"
+        android:summaryOn="@string/pref_sound_summary_on"
+        android:title="@string/pref_sound_title" />
+
+</PreferenceScreen>

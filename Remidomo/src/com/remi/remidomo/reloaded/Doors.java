@@ -15,6 +15,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.remi.remidomo.reloaded.prefs.PrefsService;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -112,7 +114,7 @@ public class Doors {
         
 		// Play sound if transitioning to opened/closed,
         // and if not server
-        String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
+        String mode = prefs.getString("mode", PrefsService.DEFAULT_MODE);
 		if ("Client".equals(mode) && enable_alert) {
 			if (index == GARAGE) {
 				if (states[GARAGE] == State.CLOSED) {
@@ -142,8 +144,8 @@ public class Doors {
 	}
 	
 	public synchronized void syncWithServer() {
-		int port = prefs.getInt("port", Preferences.DEFAULT_PORT);
-		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
+		int port = prefs.getInt("port", PrefsService.DEFAULT_PORT);
+		String ipAddr = prefs.getString("ip_address", PrefsService.DEFAULT_IP);
 		Log.d(TAG, "Client switches connecting to " + ipAddr + ":" + port);
 		service.addLog("Connexion au serveur " + ipAddr + ":" + port + " (MAJ portes)");
 

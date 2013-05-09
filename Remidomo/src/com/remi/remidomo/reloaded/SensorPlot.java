@@ -38,6 +38,8 @@ import com.androidplot.xy.XYRegionFormatter;
 import com.androidplot.xy.XYStepMode;
 import com.androidplot.xy.YLayoutStyle;
 import com.androidplot.xy.YPositionMetric;
+import com.remi.remidomo.reloaded.prefs.PrefsEnergy;
+import com.remi.remidomo.reloaded.prefs.PrefsPlots;
 
 public class SensorPlot extends XYPlot implements OnTouchListener {
 	
@@ -220,9 +222,9 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 			int effDaysBack = daysBack;
 			if (effDaysBack == 0) {
 				if (tarifCompatible) {
-					effDaysBack = prefs.getInt("energy_limit", Preferences.DEFAULT_ENERGYLIMIT);
+					effDaysBack = prefs.getInt("energy_limit", PrefsEnergy.DEFAULT_ENERGYLIMIT);
 				} else {
-					effDaysBack = prefs.getInt("plot_limit", Preferences.DEFAULT_PLOTLIMIT);
+					effDaysBack = prefs.getInt("plot_limit", PrefsPlots.DEFAULT_PLOTLIMIT);
 				}
 			}
 
@@ -230,7 +232,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 			filteredSeries = series.filter(limit);
 
 			int dotsEffectiveColor = 0;
-			if (prefs.getBoolean("dots_highlight", Preferences.DEFAULT_DOTS_HIGHLIGHT)) {
+			if (prefs.getBoolean("dots_highlight", PrefsPlots.DEFAULT_DOTS_HIGHLIGHT)) {
 				dotsEffectiveColor = dotsColor;
 			} else {
 				dotsEffectiveColor = Color.argb(0, 0, 0, 0);
@@ -246,14 +248,14 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 			LineAndPointFormatter formatter  = new LineAndPointFormatter(curveEffectiveColor, dotsEffectiveColor, null);
 			XYRegionFormatter regionFormatter;
 			
-			if (!prefs.getBoolean("dots_highlight", Preferences.DEFAULT_DOTS_HIGHLIGHT)) {
+			if (!prefs.getBoolean("dots_highlight", PrefsPlots.DEFAULT_DOTS_HIGHLIGHT)) {
 				formatter.setVertexPaint(null);
 			}
 
 			// Get initial timestamp, and force 20:00 as starting point
 			if (nightsCompatible) {
 				regionFormatter = new XYRegionFormatter(nightsColor);
-				if (prefs.getBoolean("night_highlight", Preferences.DEFAULT_NIGHT_HIGHLIGHT) &&
+				if (prefs.getBoolean("night_highlight", PrefsPlots.DEFAULT_NIGHT_HIGHLIGHT) &&
 						(filteredSeries.size() > 0)) {
 					Date startDate = new Date(filteredSeries.getX(0).longValue());
 					startDate.setHours(20);
@@ -269,7 +271,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 				}
 			}
 
-			if (prefs.getBoolean("day_labels", Preferences.DEFAULT_DAY_LABELS) &&
+			if (prefs.getBoolean("day_labels", PrefsPlots.DEFAULT_DAY_LABELS) &&
 					(filteredSeries.size() > 0)) {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("E");
 				Date startDate = new Date(filteredSeries.getX(0).longValue());
@@ -292,13 +294,13 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 
 			if (tarifCompatible) {
 				regionFormatter = new XYRegionFormatter(tarifColor);
-				if (prefs.getBoolean("tarif_highlight", Preferences.DEFAULT_TARIF_HIGHLIGHT) &&
+				if (prefs.getBoolean("tarif_highlight", PrefsEnergy.DEFAULT_TARIF_HIGHLIGHT) &&
 						(filteredSeries.size() > 0)) {
 					Date startDate = new Date(filteredSeries.getX(0).longValue());
-					startDate.setHours(prefs.getInt("hp_hour.hour", Preferences.DEFAULT_HPHOUR));
+					startDate.setHours(prefs.getInt("hp_hour.hour", PrefsEnergy.DEFAULT_HPHOUR));
 					startDate.setMinutes(prefs.getInt("hp_hour.minute", 0));
 					Date endDate = new Date(filteredSeries.getX(0).longValue());
-					endDate.setHours(prefs.getInt("hc_hour.hour", Preferences.DEFAULT_HCHOUR));
+					endDate.setHours(prefs.getInt("hc_hour.hour", PrefsEnergy.DEFAULT_HCHOUR));
 					endDate.setMinutes(prefs.getInt("hc_hour.minute", 0));
 					long deltaTime = endDate.getTime() - startDate.getTime();
 					long currentX = startDate.getTime();

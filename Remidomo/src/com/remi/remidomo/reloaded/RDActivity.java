@@ -5,6 +5,10 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.remi.remidomo.reloaded.prefs.PreferencesActivity;
+import com.remi.remidomo.reloaded.prefs.PrefsEnergy;
+import com.remi.remidomo.reloaded.prefs.PrefsService;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -182,7 +186,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         ImageButton settings = (ImageButton) findViewById(R.id.settingsButton);
         settings.setOnClickListener(new ImageButton.OnClickListener() {
         	public void onClick(View v) {
-        		startActivity(new Intent(RDActivity.this, Preferences.class));
+        		startActivity(new Intent(RDActivity.this, PreferencesActivity.class));
         	}
         });
 
@@ -436,7 +440,7 @@ public class RDActivity extends Activity implements OnGestureListener {
         ImageButton switchesHistoryButton = (ImageButton) findViewById(R.id.history_clear);
         ImageButton resetEnergy = (ImageButton) findViewById(R.id.energyreset_button);
 
-    	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
+    	String mode = prefs.getString("mode", PrefsService.DEFAULT_MODE);
         if ("Serveur".equals(mode)) {
         	refresh.setVisibility(View.GONE);
         	serverLogButton.setVisibility(View.GONE);
@@ -469,7 +473,7 @@ public class RDActivity extends Activity implements OnGestureListener {
     @Override
     protected void onDestroy() {
 
-    	if (!prefs.getBoolean("keepservice", Preferences.DEFAULT_KEEPSERVICE)) {
+    	if (!prefs.getBoolean("keepservice", PrefsService.DEFAULT_KEEPSERVICE)) {
     		if (service != null) {
     			service.stopAtActivityRequest();
     		}
@@ -604,8 +608,8 @@ public class RDActivity extends Activity implements OnGestureListener {
 
 		});
 
-		int port = prefs.getInt("port", Preferences.DEFAULT_PORT);
-		String ipAddr = prefs.getString("ip_address", Preferences.DEFAULT_IP);
+		int port = prefs.getInt("port", PrefsService.DEFAULT_PORT);
+		String ipAddr = prefs.getString("ip_address", PrefsService.DEFAULT_IP);
 
 		remoteContent.clearView();
 		remoteContent.loadUrl(ipAddr + ":" + port + "/log");
@@ -627,7 +631,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 			}
 			return true;
 		case R.id.settings:
-			startActivity(new Intent(RDActivity.this, Preferences.class));
+			startActivity(new Intent(RDActivity.this, PreferencesActivity.class));
 			return true;
 		}
 
@@ -905,11 +909,11 @@ public class RDActivity extends Activity implements OnGestureListener {
         }
 
 		Date hcHour = new Date();
-		hcHour.setHours(prefs.getInt("hc_hour.hour", Preferences.DEFAULT_HCHOUR));
+		hcHour.setHours(prefs.getInt("hc_hour.hour", PrefsEnergy.DEFAULT_HCHOUR));
 		hcHour.setMinutes(prefs.getInt("hc_hour.minute", 0));
 
 		Date hpHour = new Date();
-		hpHour.setHours(prefs.getInt("hp_hour.hour", Preferences.DEFAULT_HPHOUR));
+		hpHour.setHours(prefs.getInt("hp_hour.hour", PrefsEnergy.DEFAULT_HPHOUR));
 		hpHour.setMinutes(prefs.getInt("hp_hour.minute", 0));
 
 		Date now = new Date();

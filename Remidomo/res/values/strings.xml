@@ -22,7 +22,7 @@
 
     <!-- Preferences -->
     <string name="pref_mode_title">Mode</string>
-    <string name="pref_mode_summary">Sélectionner le mode réseau</string>
+    <string name="pref_mode_summary">En mode %1$s</string>
     <string name="pref_ip_title">Adresse IP serveur</string>
     <string name="pref_ip_summary">Adresse IP du serveur</string>
     <string name="pref_ip_dialog">Adresse IP du serveur</string>    

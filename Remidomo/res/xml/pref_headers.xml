@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+   
+
+    <header
+        android:fragment="com.remi.remidomo.reloaded.prefs.PrefsService"
+        android:icon="@drawable/pref_network"
+        android:title="@string/pref_service" >
+    </header>
+
+    <header
+        android:fragment="com.remi.remidomo.reloaded.prefs.PrefsGeneral"
+        android:icon="@drawable/pref_general"
+        android:title="@string/pref_general" >
+    </header>
+    
+    <header
+        android:fragment="com.remi.remidomo.reloaded.prefs.PrefsTrain"
+        android:icon="@drawable/pref_train"
+        android:title="@string/pref_sncf" >
+    </header>
+
+    <header
+        android:fragment="com.remi.remidomo.reloaded.prefs.PrefsMeteo"
+        android:icon="@drawable/pref_meteo"
+        android:title="@string/pref_meteo" >
+    </header>
+
+    <header
+        android:fragment="com.remi.remidomo.reloaded.prefs.PrefsPlots"
+        android:icon="@drawable/pref_plots"
+        android:title="@string/pref_plots" >
+    </header>
+
+    <header
+        android:fragment="com.remi.remidomo.reloaded.prefs.PrefsNotif"
+        android:icon="@drawable/pref_notif"
+        android:title="@string/pref_notifications" >
+    </header>
+
+    <header
+        android:fragment="com.remi.remidomo.reloaded.prefs.PrefsEnergy"
+        android:icon="@drawable/pref_energy"
+        android:title="@string/pref_energy" >
+    </header>
+
+</preference-headers>

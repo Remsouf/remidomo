@@ -16,6 +16,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.google.android.gcm.GCMConstants;
+import com.remi.remidomo.reloaded.prefs.PrefsGeneral;
+import com.remi.remidomo.reloaded.prefs.PrefsMeteo;
+import com.remi.remidomo.reloaded.prefs.PrefsService;
+import com.remi.remidomo.reloaded.prefs.PrefsTrain;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -144,7 +148,7 @@ public class RDService extends Service {
     		}
     	} catch (java.lang.InterruptedException ignored) {}
 
-    	String mode = prefs.getString("mode", Preferences.DEFAULT_MODE);
+    	String mode = prefs.getString("mode", PrefsService.DEFAULT_MODE);
 
     	// In case of crash/restart, intent can be null
     	if ((intent != null) && GCMConstants.INTENT_FROM_GCM_REGISTRATION_CALLBACK.equals(intent.getAction())) {
@@ -165,7 +169,7 @@ public class RDService extends Service {
             	};
             }, "sdcard read").start();
     	} else if ((intent != null) && ACTION_BOOTKICK.equals(intent.getAction())) {
-    		boolean kickboot = prefs.getBoolean("bootkick", Preferences.DEFAULT_BOOTKICK);
+    		boolean kickboot = prefs.getBoolean("bootkick", PrefsService.DEFAULT_BOOTKICK);
     		if (!kickboot) {
     			Log.i(TAG, "Exit service to ignore boot event");
     			cleanObjects();
@@ -240,7 +244,7 @@ public class RDService extends Service {
     			pusher = new PushSender(this);
     		} else {
     			clientTimer = new Timer("Client");
-    			int period = prefs.getInt("client_poll", Preferences.DEFAULT_CLIENT_POLL);
+    			int period = prefs.getInt("client_poll", PrefsGeneral.DEFAULT_CLIENT_POLL);
     			// 15s graceful period, to let the service read data from FS,
     			// before attempting updates from the server
     			clientTimer.scheduleAtFixedRate(new ClientTask(this), 15000, 1000L*60*period);
@@ -250,12 +254,12 @@ public class RDService extends Service {
 
     		// Timer for train updates
     		Timer timerTrains = new Timer("Trains");
-    		int period = prefs.getInt("sncf_poll", Preferences.DEFAULT_SNCF_POLL);
+    		int period = prefs.getInt("sncf_poll", PrefsTrain.DEFAULT_SNCF_POLL);
     		timerTrains.scheduleAtFixedRate(new TrainsTask(), 1, 1000L*60*period);
 
     		// Timer for weather updates
     		Timer timerMeteo = new Timer("Meteo");
-    		period = prefs.getInt("meteo_poll", Preferences.DEFAULT_METEO_POLL);
+    		period = prefs.getInt("meteo_poll", PrefsMeteo.DEFAULT_METEO_POLL);
     		timerMeteo.scheduleAtFixedRate(new MeteoTask(), 1, 1000L*60*60*period);
     	}
     
@@ -408,7 +412,7 @@ public class RDService extends Service {
     public class RfxThread implements Runnable {
     	
     	public void run() {
-    		int port = prefs.getInt("rfx_port", Preferences.DEFAULT_RFX_PORT);
+    		int port = prefs.getInt("rfx_port", PrefsService.DEFAULT_RFX_PORT);
     		
     		rfxSocket = null;
     		
