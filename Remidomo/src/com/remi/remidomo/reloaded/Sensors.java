@@ -321,6 +321,14 @@ public class Sensors {
     	}
     }
 
+    public void clearData() {
+    	synchronized(sensors) {
+    		for (SensorData sensor: sensors) {
+    			sensor.clearData();
+    		}
+    	}
+    }
+
     public boolean checkSensorsConsistency() {
     	synchronized (sensors) {
     		// 1st, find the most recent sensor timestamp

@@ -224,6 +224,16 @@ public class RDService extends Service {
     			registrationKey = null;
     		}
 
+    		if ((intent != null) && intent.getBooleanExtra("RESET_DATA", false)) {
+    			// Clear sensor data
+    			this.sensors.clearData();
+    			if (callback != null) {
+					callback.postToast(getString(R.string.data_cleared));
+					callback.updateThermo();
+				}
+    			addLog("Données capteurs effacées");
+    		}
+
     		// Stop all threads and clean everything
     		cleanObjects();
 

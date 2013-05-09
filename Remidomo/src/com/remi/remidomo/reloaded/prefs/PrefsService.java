@@ -6,6 +6,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
@@ -29,6 +30,7 @@ public class PrefsService extends PreferenceFragment implements OnSharedPreferen
 	private CheckBoxPreference bootkick;
 	private CheckBoxPreference keepservice;
 	private ListPreference mode;
+	private Preference reset_data;
 
 	private SharedPreferences prefs;
 	
@@ -48,7 +50,18 @@ public class PrefsService extends PreferenceFragment implements OnSharedPreferen
         ip_address = (CustomEditTextPreference) findPreference("ip_address");
         port = (CustomSpinnerPreference) findPreference("port");
         rfx_port = (CustomSpinnerPreference) findPreference("rfx_port");
+        reset_data = (Preference) findPreference("reset_data");
         updateTexts();
+
+        reset_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference pref) {
+            	final Intent intent = new Intent(PrefsService.this.getActivity(), RDService.class);
+            	intent.putExtra("RESET_DATA", true);
+            	getActivity().startService(intent);
+            	return true;
+            }
+        });
     }
     
     @Override
@@ -109,9 +122,11 @@ public class PrefsService extends PreferenceFragment implements OnSharedPreferen
     	if ("Serveur".equals(mode_sel)) {
     		ip_address.setEnabled(false);
     		rfx_port.setEnabled(true);
+    		reset_data.setEnabled(false);
     	} else {
     		ip_address.setEnabled(true);
     		rfx_port.setEnabled(false);
+    		reset_data.setEnabled(true);
     	}
 
     	String msg = String.format(getString(R.string.pref_mode_summary), mode_sel);

@@ -415,5 +415,6 @@ public class SensorData {
 
 	public synchronized void clearData() {
 		data.clear();
+		lastUpdate = null;
 	}
 }

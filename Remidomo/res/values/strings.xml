@@ -19,6 +19,7 @@
     <string name="sensors_restore">Tenter une récupération depuis la carte SD ?</string>
     <string name="save_complete">Sauvegarde terminée</string>
 	<string name="load_complete">Lecture terminée</string>
+	<string name="data_cleared">Données effacées</string>
 
     <!-- Preferences -->
     <string name="pref_mode_title">Mode</string>
@@ -87,6 +88,9 @@
     <string name="invalid_int_lower">Doit être supérieur à %1$d</string>
 	<string name="invalid_int_higher">Doit être inférieur à %1$d</string>
 	<string name="invalid_int">Ce n\'est pas un entier valide</string>
+	<string name="pref_maintenance">Maintenance</string>
+	<string name="pref_reset">Effacer données</string>
+	<string name="pref_reset_summary">Effacer les données des capteurs</string>
 
     <!-- Vues -->
     <string name="pool">Piscine</string>
