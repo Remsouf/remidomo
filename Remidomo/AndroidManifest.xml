@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.remi.remidomo.reloaded"
-    android:versionCode="201"
-    android:versionName="2.01" >
+    android:versionCode="202"
+    android:versionName="2.02" >
 
     <uses-sdk android:minSdkVersion="15"
               android:targetSdkVersion="17" />
