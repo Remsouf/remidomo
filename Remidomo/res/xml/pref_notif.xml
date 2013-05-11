@@ -11,4 +11,12 @@
         android:summaryOn="@string/pref_sound_summary_on"
         android:title="@string/pref_sound_title" />
 
+    <Preference
+            android:title="@string/pref_sound_garage"
+            android:key="sound_garage"/>
+
+    <Preference
+            android:title="@string/pref_sound_alert"
+            android:key="sound_alert"/>
+
 </PreferenceScreen>

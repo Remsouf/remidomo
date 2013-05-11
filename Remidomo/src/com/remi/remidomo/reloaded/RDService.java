@@ -18,6 +18,7 @@ import java.util.TimerTask;
 import com.google.android.gcm.GCMConstants;
 import com.remi.remidomo.reloaded.prefs.PrefsGeneral;
 import com.remi.remidomo.reloaded.prefs.PrefsMeteo;
+import com.remi.remidomo.reloaded.prefs.PrefsNotif;
 import com.remi.remidomo.reloaded.prefs.PrefsService;
 import com.remi.remidomo.reloaded.prefs.PrefsTrain;
 
@@ -375,7 +376,7 @@ public class RDService extends Service {
     /**
      * Alert notifications
      */
-    public void showAlertNotification(String text, int soundResId, int iconResId, int destinationView, Date tstamp) {
+    public void showAlertNotification(String text, PrefsNotif.NotifType soundId, int iconResId, int destinationView, Date tstamp) {
 
         // The PendingIntent to launch our activity if the user selects this notification
         Intent intent = new Intent(this, RDActivity.class);
@@ -399,8 +400,14 @@ public class RDService extends Service {
     	}
 
         // Set sound if any (and if prefs allow)
-        if ((soundResId != 0) && prefs.getBoolean("notif_sound", true)) {
-        	builder.setSound(Uri.parse("android.resource://"+getPackageName()+"/"+soundResId));
+        if (prefs.getBoolean("notif_sound", true)) {
+        	String pref;
+        	if (soundId == PrefsNotif.NotifType.GARAGE) {
+        		pref = prefs.getString("sound_garage", PrefsNotif.DEFAULT_SOUND_GARAGE);
+        	} else {
+        		pref = prefs.getString("sound_alert", PrefsNotif.DEFAULT_SOUND_ALERT);
+        	}
+        	builder.setSound(Uri.parse(pref));
         }
 
         // Send the notification.
@@ -900,11 +907,11 @@ public class RDService extends Service {
 				doors.setFromPushedIntent(intent);
 			} else if (PushSender.LOWBAT.equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
-				showAlertNotification(getString(R.string.low_bat), R.raw.garage_alert, R.drawable.battery_low, RDActivity.TEMP_VIEW_ID, tstamp);
+				showAlertNotification(getString(R.string.low_bat), PrefsNotif.NotifType.ALERT, R.drawable.battery_low, RDActivity.TEMP_VIEW_ID, tstamp);
 			} else if (PushSender.POWER_DROP.equals(target)) {
 				// In case the server still has connectivity...
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
-				showAlertNotification(getString(R.string.power_dropped), R.raw.garage_alert, R.drawable.energy, RDActivity.DASHBOARD_VIEW_ID, tstamp);
+				showAlertNotification(getString(R.string.power_dropped), PrefsNotif.NotifType.ALERT, R.drawable.energy, RDActivity.DASHBOARD_VIEW_ID, tstamp);
 				energy.updatePowerStatus(false);
 				if (callback != null) {
 					callback.updateEnergy();
@@ -912,7 +919,7 @@ public class RDService extends Service {
 			} else if (PushSender.POWER_RESTORE.equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
 				String duration = intent.getStringExtra(PushSender.STATE);
-				showAlertNotification(String.format(getString(R.string.power_restored), duration), R.raw.garage_alert, R.drawable.energy, RDActivity.DASHBOARD_VIEW_ID, tstamp);
+				showAlertNotification(String.format(getString(R.string.power_restored), duration), PrefsNotif.NotifType.ALERT, R.drawable.energy, RDActivity.DASHBOARD_VIEW_ID, tstamp);
 				energy.updatePowerStatus(true);
 				if (callback != null) {
 					callback.updateEnergy();
@@ -920,7 +927,7 @@ public class RDService extends Service {
 			} else if (PushSender.MISSING_SENSOR.equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
 				String sensorName = intent.getStringExtra(PushSender.STATE);
-				showAlertNotification(String.format(getString(R.string.missing_sensor), sensorName), R.raw.garage_alert, R.drawable.temperature2, RDActivity.TEMP_VIEW_ID, tstamp);
+				showAlertNotification(String.format(getString(R.string.missing_sensor), sensorName), PrefsNotif.NotifType.ALERT, R.drawable.temperature2, RDActivity.TEMP_VIEW_ID, tstamp);
 			} else {
 				Log.e(TAG, "Unknown push target: " + target);
 				addLog("Cible push inconnue: " + target, LogLevel.HIGH);
