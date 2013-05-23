@@ -319,7 +319,7 @@ public class Doors {
 		}
 	}
 
-	public int getResourceForState(State state) {
+	public static int getResourceForState(State state) {
 		if (state == Doors.State.UNKNOWN) {
 			return R.drawable.meteo_unknown;
 		} else if (state == Doors.State.CLOSED) {
@@ -333,6 +333,14 @@ public class Doors {
 		} else {
 			return R.drawable.meteo_unknown;
 		}
+	}
+
+	public Date getLastUpdate(int index) {
+	    if (eventHistory.isEmpty()) {
+	        return null;
+	    } else {
+	        return eventHistory.get(eventHistory.size() - 1).tstamp;
+	    }
 	}
 
 	public ArrayList<Event> getHistory(int index) {

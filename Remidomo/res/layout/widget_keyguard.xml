@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@null" >
+
+    <!-- Clock -->
+
+    <TextView
+        android:id="@+id/widget_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-thin"
+        android:textColor="@android:color/white"
+        android:textSize="90sp"
+        android:layout_marginBottom="-10sp" />
+
+    <TextView
+        android:id="@+id/widget_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/widget_time"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-10sp"
+        android:fontFamily="sans-serif-bold"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:textSize="30sp" />
+
+    <!-- Doors -->
+
+    <RelativeLayout
+        android:id="@+id/widget_doors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10sp"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/widget_garage_status"
+            android:layout_width="70sp"
+            android:layout_height="70sp"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:src="@drawable/meteo_unknown" />
+
+        <TextView
+            android:id="@+id/widget_last_garage_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/widget_garage_status"
+            android:text="@string/interrogation"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+    </RelativeLayout>
+
+    <!-- Temperatures -->
+
+    <LinearLayout
+        android:id="@+id/widget_thermo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/widget_doors"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/widget_pool_icon"
+                android:layout_width="32sp"
+                android:layout_height="32sp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/pool" />
+
+            <TextView
+                android:id="@+id/widget_pool_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0sp"
+                android:includeFontPadding="false"
+                android:padding="3sp"
+                android:text="@string/interrogation"
+                android:textSize="50sp"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/widget_ext_icon"
+                android:layout_width="32sp"
+                android:layout_height="32sp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/garden" />
+
+            <TextView
+                android:id="@+id/widget_ext_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:padding="3sp"
+                android:text="@string/interrogation"
+                android:textSize="50sp"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/widget_veranda_icon"
+                android:layout_width="32sp"
+                android:layout_height="32sp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/veranda" />
+
+            <TextView
+                android:id="@+id/widget_veranda_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0sp"
+                android:includeFontPadding="false"
+                android:text="@string/interrogation"
+                android:textSize="50sp"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/widget_last_thermo_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:includeFontPadding="false"
+            android:text="@string/interrogation"
+            android:textSize="20sp"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+</RelativeLayout>

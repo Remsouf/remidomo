@@ -856,7 +856,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 			// Main icon
 			ImageButton portail = (ImageButton) findViewById(R.id.garage_status);
 			Doors.State state = service.getDoors().getState(Doors.GARAGE);
-			portail.setImageResource(service.getDoors().getResourceForState(state));
+			portail.setImageResource(Doors.getResourceForState(state));
 
 			// History
 			LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -869,7 +869,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 				RelativeLayout eventLayout = (RelativeLayout) inflated.getChildAt(i);
 
 				ImageView icon = (ImageView) eventLayout.getChildAt(0);
-				icon.setImageResource(service.getDoors().getResourceForState(event.state));
+				icon.setImageResource(Doors.getResourceForState(event.state));
 
 				TextView text = (TextView) eventLayout.getChildAt(1);
 				text.setText(event.tstamp.toLocaleString());
@@ -954,14 +954,14 @@ public class RDActivity extends Activity implements OnGestureListener {
         updateEnergyLastUpdate();
 	}
 
-	private String deltaToTimeString(long delta) {
+	public static String deltaToTimeString(long delta) {
 		int hours = (int) delta / 3600000;
 		int minutes = ((int)delta - (hours * 3600000)) / 60000;
 		String delai = "" + hours + ":" + String.format("%02d", minutes);
 		return delai;
 	}
 
-	private String deltaToDateString(long delta) {
+	public String deltaToDateString(long delta) {
 		int days = (int) (delta / 86400000);
 		return String.format(getString(R.string.days), days);
 	}

@@ -4,12 +4,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
@@ -21,11 +27,15 @@ import com.remi.remidomo.reloaded.prefs.PrefsMeteo;
 import com.remi.remidomo.reloaded.prefs.PrefsNotif;
 import com.remi.remidomo.reloaded.prefs.PrefsService;
 import com.remi.remidomo.reloaded.prefs.PrefsTrain;
+import com.remi.remidomo.reloaded.widget.WidgetProvider;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,6 +44,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
@@ -43,6 +54,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 public class RDService extends Service {
 
@@ -65,6 +77,7 @@ public class RDService extends Service {
     public final static String ACTION_BATTERYLOW = "com.remi.remidomo.reloaded.BATLOW";
     public final static String ACTION_POWERCONNECT = "com.remi.remidomo.reloaded.POWER_CONN";
     public final static String ACTION_POWERDISCONNECT = "com.remi.remidomo.reloaded.POWER_DISC";
+    public final static String ACTION_UPDATEWIDGET = "com.remi.remidomo.reloaded.UPDATE_WIDGET";
 
     private final IBinder mBinder = new LocalBinder();
     public IUpdateListener callback;
@@ -154,7 +167,7 @@ public class RDService extends Service {
     	// In case of crash/restart, intent can be null
     	if ((intent != null) && GCMConstants.INTENT_FROM_GCM_REGISTRATION_CALLBACK.equals(intent.getAction())) {
     		registrationKey = intent.getStringExtra("registration_id");
-    		Log.d(TAG, "Got GCM registration key");
+    		Log.d(TAG, "New GCM registration key: " + registrationKey);
     	} else if ((intent != null) && GCMConstants.INTENT_FROM_GCM_MESSAGE.equals(intent.getAction())) {
     		// Don't restart, just account for received Push intent
     		handlePushedMessage(intent);
@@ -216,6 +229,8 @@ public class RDService extends Service {
 					callback.updateEnergy();
 				}
 			}
+		} else if ((intent != null) && ACTION_UPDATEWIDGET.equals(intent.getAction())) {
+			this.updateWidgets(intent);
     	} else {
     		Log.i(TAG, "Start service");
     		addLog("Service (re)démarré");
@@ -968,5 +983,116 @@ public class RDService extends Service {
     	} catch (android.content.pm.PackageManager.NameNotFoundException ignored) {}
 
     	editor.commit();
+    }
+
+    /****************************** WIDGET ******************************/
+    private void updateWidgets(Intent intent) {
+
+    	AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+
+    	ComponentName thisWidget = new ComponentName(this, WidgetProvider.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+
+		final int N = appWidgetIds.length;
+
+        // Perform this loop procedure for each App Widget that belongs to this provider
+        for (int i=0; i<N; i++) {
+            int appWidgetId = appWidgetIds[i];
+
+            // See if the widget is on home screen or keyguard
+            int layoutId = R.layout.widget_home;
+            try {
+                Method method = AppWidgetManager.class.getMethod("getAppWidgetOptions", int.class);
+                Bundle options = (Bundle) method.invoke(appWidgetManager, appWidgetId);
+                int category = options.getInt("appWidgetCategory", -1);
+                if (category == AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD) {
+                    layoutId = R.layout.widget_keyguard;
+                }
+            } catch (InvocationTargetException ignored) {
+            } catch (NoSuchMethodException ignored) {
+            } catch (IllegalAccessException ignored) {
+            }
+
+            RemoteViews views = new RemoteViews(this.getPackageName(), layoutId);
+
+            // Create an Intent to launch main activity
+            Intent actIntent = new Intent(this, RDActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, actIntent, 0);
+            views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+
+            // Pool
+    		SensorData series = null;
+    		if (getSensors() != null) {
+    		    series = getSensors().getData(Sensors.ID_POOL_T);
+    		}
+    		if ((series != null) && (series.size() > 0)) {
+    			DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+    			decimalFormat.applyPattern("#0.0#");
+    			float lastValue = series.getLast().value;
+    			views.setTextViewText(R.id.widget_pool_temp, decimalFormat.format(lastValue)+getString(R.string.degC));
+    		} else {
+    			views.setTextViewText(R.id.widget_pool_temp, "??.?"+getString(R.string.degC));
+    		}
+
+    		// Ext
+    		if (getSensors() != null) {
+    		    series = getSensors().getData(Sensors.ID_EXT_T);
+    		}
+    		if ((series != null) && (series.size() > 0)) {
+    			DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+    			decimalFormat.applyPattern("#0.0#");
+    			float lastValue = series.getLast().value;
+    			views.setTextViewText(R.id.widget_ext_temp, decimalFormat.format(lastValue)+getString(R.string.degC));
+    		} else {
+    			views.setTextViewText(R.id.widget_ext_temp, "??.?"+getString(R.string.degC));
+    		}
+
+    		// Veranda
+    		if (getSensors() != null) {
+    		    series = getSensors().getData(Sensors.ID_VERANDA_T);
+    		}
+    		if ((series != null) && (series.size() > 0)) {
+    			DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
+    			decimalFormat.applyPattern("#0.0#");
+    			float lastValue = series.getLast().value;
+    			views.setTextViewText(R.id.widget_veranda_temp, decimalFormat.format(lastValue)+getString(R.string.degC));
+    		} else {
+    			views.setTextViewText(R.id.widget_veranda_temp, "??.?"+getString(R.string.degC));
+    		}
+
+    		if ((getSensors() != null) && (getSensors().getLastUpdate() != null)) {
+                long delta = new Date().getTime() - getSensors().getLastUpdate().getTime();
+                views.setTextViewText(R.id.widget_last_thermo_update, RDActivity.deltaToTimeString(delta));
+            } else {
+                views.setTextViewText(R.id.widget_last_thermo_update, "?:??");
+            }
+
+    		// Garage
+    		Doors.State state;
+    		if (getDoors() != null) {
+    		    state = getDoors().getState(Doors.GARAGE);
+    		} else {
+    		    state = Doors.State.UNKNOWN;
+    		}
+			views.setImageViewResource(R.id.widget_garage_status, Doors.getResourceForState(state));
+
+			if ((getDoors() != null) && (getDoors().getLastUpdate(Doors.GARAGE) != null)) {
+			    Date lastEvent = getDoors().getLastUpdate(Doors.GARAGE);
+			    DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
+			    views.setTextViewText(R.id.widget_last_garage_update, format.format(lastEvent));
+			} else {
+			    views.setTextViewText(R.id.widget_last_garage_update, "??:??");
+			}
+
+			// Clock
+			DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
+			views.setTextViewText(R.id.widget_time, format.format(new Date()));
+
+			format = DateFormat.getDateInstance(DateFormat.MEDIUM);
+			views.setTextViewText(R.id.widget_date, format.format(new Date()));
+
+            // Tell the AppWidgetManager to perform an update on the current app widget
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+        }
     }
 }

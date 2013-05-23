@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.remi.remidomo.reloaded"
-    android:versionCode="202"
-    android:versionName="2.02" >
+    android:versionCode="203"
+    android:versionName="2.03" >
 
     <uses-sdk android:minSdkVersion="15"
               android:targetSdkVersion="17" />
@@ -48,6 +48,7 @@
 				<action android:name="com.remi.remidomo.reloaded.BATLOW" />
 				<action android:name="com.remi.remidomo.reloaded.POWER_CONN" />
 				<action android:name="com.remi.remidomo.reloaded.POWER_DISC" />
+				<action android:name="com.remi.remidomo.reloaded.UPDATE_WIDGET" />
 			</intent-filter>
         </service>
 
@@ -75,7 +76,20 @@
               <category android:name="com.remi.remidomo.reloaded" />
           </intent-filter>
       </receiver>
-    	
+
+      <receiver android:name="com.remi.remidomo.reloaded.widget.WidgetProvider"
+                android:exported="true" >
+          <intent-filter>
+              <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+              <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+              <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+		  </intent-filter>
+    	  <meta-data android:name="android.appwidget.provider"
+               	     android:resource="@xml/widget" />
+	  </receiver>
+
+      <receiver android:name="com.remi.remidomo.reloaded.widget.WidgetBroadcastReceiver"/>
+
     </application>
 
 </manifest>
