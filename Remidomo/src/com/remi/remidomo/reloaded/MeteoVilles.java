@@ -22,7 +22,7 @@ class MeteoVilles extends Meteo {
 
 	private final static String LOCATION = "grenoble";
 	private final static String METEO_URL = "http://data.meteo-villes.com/previsions12j.php?ville=";
-	private final static String url = METEO_URL+"&ville="+LOCATION;
+	private final static String url = METEO_URL+LOCATION;
 
 	private final static Map<Integer, Integer> resourcesMap;
 
