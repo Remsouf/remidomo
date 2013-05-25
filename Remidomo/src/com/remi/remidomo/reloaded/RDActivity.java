@@ -87,7 +87,7 @@ public class RDActivity extends Activity implements OnGestureListener {
     	@Override
     	protected void onPreExecute() {
     		super.onPreExecute();
-    		updateListener.startRefreshAnim();            
+    		updateListener.startRefreshAnim();
         }
 
         @Override
@@ -1126,7 +1126,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 					 ImageButton refresh = (ImageButton) findViewById(R.id.refreshButton);
 					 refresh.setEnabled(false);
 					 Animation anim = AnimationUtils.loadAnimation(RDActivity.this, R.anim.rotate);
-					 refresh.setAnimation(anim);
+					 refresh.startAnimation(anim);
 				 }
 			 });
 		 }
