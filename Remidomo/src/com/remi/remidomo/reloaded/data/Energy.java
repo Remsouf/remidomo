@@ -1,4 +1,4 @@
-package com.remi.remidomo.reloaded;
+package com.remi.remidomo.reloaded.data;
 
 import java.io.OutputStreamWriter;
 import java.net.URI;
@@ -11,6 +11,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.remi.remidomo.reloaded.*;
 import com.remi.remidomo.reloaded.prefs.PrefsEnergy;
 import com.remi.remidomo.reloaded.prefs.PrefsService;
 
@@ -59,7 +60,7 @@ public class Energy {
         		initialTstamp = new Date(prefs.getLong("initial_tstamp", new Date().getTime()));
 
         		// Fetch data for all sensors
-        		Energy.this.service.addLog("Lecture des données d'énergie locales");
+        		Energy.this.service.addLog("Lecture des donn��es d'��nergie locales");
 
         		readyForUpdates = false;
         		// (Update view everytime a new temp file was read)
@@ -68,7 +69,7 @@ public class Energy {
                 if (Energy.this.service.callback != null) {
                 	Energy.this.service.callback.updateEnergy();
         		}
-                Energy.this.service.addLog("Lecture d'énergie terminée", RDService.LogLevel.UPDATE);
+                Energy.this.service.addLog("Lecture d'��nergie termin��e", RDService.LogLevel.UPDATE);
                 readyForUpdates = true;
         	};
         }).start();
@@ -114,10 +115,10 @@ public class Energy {
     					service.pushToClients(PushSender.POWER_RESTORE, 0, duration);
     				}
     			}
-    			service.addLog("Alimentation électrique restaurée", RDService.LogLevel.HIGH);
+    			service.addLog("Alimentation ��lectrique restaur��e", RDService.LogLevel.HIGH);
     		} else {
     			powerLossTimestamp = new Date().getTime();
-    			service.addLog("Alimentation électrique perdue", RDService.LogLevel.HIGH);
+    			service.addLog("Alimentation ��lectrique perdue", RDService.LogLevel.HIGH);
     		}
     	}
     }
@@ -257,7 +258,7 @@ public class Energy {
 
 			initialTstamp = new Date(entries.getLong("initial_tstamp"));
 
-			service.addLog("Mise à jour des données de '" + ID_POWER + "' depuis le serveur (" + newEnergyData.size() + " nvx points)",
+			service.addLog("Mise �� jour des donn��es de '" + ID_POWER + "' depuis le serveur (" + newEnergyData.size() + " nvx points)",
 					   	   RDService.LogLevel.UPDATE);
 
 			power.writeFile(SensorData.DirType.INTERNAL,

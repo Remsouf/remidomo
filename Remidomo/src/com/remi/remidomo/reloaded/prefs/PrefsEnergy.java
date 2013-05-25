@@ -2,8 +2,8 @@ package com.remi.remidomo.reloaded.prefs;
 
 import java.text.DecimalFormat;
 
-import com.remi.remidomo.reloaded.CustomSpinnerPreference;
-import com.remi.remidomo.reloaded.CustomTimePickerPreference;
+import com.remi.remidomo.reloaded.views.CustomSpinnerPreference;
+import com.remi.remidomo.reloaded.views.CustomTimePickerPreference;
 import com.remi.remidomo.reloaded.R;
 
 import android.content.SharedPreferences;

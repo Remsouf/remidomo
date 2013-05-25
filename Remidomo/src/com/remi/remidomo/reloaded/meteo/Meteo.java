@@ -1,4 +1,6 @@
-package com.remi.remidomo.reloaded;
+package com.remi.remidomo.reloaded.meteo;
+
+import com.remi.remidomo.reloaded.*;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -12,7 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-abstract class Meteo {
+public abstract class Meteo {
 	// private final static String TAG = RDActivity.class.getSimpleName();
 
 	protected ArrayList<MeteoData> meteoData = new ArrayList<MeteoData>();

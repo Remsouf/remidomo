@@ -1,4 +1,6 @@
-package com.remi.remidomo.reloaded;
+package com.remi.remidomo.reloaded.data;
+
+import com.remi.remidomo.reloaded.*;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -186,7 +188,7 @@ public class Doors {
 				}
 			}
 
-			service.addLog("Mise à jour des états portes depuis le serveur", RDService.LogLevel.UPDATE);
+			service.addLog("Mise �� jour des ��tats portes depuis le serveur", RDService.LogLevel.UPDATE);
 			if (service.callback != null) {
 				service.callback.updateDoors();
 			}
@@ -286,7 +288,7 @@ public class Doors {
 
 		if (newState != states[GARAGE]) {
 			Log.i(TAG, "Doors state updated from hardware: " + newState);
-			service.addLog("Portes synchronisées avec le matériel", RDService.LogLevel.UPDATE);
+			service.addLog("Portes synchronis��es avec le mat��riel", RDService.LogLevel.UPDATE);
 
 			setState(GARAGE, newState, true);
 			Event event = new Event();

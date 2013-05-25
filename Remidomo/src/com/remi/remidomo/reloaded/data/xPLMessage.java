@@ -1,4 +1,6 @@
-package com.remi.remidomo.reloaded;
+package com.remi.remidomo.reloaded.data;
+
+import com.remi.remidomo.reloaded.*;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;

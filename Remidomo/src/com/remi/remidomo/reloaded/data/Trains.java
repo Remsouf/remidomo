@@ -1,4 +1,4 @@
-package com.remi.remidomo.reloaded;
+package com.remi.remidomo.reloaded.data;
 
 import java.net.URI;
 import java.text.ParsePosition;
@@ -14,6 +14,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.remi.remidomo.reloaded.*;
 import com.remi.remidomo.reloaded.prefs.PrefsTrain;
 
 import android.content.SharedPreferences;
@@ -152,7 +153,7 @@ public class Trains {
 					trainsData = newTrains;
 				}
 
-				service.addLog("Mise à jour des données SNCF (" + newTrains.size() + " trains)", RDService.LogLevel.UPDATE);
+				service.addLog("Mise �� jour des donn��es SNCF (" + newTrains.size() + " trains)", RDService.LogLevel.UPDATE);
 
 				if (!trainsData.isEmpty()) {
 					lastUpdate = new Date();

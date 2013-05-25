@@ -8,6 +8,9 @@ import java.util.TimerTask;
 import com.remi.remidomo.reloaded.prefs.PreferencesActivity;
 import com.remi.remidomo.reloaded.prefs.PrefsEnergy;
 import com.remi.remidomo.reloaded.prefs.PrefsService;
+import com.remi.remidomo.reloaded.views.SensorPlot;
+import com.remi.remidomo.reloaded.views.TrainsView;
+import com.remi.remidomo.reloaded.data.*;
 
 import android.app.Activity;
 import android.app.ActivityManager;

@@ -1,4 +1,6 @@
-package com.remi.remidomo.reloaded;
+package com.remi.remidomo.reloaded.views;
+
+import com.remi.remidomo.reloaded.*;
 
 /*
  * http://www.twodee.org/weblog/?p=1037

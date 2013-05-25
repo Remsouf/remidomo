@@ -11,11 +11,11 @@ import android.content.Intent;
 import android.test.ServiceTestCase;
 import android.util.Log;
 
-import com.remi.remidomo.reloaded.Doors;
+import com.remi.remidomo.reloaded.data.Doors;
 import com.remi.remidomo.reloaded.RDService;
-import com.remi.remidomo.reloaded.xPLMessage;
-import com.remi.remidomo.reloaded.Doors.Event;
-import com.remi.remidomo.reloaded.xPLMessage.xPLParseException;
+import com.remi.remidomo.reloaded.data.xPLMessage;
+import com.remi.remidomo.reloaded.data.Doors.Event;
+import com.remi.remidomo.reloaded.data.xPLMessage.xPLParseException;
 
 public class DoorsTest extends ServiceTestCase<RDService> {
 

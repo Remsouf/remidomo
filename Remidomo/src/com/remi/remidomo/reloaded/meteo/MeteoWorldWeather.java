@@ -1,4 +1,6 @@
-package com.remi.remidomo.reloaded;
+package com.remi.remidomo.reloaded.meteo;
+
+import com.remi.remidomo.reloaded.*;
 
 import java.net.URI;
 import java.text.ParsePosition;
@@ -19,7 +21,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-class MeteoWorldWeather extends Meteo {
+public class MeteoWorldWeather extends Meteo {
 	private final static String TAG = RDActivity.class.getSimpleName();
 
 	private final static String LOCATION = "le+touvet,france";

@@ -3,7 +3,7 @@
     android:icon="@drawable/pref_meteo"
     android:title="@string/pref_meteo" >
 
-    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+    <com.remi.remidomo.reloaded.views.CustomSpinnerPreference
         android:dialogTitle="@string/pref_meteo_dialog"
         android:key="meteo_poll"
         android:persistent="true"

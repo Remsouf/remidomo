@@ -6,7 +6,7 @@
     android:id="@+id/poolView"
     android:orientation="vertical" >
 
-    <com.remi.remidomo.reloaded.SensorPlot
+    <com.remi.remidomo.reloaded.views.SensorPlot
     	android:id="@+id/poolTempPlot"
     	android:layout_width="fill_parent"
     	android:layout_height="1330px"

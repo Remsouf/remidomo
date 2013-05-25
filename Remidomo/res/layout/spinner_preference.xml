@@ -13,7 +13,7 @@
     android:inputType="number"
     android:layout_centerInParent="true" />
 
-  <com.remi.remidomo.reloaded.CustomSpinner
+  <com.remi.remidomo.reloaded.views.CustomSpinner
     android:id="@+id/prefSpinner"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"

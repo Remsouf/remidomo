@@ -106,7 +106,7 @@
 
         </RelativeLayout>
 
-        <com.remi.remidomo.reloaded.CustomViewFlipper
+        <com.remi.remidomo.reloaded.views.CustomViewFlipper
             android:id="@+id/viewFlipper"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -120,5 +120,5 @@
 			<include layout="@layout/energy" />
 			<include layout="@layout/log" />
 			
-        </com.remi.remidomo.reloaded.CustomViewFlipper>
+        </com.remi.remidomo.reloaded.views.CustomViewFlipper>
 </RelativeLayout>

@@ -10,10 +10,9 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
-import com.remi.remidomo.reloaded.CustomEditTextPreference;
-import com.remi.remidomo.reloaded.CustomSpinnerPreference;
-import com.remi.remidomo.reloaded.R;
-import com.remi.remidomo.reloaded.RDService;
+import com.remi.remidomo.reloaded.*;
+import com.remi.remidomo.reloaded.views.CustomEditTextPreference;
+import com.remi.remidomo.reloaded.views.CustomSpinnerPreference;
 
 public class PrefsService extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 

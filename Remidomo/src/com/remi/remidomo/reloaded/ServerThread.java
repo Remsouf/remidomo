@@ -32,6 +32,9 @@ import org.apache.http.protocol.ResponseServer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.remi.remidomo.reloaded.data.Energy;
+import com.remi.remidomo.reloaded.data.SensorData;
+import com.remi.remidomo.reloaded.data.Sensors;
 import com.remi.remidomo.reloaded.prefs.PrefsEnergy;
 import com.remi.remidomo.reloaded.prefs.PrefsPlots;
 import com.remi.remidomo.reloaded.prefs.PrefsService;

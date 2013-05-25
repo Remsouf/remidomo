@@ -1,4 +1,6 @@
-package com.remi.remidomo.reloaded;
+package com.remi.remidomo.reloaded.views;
+
+import com.remi.remidomo.reloaded.*;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

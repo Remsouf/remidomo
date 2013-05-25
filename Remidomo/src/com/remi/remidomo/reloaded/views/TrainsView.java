@@ -1,6 +1,9 @@
-package com.remi.remidomo.reloaded;
+package com.remi.remidomo.reloaded.views;
 
 import java.util.ArrayList;
+
+import com.remi.remidomo.reloaded.*;
+import com.remi.remidomo.reloaded.data.Trains;
 
 import android.content.Context;
 import android.util.AttributeSet;

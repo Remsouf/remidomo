@@ -13,7 +13,7 @@
         android:summary="@string/pref_gare_summary"
         android:title="@string/pref_gare_title" />
 
-    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+    <com.remi.remidomo.reloaded.views.CustomSpinnerPreference
         android:dialogTitle="@string/pref_poll_dialog"
         android:inputType="number"
         android:key="sncf_poll"

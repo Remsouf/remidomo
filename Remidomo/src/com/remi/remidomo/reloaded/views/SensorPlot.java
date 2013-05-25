@@ -1,4 +1,4 @@
-package com.remi.remidomo.reloaded;
+package com.remi.remidomo.reloaded.views;
 
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
@@ -38,6 +38,9 @@ import com.androidplot.xy.XYRegionFormatter;
 import com.androidplot.xy.XYStepMode;
 import com.androidplot.xy.YLayoutStyle;
 import com.androidplot.xy.YPositionMetric;
+
+import com.remi.remidomo.reloaded.*;
+import com.remi.remidomo.reloaded.data.SensorData;
 import com.remi.remidomo.reloaded.prefs.PrefsEnergy;
 import com.remi.remidomo.reloaded.prefs.PrefsPlots;
 

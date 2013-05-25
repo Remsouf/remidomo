@@ -51,7 +51,7 @@
             android:src="@drawable/train"
             android:layout_alignParentLeft="true" />
         
-        <com.remi.remidomo.reloaded.TrainsView
+        <com.remi.remidomo.reloaded.views.TrainsView
             android:id="@+id/trains"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -3,9 +3,9 @@ package com.remi.remidomo.test;
 import java.util.Date;
 
 import com.androidplot.series.XYSeries;
-import com.remi.remidomo.reloaded.SensorData;
-import com.remi.remidomo.reloaded.SensorData.Pair;
-import com.remi.remidomo.reloaded.SensorPlot;
+import com.remi.remidomo.reloaded.data.SensorData;
+import com.remi.remidomo.reloaded.data.SensorData.Pair;
+import com.remi.remidomo.reloaded.views.SensorPlot;
 
 import android.test.AndroidTestCase;
 import android.util.Log;

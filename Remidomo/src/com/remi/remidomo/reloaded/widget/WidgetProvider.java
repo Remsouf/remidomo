@@ -1,5 +1,7 @@
 package com.remi.remidomo.reloaded.widget;
 
+import com.remi.remidomo.reloaded.*;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -33,8 +35,8 @@ public class WidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		// Pass the info to RDService
-		Intent intent = new Intent(context, com.remi.remidomo.reloaded.RDService.class);
-		intent.setAction(com.remi.remidomo.reloaded.RDService.ACTION_UPDATEWIDGET);
+		Intent intent = new Intent(context, RDService.class);
+		intent.setAction(RDService.ACTION_UPDATEWIDGET);
         context.startService(intent);
 	}
 }

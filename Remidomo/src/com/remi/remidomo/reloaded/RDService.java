@@ -10,24 +10,25 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import com.google.android.gcm.GCMConstants;
+import com.remi.remidomo.reloaded.meteo.Meteo;
+import com.remi.remidomo.reloaded.meteo.MeteoVilles;
 import com.remi.remidomo.reloaded.prefs.PrefsGeneral;
 import com.remi.remidomo.reloaded.prefs.PrefsMeteo;
 import com.remi.remidomo.reloaded.prefs.PrefsNotif;
 import com.remi.remidomo.reloaded.prefs.PrefsService;
 import com.remi.remidomo.reloaded.prefs.PrefsTrain;
 import com.remi.remidomo.reloaded.widget.WidgetProvider;
+import com.remi.remidomo.reloaded.data.*;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;

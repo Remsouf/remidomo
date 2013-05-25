@@ -52,7 +52,7 @@
              android:src="@drawable/veranda" />
 		</LinearLayout>
 
-    	<com.remi.remidomo.reloaded.SensorPlot
+    	<com.remi.remidomo.reloaded.views.SensorPlot
     		android:id="@+id/ThermoPlot"
     		android:layout_width="wrap_content"
     		android:layout_height="550px"

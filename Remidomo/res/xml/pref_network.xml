@@ -13,7 +13,7 @@
         android:summary="@string/pref_mode_summary"
         android:title="@string/pref_mode_title" />
 
-    <com.remi.remidomo.reloaded.CustomEditTextPreference
+    <com.remi.remidomo.reloaded.views.CustomEditTextPreference
         android:defaultValue="1.2.3.4"
         android:dialogTitle="@string/pref_ip_dialog"
         android:key="ip_address"
@@ -22,7 +22,7 @@
         android:title="@string/pref_ip_title"
         app:validator_ip="true" />
 
-    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+    <com.remi.remidomo.reloaded.views.CustomSpinnerPreference
         android:dialogTitle="@string/pref_port_rfxlan"
         android:key="rfx_port"
         android:persistent="true"
@@ -31,7 +31,7 @@
         app:defaultVal="1234"
         app:max="65535"
         app:min="1024" />
-    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+    <com.remi.remidomo.reloaded.views.CustomSpinnerPreference
         android:dialogTitle="@string/pref_port_serveur"
         android:key="port"
         android:persistent="true"

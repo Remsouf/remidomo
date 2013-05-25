@@ -4,7 +4,7 @@
     android:icon="@drawable/pref_general"
     android:title="@string/pref_general" >
 
-    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+    <com.remi.remidomo.reloaded.views.CustomSpinnerPreference
         android:dialogTitle="@string/pref_storelimit_dialog"
         android:key="loglimit"
         android:persistent="true"
@@ -14,7 +14,7 @@
         app:max="1000"
         app:min="30" />
 
-    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+    <com.remi.remidomo.reloaded.views.CustomSpinnerPreference
         android:dialogTitle="@string/pref_poll_dialog"
         android:key="client_poll"
         android:persistent="true"

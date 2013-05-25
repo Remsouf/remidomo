@@ -1,6 +1,6 @@
 package com.remi.remidomo.test;
 
-import com.remi.remidomo.reloaded.xPLMessage;
+import com.remi.remidomo.reloaded.data.xPLMessage;
 
 import android.test.AndroidTestCase;
 

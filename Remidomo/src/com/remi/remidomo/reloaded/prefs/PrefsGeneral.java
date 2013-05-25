@@ -1,7 +1,7 @@
 package com.remi.remidomo.reloaded.prefs;
 
-import com.remi.remidomo.reloaded.CustomSpinnerPreference;
-import com.remi.remidomo.reloaded.R;
+import com.remi.remidomo.reloaded.*;
+import com.remi.remidomo.reloaded.views.CustomSpinnerPreference;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;

@@ -1,4 +1,6 @@
-package com.remi.remidomo.reloaded;
+package com.remi.remidomo.reloaded.meteo;
+
+import com.remi.remidomo.reloaded.*;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -17,7 +19,7 @@ import android.text.Html;
 import android.util.Log;
 import android.util.Xml;
 
-class MeteoVilles extends Meteo {
+public class MeteoVilles extends Meteo {
 	private final static String TAG = RDActivity.class.getSimpleName();
 
 	private final static String LOCATION = "grenoble";

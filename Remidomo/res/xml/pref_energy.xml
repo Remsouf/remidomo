@@ -12,14 +12,14 @@
         android:summaryOn="@string/pref_tarif_summary_on"
         android:title="@string/pref_tarif_title" />
 
-    <com.remi.remidomo.reloaded.CustomTimePickerPreference
+    <com.remi.remidomo.reloaded.views.CustomTimePickerPreference
         android:dialogLayout="@layout/time_preference"
         android:key="hc_hour"
         android:persistent="true"
         android:summary="@string/pref_hchour_summary"
         android:title="@string/pref_hchour_title"
         app:defaultValue="23" />
-    <com.remi.remidomo.reloaded.CustomTimePickerPreference
+    <com.remi.remidomo.reloaded.views.CustomTimePickerPreference
         android:dialogLayout="@layout/time_preference"
         android:key="hp_hour"
         android:persistent="true"
@@ -27,7 +27,7 @@
         android:title="@string/pref_hphour_title"
         app:defaultValue="7" />
 
-    <com.remi.remidomo.reloaded.CustomSpinnerPreference
+    <com.remi.remidomo.reloaded.views.CustomSpinnerPreference
         android:dialogTitle="@string/pref_energylimit_dialog"
         android:key="energy_limit"
         android:persistent="true"
