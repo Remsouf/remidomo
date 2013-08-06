@@ -174,7 +174,7 @@ public class Switches {
 				try {
 					DatagramPacket packet = new DatagramPacket(buffer, buffer.length, destination, port);
 					service.getRfxSocket().send(packet);
-					service.addLog("Packet RFX envoy��");
+					service.addLog("Packet RFX envoyé");
 					Log.i(TAG, "RFX packet sent");
 				} catch (Exception e) {
 					Log.e(TAG, "Error sending: " + e.getLocalizedMessage());
@@ -207,7 +207,7 @@ public class Switches {
 		
 		if (!SWITCH_UNIT.get(i).equals(unit)) {
 			Log.e(TAG, "AC unit and address known but not consistent (" + address + "/" + unit + ")");
-			service.addLog("Message AC provenant d'une adresse incoh��rente avec l'unit�� (" + address + "/" + unit + ")", RDService.LogLevel.HIGH);
+			service.addLog("Message AC provenant d'une adresse incohérente avec l'unité (" + address + "/" + unit + ")", RDService.LogLevel.HIGH);
 			return;			
 		}
 		
@@ -221,7 +221,7 @@ public class Switches {
 		}
 		
 		Log.i(TAG, "Switches state updated from hardware");
-		service.addLog("Commandes synchronis��es avec le mat��riel", RDService.LogLevel.UPDATE);
+		service.addLog("Commandes synchronisées avec le matériel", RDService.LogLevel.UPDATE);
 		if (service.callback != null) {
 			service.callback.updateSwitches();
 		}
@@ -245,7 +245,7 @@ public class Switches {
 					states[i] = array.getBoolean(i);
 				}
 			}
-			service.addLog("Mise �� jour des ��tats commandes depuis le serveur", RDService.LogLevel.UPDATE);
+			service.addLog("Mise à jour des états commandes depuis le serveur", RDService.LogLevel.UPDATE);
 			if (service.callback != null) {
 				service.callback.updateSwitches();
 			}
@@ -293,7 +293,7 @@ public class Switches {
 					service.addLog("Envoi commande au serveur");
 					if (!"OK".equals(content)) {
 						Log.d(TAG, "Bad response to command URL: " + content);
-						service.addLog("Mauvaise r��ponse du serveur: " + content, RDService.LogLevel.HIGH);
+						service.addLog("Mauvaise réponse du serveur: " + content, RDService.LogLevel.HIGH);
 					}
 				} catch (java.net.URISyntaxException e) {
 					Log.e(TAG, "Bad URI: " + url);

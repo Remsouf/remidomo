@@ -74,7 +74,7 @@ public class Sensors {
         		}
 
         		// Fetch data for all sensors
-        		Sensors.this.service.addLog("Lecture des donn��es capteurs locales");
+        		Sensors.this.service.addLog("Lecture des données capteurs locales");
 
         		readyForUpdates = false;
         		synchronized (sensors) {
@@ -93,7 +93,7 @@ public class Sensors {
         			if (Sensors.this.service.callback != null) {
         				Sensors.this.service.callback.updateThermo();
         			}
-        			Sensors.this.service.addLog("Lecture termin��e", RDService.LogLevel.UPDATE);
+        			Sensors.this.service.addLog("Lecture terminée", RDService.LogLevel.UPDATE);
         			readyForUpdates = true;
 
         			/* Check if all data empty */
@@ -274,7 +274,7 @@ public class Sensors {
 				newData.readJSON(table);
 
 				updateDataChunk(name, newData);
-				service.addLog("Mise �� jour des donn��es de '" + name + "' depuis le serveur (" + newData.size() + " nvx points)",
+				service.addLog("Mise à jour des données de '" + name + "' depuis le serveur (" + newData.size() + " nvx points)",
 							   RDService.LogLevel.UPDATE);
 			}
 			synchronized(sensors) {

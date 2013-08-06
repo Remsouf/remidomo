@@ -153,7 +153,7 @@ public class Trains {
 					trainsData = newTrains;
 				}
 
-				service.addLog("Mise �� jour des donn��es SNCF (" + newTrains.size() + " trains)", RDService.LogLevel.UPDATE);
+				service.addLog("Mise à jour des données SNCF (" + newTrains.size() + " trains)", RDService.LogLevel.UPDATE);
 
 				if (!trainsData.isEmpty()) {
 					lastUpdate = new Date();

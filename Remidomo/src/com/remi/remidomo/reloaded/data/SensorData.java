@@ -121,7 +121,7 @@ public class SensorData {
 			}
 		} catch (java.io.FileNotFoundException e) {
 			Log.e(TAG, "Sensor file not found. " + e);
-			service.addLog("Pas de donn��es locales pour " + name, RDService.LogLevel.HIGH);
+			service.addLog("Pas de données locales pour " + name, RDService.LogLevel.HIGH);
 		} catch (java.lang.IllegalArgumentException e) {
 			Log.e(TAG, "Error parsing sensor file for sensor " + name + " (IllegalArgument)");
 			service.addLog("Erreur de lecture pour " + name, RDService.LogLevel.HIGH);
@@ -164,7 +164,7 @@ public class SensorData {
 					fos = new FileOutputStream(path);
 				} else {
 				    Log.e(TAG, "Impossible to write to external storage");
-				    service.addLog("Impossible d'��crire sur la carte SD", RDService.LogLevel.HIGH);
+				    service.addLog("Impossible d'écrire sur la carte SD", RDService.LogLevel.HIGH);
 				}
 			} else {
 				assert(false);
@@ -193,7 +193,7 @@ public class SensorData {
 			}
 		} catch (java.io.IOException e) {
 			Log.e(TAG, "Failed to write file for sensor " + this.name + ": " + e);
-			service.addLog("Impossible d'��crire le fichier de donn��es pour " + this.name, RDService.LogLevel.HIGH);
+			service.addLog("Impossible d'écrire le fichier de données pour " + this.name, RDService.LogLevel.HIGH);
 		} finally {
 			if (fos != null) {
 				try {
