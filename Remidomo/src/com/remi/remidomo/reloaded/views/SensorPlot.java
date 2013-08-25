@@ -5,7 +5,9 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -24,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.androidplot.Plot;
 import com.androidplot.series.XYSeries;
@@ -131,6 +132,8 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		autoRange = a.getBoolean(R.styleable.SensorPlot_auto_range, false);
 		tapEnabled = a.getBoolean(R.styleable.SensorPlot_tap_enabled, false);
 		units = a.getString(R.styleable.SensorPlot_units);
+		a.recycle();
+
 		initTouchHandling();
 		initPlot();
 	}
@@ -152,6 +155,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 		autoRange = a.getBoolean(R.styleable.SensorPlot_auto_range, false);
 		tapEnabled = a.getBoolean(R.styleable.SensorPlot_tap_enabled, false);
 		units = a.getString(R.styleable.SensorPlot_units);
+		a.recycle();
 
 		initTouchHandling();
 		initPlot();
@@ -260,10 +264,12 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 				regionFormatter = new XYRegionFormatter(nightsColor);
 				if (prefs.getBoolean("night_highlight", PrefsPlots.DEFAULT_NIGHT_HIGHLIGHT) &&
 						(filteredSeries.size() > 0)) {
-					Date startDate = new Date(filteredSeries.getX(0).longValue());
-					startDate.setHours(20);
-					startDate.setMinutes(0);
-					long currentX = startDate.getTime();
+
+					Calendar startDate = Calendar.getInstance();
+					startDate.setTimeInMillis(filteredSeries.getX(0).longValue());
+					startDate.set(Calendar.HOUR_OF_DAY, 20);
+					startDate.set(Calendar.MINUTE, 0);
+					long currentX = startDate.getTimeInMillis();
 					while (currentX < filteredSeries.getX(filteredSeries.size()-1).longValue()) {
 						// Float.[NEGATIVE|POSITIVE]_INFINITY don't work on ICS
 						final float NEGATIVE_INFINITY = -50.0f;
@@ -276,14 +282,15 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 
 			if (prefs.getBoolean("day_labels", PrefsPlots.DEFAULT_DAY_LABELS) &&
 					(filteredSeries.size() > 0)) {
-				SimpleDateFormat dateFormat = new SimpleDateFormat("E");
-				Date startDate = new Date(filteredSeries.getX(0).longValue());
-				startDate.setHours(12);
-				startDate.setMinutes(0);
-				long currentX = startDate.getTime();
+				SimpleDateFormat dateFormat = new SimpleDateFormat("E", Locale.getDefault());
+				Calendar startDate = Calendar.getInstance();
+				startDate.setTimeInMillis(filteredSeries.getX(0).longValue());
+				startDate.set(Calendar.HOUR_OF_DAY, 12);
+				startDate.set(Calendar.MINUTE, 0);
+				long currentX = startDate.getTimeInMillis();
 				while (currentX < filteredSeries.getX(filteredSeries.size()-1).longValue()) {
 					String dayLabel = dateFormat.format(new Date(currentX));
-					dayLabel = dayLabel.substring(0, 1).toUpperCase();
+					dayLabel = dayLabel.substring(0, 1).toUpperCase(Locale.getDefault());
 					XValueMarker marker = new XValueMarker(currentX, dayLabel);
 					marker.getLinePaint().setAlpha(0);
 					marker.getTextPaint().setColor(gridColor);
@@ -299,14 +306,16 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 				regionFormatter = new XYRegionFormatter(tarifColor);
 				if (prefs.getBoolean("tarif_highlight", PrefsEnergy.DEFAULT_TARIF_HIGHLIGHT) &&
 						(filteredSeries.size() > 0)) {
-					Date startDate = new Date(filteredSeries.getX(0).longValue());
-					startDate.setHours(prefs.getInt("hp_hour.hour", PrefsEnergy.DEFAULT_HPHOUR));
-					startDate.setMinutes(prefs.getInt("hp_hour.minute", 0));
-					Date endDate = new Date(filteredSeries.getX(0).longValue());
-					endDate.setHours(prefs.getInt("hc_hour.hour", PrefsEnergy.DEFAULT_HCHOUR));
-					endDate.setMinutes(prefs.getInt("hc_hour.minute", 0));
-					long deltaTime = endDate.getTime() - startDate.getTime();
-					long currentX = startDate.getTime();
+					Calendar startDate = Calendar.getInstance();
+					startDate.setTimeInMillis(filteredSeries.getX(0).longValue());
+					startDate.set(Calendar.HOUR_OF_DAY, prefs.getInt("hp_hour.hour", PrefsEnergy.DEFAULT_HPHOUR));
+					startDate.set(Calendar.MINUTE, prefs.getInt("hp_hour.minute", 0));
+					Calendar endDate = Calendar.getInstance();
+					endDate.setTimeInMillis(filteredSeries.getX(0).longValue());
+					endDate.set(Calendar.HOUR_OF_DAY, prefs.getInt("hc_hour.hour", PrefsEnergy.DEFAULT_HCHOUR));
+					endDate.set(Calendar.MINUTE, prefs.getInt("hc_hour.minute", 0));
+					long deltaTime = endDate.getTimeInMillis() - startDate.getTimeInMillis();
+					long currentX = startDate.getTimeInMillis();
 					while (currentX < filteredSeries.getX(filteredSeries.size()-1).longValue()) {
 						// Float.[NEGATIVE|POSITIVE]_INFINITY doesn't work on ICS
 						final float NEGATIVE_INFINITY = 0.0f;
@@ -518,7 +527,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
         // create a simple date format that draws on the year portion of our timestamp.
         // see http://download.oracle.com/javase/1.4.2/docs/api/java/text/SimpleDateFormat.html
         // for a full description of SimpleDateFormat.
-        private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM-kk:mm");
+        private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM-kk:mm", Locale.getDefault());
 
         @Override
         public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {

@@ -1,6 +1,8 @@
 package com.remi.remidomo.reloaded;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -120,7 +122,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 
         setContentView(R.layout.main);
 
-        gestureScanner = new GestureDetector(this);
+        gestureScanner = new GestureDetector(this, this);
 
         new Thread(new Runnable() {
         	public void run() {
@@ -899,7 +901,8 @@ public class RDActivity extends Activity implements OnGestureListener {
 				icon.setImageResource(Doors.getResourceForState(event.state));
 
 				TextView text = (TextView) eventLayout.getChildAt(1);
-				text.setText(event.tstamp.toLocaleString());
+				DateFormat df = DateFormat.getDateTimeInstance();
+				text.setText(df.format(event.tstamp));
 
 				i++;
 			}
@@ -935,17 +938,17 @@ public class RDActivity extends Activity implements OnGestureListener {
         	power.setText("?");
         }
 
-		Date hcHour = new Date();
-		hcHour.setHours(prefs.getInt("hc_hour.hour", PrefsEnergy.DEFAULT_HCHOUR));
-		hcHour.setMinutes(prefs.getInt("hc_hour.minute", 0));
+		Calendar hcHour = Calendar.getInstance();
+		hcHour.set(Calendar.HOUR_OF_DAY, prefs.getInt("hc_hour.hour", PrefsEnergy.DEFAULT_HCHOUR));
+		hcHour.set(Calendar.MINUTE, prefs.getInt("hc_hour.minute", 0));
 
-		Date hpHour = new Date();
-		hpHour.setHours(prefs.getInt("hp_hour.hour", PrefsEnergy.DEFAULT_HPHOUR));
-		hpHour.setMinutes(prefs.getInt("hp_hour.minute", 0));
+		Calendar hpHour = Calendar.getInstance();
+		hpHour.set(Calendar.HOUR_OF_DAY, prefs.getInt("hp_hour.hour", PrefsEnergy.DEFAULT_HPHOUR));
+		hpHour.set(Calendar.MINUTE, prefs.getInt("hp_hour.minute", 0));
 
 		Date now = new Date();
-		if ((now.getTime() >= hpHour.getTime()) &&
-			(now.getTime() < hcHour.getTime())) {
+		if ((now.getTime() >= hpHour.getTimeInMillis()) &&
+			(now.getTime() < hcHour.getTimeInMillis())) {
 			power.setTextColor(Color.parseColor("#FF5555"));
 			units.setTextColor(Color.parseColor("#FF5555"));
 		} else {
