@@ -505,9 +505,33 @@ public class RDActivity extends Activity implements OnGestureListener {
 			}
             if (e1.getX() > e2.getX() && Math.abs(e1.getX() - e2.getX()) > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
             	flipper.showNext();
+
+            	currentView = flipper.getDisplayedChild();
+            	/* Only the visible view will be updated */
+            	updatePoolView();
+            	updateLogView();
+            	updateThermoView();
+            	updateSwitchesView();
+            	updateDoorsView();
+            	updateTrainView();
+            	updateDashboardThermo();
+            	updateEnergyView();
+
             	updateMainIcons(null, flipper.getDisplayedChild());
             } else if (e1.getX() < e2.getX() && e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
             	flipper.showPrevious();
+
+            	currentView = flipper.getDisplayedChild();
+            	/* Only the visible view will be updated */
+            	updatePoolView();
+            	updateLogView();
+            	updateThermoView();
+            	updateSwitchesView();
+            	updateDoorsView();
+            	updateTrainView();
+            	updateDashboardThermo();
+            	updateEnergyView();
+
             	updateMainIcons(null, flipper.getDisplayedChild());
             }
         } catch (Exception e) {
