@@ -6,8 +6,10 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import android.app.Dialog;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -40,139 +42,63 @@ public abstract class Meteo {
 		TextView minText;
 		TextView maxText;
 
+		Resources rsrc = activity.getResources();
+		final String packageName = activity.getPackageName();
+
 		if (meteoData.isEmpty()) {
-			dayText = (TextView) activity.findViewById(R.id.meteo_day1);
-			dayPic = (ImageView) activity.findViewById(R.id.meteo_pic1);
-			minText = (TextView) activity.findViewById(R.id.meteo_min1);
-			maxText = (TextView) activity.findViewById(R.id.meteo_max1);
-			dayText.setText("");
-			dayPic.setImageResource(R.drawable.meteo_unknown);
-			minText.setText("");
-			maxText.setText("");
-			
-			dayText = (TextView) activity.findViewById(R.id.meteo_day2);
-			dayPic = (ImageView) activity.findViewById(R.id.meteo_pic2);
-			minText = (TextView) activity.findViewById(R.id.meteo_min2);
-			maxText = (TextView) activity.findViewById(R.id.meteo_max2);
-			dayText.setText("");
-			dayPic.setImageResource(R.drawable.meteo_unknown);
-			minText.setText("");
-			maxText.setText("");
-			
-			dayText = (TextView) activity.findViewById(R.id.meteo_day3);
-			dayPic = (ImageView) activity.findViewById(R.id.meteo_pic3);
-			minText = (TextView) activity.findViewById(R.id.meteo_min3);
-			maxText = (TextView) activity.findViewById(R.id.meteo_max3);
-			dayText.setText("");
-			dayPic.setImageResource(R.drawable.meteo_unknown);
-			minText.setText("");
-			maxText.setText("");
-			
-			dayText = (TextView) activity.findViewById(R.id.meteo_day4);
-			dayPic = (ImageView) activity.findViewById(R.id.meteo_pic4);
-			minText = (TextView) activity.findViewById(R.id.meteo_min4);
-			maxText = (TextView) activity.findViewById(R.id.meteo_max4);
-			dayText.setText("");
-			dayPic.setImageResource(R.drawable.meteo_unknown);
-			minText.setText("");
-			maxText.setText("");
-			
-			dayText = (TextView) activity.findViewById(R.id.meteo_day5);
-			dayPic = (ImageView) activity.findViewById(R.id.meteo_pic5);
-			minText = (TextView) activity.findViewById(R.id.meteo_min5);
-			maxText = (TextView) activity.findViewById(R.id.meteo_max5);
-			dayText.setText("");
-			dayPic.setImageResource(R.drawable.meteo_unknown);
-			minText.setText("");
-			maxText.setText("");
+			for (int i=1; i<=NB_DAYS; i++) {
+				int rId = rsrc.getIdentifier("meteo_day" + i, "id", packageName);
+				dayText = (TextView) activity.findViewById(rId);
+
+				rId = rsrc.getIdentifier("meteo_pic" + i, "id", packageName);
+				dayPic = (ImageView) activity.findViewById(rId);
+
+				rId = rsrc.getIdentifier("meteo_min" + i, "id", packageName);
+				minText = (TextView) activity.findViewById(rId);
+
+				rId = rsrc.getIdentifier("meteo_max" + i, "id", packageName);
+				maxText = (TextView) activity.findViewById(rId);
+
+				dayText.setText("");
+				dayPic.setImageResource(R.drawable.meteo_unknown);
+				minText.setText("");
+				maxText.setText("");
+			}
 			
 		} else {
 			MeteoData dayData;
 			DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
             decimalFormat.applyPattern("#0.#");
 
-            SimpleDateFormat hr = new SimpleDateFormat("EEE");
+            SimpleDateFormat hr = new SimpleDateFormat("E", Locale.getDefault());
             String dayName;
 
-			dayData = meteoData.get(0);
-			dayText = (TextView) activity.findViewById(R.id.meteo_day1);
-			dayPic = (ImageView) activity.findViewById(R.id.meteo_pic1);
-			minText = (TextView) activity.findViewById(R.id.meteo_min1);
-			maxText = (TextView) activity.findViewById(R.id.meteo_max1);
-			dayName = hr.format(dayData.date);
-			dayText.setText(dayName);
-			dayPic.setImageResource(dayData.resourceId);
-			minText.setText(decimalFormat.format(dayData.minTemp)+" ");
-			maxText.setText(decimalFormat.format(dayData.maxTemp)+" ");
-			dayPic.setOnClickListener(new ImageButton.OnClickListener() {
-				public void onClick(View v) {
-					displayDialog(v);
-				}
-			});
+            for (int i=1; i<=NB_DAYS; i++) {
+				dayData = meteoData.get(i-1);
 
-			dayData = meteoData.get(1);
-			dayText = (TextView) activity.findViewById(R.id.meteo_day2);
-			dayPic = (ImageView) activity.findViewById(R.id.meteo_pic2);
-			minText = (TextView) activity.findViewById(R.id.meteo_min2);
-			maxText = (TextView) activity.findViewById(R.id.meteo_max2);
-			dayName = hr.format(dayData.date);
-			dayText.setText(dayName);
-			dayPic.setImageResource(dayData.resourceId);
-			minText.setText(decimalFormat.format(dayData.minTemp)+" ");
-			maxText.setText(decimalFormat.format(dayData.maxTemp)+" ");
-			dayPic.setOnClickListener(new ImageButton.OnClickListener() {
-				public void onClick(View v) {
-					displayDialog(v);
-				}
-			});
+				int rId = rsrc.getIdentifier("meteo_day" + i, "id", packageName);
+				dayText = (TextView) activity.findViewById(rId);
 
-			dayData = meteoData.get(2);
-			dayText = (TextView) activity.findViewById(R.id.meteo_day3);
-			dayPic = (ImageView) activity.findViewById(R.id.meteo_pic3);
-			minText = (TextView) activity.findViewById(R.id.meteo_min3);
-			maxText = (TextView) activity.findViewById(R.id.meteo_max3);
-			dayName = hr.format(dayData.date);
-			dayText.setText(dayName);
-			dayPic.setImageResource(dayData.resourceId);
-			minText.setText(decimalFormat.format(dayData.minTemp)+" ");
-			maxText.setText(decimalFormat.format(dayData.maxTemp)+" ");
-			dayPic.setOnClickListener(new ImageButton.OnClickListener() {
-				public void onClick(View v) {
-					displayDialog(v);
-				}
-			});
+				rId = rsrc.getIdentifier("meteo_pic" + i, "id", packageName);
+				dayPic = (ImageView) activity.findViewById(rId);
 
-			dayData = meteoData.get(3);
-			dayText = (TextView) activity.findViewById(R.id.meteo_day4);
-			dayPic = (ImageView) activity.findViewById(R.id.meteo_pic4);
-			minText = (TextView) activity.findViewById(R.id.meteo_min4);
-			maxText = (TextView) activity.findViewById(R.id.meteo_max4);
-			dayName = hr.format(dayData.date);
-			dayText.setText(dayName);
-			dayPic.setImageResource(dayData.resourceId);
-			minText.setText(decimalFormat.format(dayData.minTemp)+" ");
-			maxText.setText(decimalFormat.format(dayData.maxTemp)+" ");
-			dayPic.setOnClickListener(new ImageButton.OnClickListener() {
-				public void onClick(View v) {
-					displayDialog(v);
-				}
-			});
+				rId = rsrc.getIdentifier("meteo_min" + i, "id", packageName);
+				minText = (TextView) activity.findViewById(rId);
 
-			dayData = meteoData.get(4);
-			dayText = (TextView) activity.findViewById(R.id.meteo_day5);
-			dayPic = (ImageView) activity.findViewById(R.id.meteo_pic5);
-			minText = (TextView) activity.findViewById(R.id.meteo_min5);
-			maxText = (TextView) activity.findViewById(R.id.meteo_max5);
-			dayName = hr.format(dayData.date);
-			dayText.setText(dayName);
-			dayPic.setImageResource(dayData.resourceId);
-			minText.setText(decimalFormat.format(dayData.minTemp)+" ");
-			maxText.setText(decimalFormat.format(dayData.maxTemp)+" ");
-			dayPic.setOnClickListener(new ImageButton.OnClickListener() {
-				public void onClick(View v) {
-					displayDialog(v);
-				}
-			});
+				rId = rsrc.getIdentifier("meteo_max" + i, "id", packageName);
+				maxText = (TextView) activity.findViewById(rId);
+
+				dayName = hr.format(dayData.date);
+				dayText.setText(dayName);
+				dayPic.setImageResource(dayData.resourceId);
+				minText.setText(decimalFormat.format(dayData.minTemp)+" ");
+				maxText.setText(decimalFormat.format(dayData.maxTemp)+" ");
+				dayPic.setOnClickListener(new ImageButton.OnClickListener() {
+					public void onClick(View v) {
+						displayDialog(v);
+					}
+				});
+            }
 		}
 	}
 	
@@ -197,7 +123,7 @@ public abstract class Meteo {
 		}
 
 		if (data.details != null) {
-			SimpleDateFormat hr = new SimpleDateFormat("EEEEE");
+			SimpleDateFormat hr = new SimpleDateFormat("EEEE", Locale.getDefault());
 
 			final Dialog dialog = new Dialog(v.getContext(), R.style.MeteoDialog);
 			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
