@@ -45,7 +45,7 @@ public class PushSender {
 		sender = new Sender(GCM_API_KEY);
 	}
 	
-	public void pushMsg(List<String> regIds, String target, int index, String state) {
+	public void pushMsg(final List<String> regIds, final String target, final int index, final String state) {
 
 		final String UTF8 = "UTF-8";
 
@@ -53,27 +53,32 @@ public class PushSender {
 			return;
 		}
 
-		try {
-			String uniqueKey = new BigInteger(130, random).toString(32);
+        final String uniqueKey = new BigInteger(130, random).toString(32);
 
-			Message message = new Message.Builder()
-			.collapseKey(STATE)
-			.delayWhileIdle(false)
-			.addData(TARGET, target)
-			.addData(ID, Integer.toString(index))
-			.addData(STATE, URLEncoder.encode(state, UTF8))
-			.addData(KEY, URLEncoder.encode(uniqueKey, UTF8))
-			.addData(TSTAMP, Long.toString(new Date().getTime()))
-			.build();
+        new Thread(new Runnable() {
+            public synchronized void run() {
+                try {
+                    Message message = new Message.Builder()
+                            .collapseKey(STATE)
+                            .delayWhileIdle(false)
+                            .addData(TARGET, target)
+                            .addData(ID, Integer.toString(index))
+                            .addData(STATE, URLEncoder.encode(state, UTF8))
+                            .addData(KEY, URLEncoder.encode(uniqueKey, UTF8))
+                            .addData(TSTAMP, Long.toString(new Date().getTime()))
+                            .build();
 
-			MulticastResult result = sender.send(message, regIds, 1);
-			if (result.getFailure() > 0) {
-				service.addLog("Erreur envoi push: " + result.toString(), RDService.LogLevel.HIGH);
-			}
-		} catch (UnsupportedEncodingException e) {
-			Log.e(TAG, "Encoding error: " + e);
-		} catch (java.io.IOException e) {
-			Log.e(TAG, "IO: " + e);
-		}
+                    MulticastResult result = sender.send(message, regIds, 1);
+                    if (result.getFailure() > 0) {
+                        service.addLog("Erreur envoi push: " + result.toString(), RDService.LogLevel.HIGH);
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    Log.e(TAG, "Encoding error: " + e);
+                } catch (java.io.IOException e) {
+                    Log.e(TAG, "IO: " + e);
+                }
+            }
+        }).start();
+
 	}
 }

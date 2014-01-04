@@ -106,6 +106,7 @@ public class Energy {
     	String mode = prefs.getString("mode", PrefsService.DEFAULT_MODE);
     	if ("Serveur".equals(mode)) {
     		if (powerStatus) {
+                service.addLog("Alimentation électrique restaurée", RDService.LogLevel.HIGH);
     			if (powerLossTimestamp != 0) {
     				long delta = new Date().getTime() - powerLossTimestamp;
     				if (delta >= POWER_LOSS_THRESHOLD) {
@@ -115,7 +116,6 @@ public class Energy {
     					service.pushToClients(PushSender.POWER_RESTORE, 0, duration);
     				}
     			}
-    			service.addLog("Alimentation électrique restaurée", RDService.LogLevel.HIGH);
     		} else {
     			powerLossTimestamp = new Date().getTime();
     			service.addLog("Alimentation électrique perdue", RDService.LogLevel.HIGH);
