@@ -14,9 +14,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.remi.remidomo.common.Notifications;
 import com.remi.remidomo.reloaded.*;
 import com.remi.remidomo.reloaded.data.SensorData.Pair;
-import com.remi.remidomo.reloaded.prefs.PrefsNotif;
+import com.remi.remidomo.common.prefs.PrefsNotif;
 import com.remi.remidomo.reloaded.prefs.PrefsService;
 
 import android.app.NotificationManager;
@@ -359,7 +360,7 @@ public class Sensors {
     				if ((service != null) && (!warnedAboutMissingSensor)) {
     					service.pushToClients(PushSender.MISSING_SENSOR, 0, sensor.getName());
     					String msg = String.format(service.getString(R.string.missing_sensor), sensor.getName());
-    					service.showAlertNotification(msg, PrefsNotif.NotifType.ALERT, R.drawable.temperature2, RDActivity.TEMP_VIEW_ID, new Date());
+    					Notifications.showAlertNotification(service, msg, Notifications.NotifType.ALERT, R.drawable.temperature2, RDActivity.TEMP_VIEW_ID, RDActivity.class, new Date());
     					service.addLog(msg);
     					warnedAboutMissingSensor = true;
     				}

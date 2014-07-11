@@ -1,6 +1,7 @@
-package com.remi.remidomo.reloaded.prefs;
+package com.remi.remidomo.common.prefs;
 
-import com.remi.remidomo.reloaded.R;
+import com.remi.remidomo.common.Notifications;
+import com.remi.remidomo.common.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,19 +12,13 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.support.v4.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 public class PrefsNotif extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
 	public static String DEFAULT_SOUND_GARAGE;
 	public static String DEFAULT_SOUND_ALERT;
-
-	// Constants for invoking ringtone selection
-	public enum NotifType {
-		GARAGE,
-		ALERT
-	};
 
 	private Preference sound_garage;
 	private Preference sound_alert;
@@ -49,7 +44,7 @@ public class PrefsNotif extends PreferenceFragment implements OnSharedPreference
             	intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
             	intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.pref_sound_garage_title));
             	intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(actualUri));
-            	startActivityForResult(intent, NotifType.GARAGE.ordinal());
+            	startActivityForResult(intent, Notifications.NotifType.GARAGE.ordinal());
             	return true;
             }
         });
@@ -62,7 +57,7 @@ public class PrefsNotif extends PreferenceFragment implements OnSharedPreference
             	intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
             	intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.pref_sound_alert_title));
             	intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(actualUri));
-            	startActivityForResult(intent, NotifType.ALERT.ordinal());
+            	startActivityForResult(intent, Notifications.NotifType.ALERT.ordinal());
             	return true;
             }
         });
@@ -128,13 +123,13 @@ public class PrefsNotif extends PreferenceFragment implements OnSharedPreference
              Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
 
              SharedPreferences.Editor editor = prefs.edit();
-             if (requestCode == NotifType.GARAGE.ordinal()) {
+             if (requestCode == Notifications.NotifType.GARAGE.ordinal()) {
             	 if (uri != null) {
             		 editor.putString("sound_garage", uri.toString());
             	 } else {
             		 editor.putString("sound_garage", DEFAULT_SOUND_GARAGE);
             	 }
-             } else if (requestCode == NotifType.ALERT.ordinal()) {
+             } else if (requestCode == Notifications.NotifType.ALERT.ordinal()) {
             	 if (uri != null) {
             		 editor.putString("sound_alert", uri.toString());
             	 } else {

@@ -1,5 +1,6 @@
 package com.remi.remidomo.reloaded.data;
 
+import com.remi.remidomo.common.Notifications;
 import com.remi.remidomo.reloaded.*;
 
 import java.net.URI;
@@ -17,7 +18,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.remi.remidomo.reloaded.prefs.PrefsNotif;
+import com.remi.remidomo.common.prefs.PrefsNotif;
 import com.remi.remidomo.reloaded.prefs.PrefsService;
 
 import android.content.Intent;
@@ -121,11 +122,11 @@ public class Doors {
 		if ("Client".equals(mode) && enable_alert) {
 			if (index == GARAGE) {
 				if (states[GARAGE] == State.CLOSED) {
-					service.showAlertNotification(service.getString(R.string.garage_closed),
-												  PrefsNotif.NotifType.GARAGE, R.drawable.garage_closed, RDActivity.SWITCHES_VIEW_ID, tstamp);
+					Notifications.showAlertNotification(service, service.getString(R.string.garage_closed),
+                            Notifications.NotifType.GARAGE, R.drawable.garage_closed, RDActivity.SWITCHES_VIEW_ID, RDActivity.class, tstamp);
 				} else if (states[GARAGE] == State.OPENED) {
-					service.showAlertNotification(service.getString(R.string.garage_opened),
-							                      PrefsNotif.NotifType.GARAGE, R.drawable.garage_opened, RDActivity.SWITCHES_VIEW_ID, tstamp);
+                    Notifications.showAlertNotification(service, service.getString(R.string.garage_opened),
+                            Notifications.NotifType.GARAGE, R.drawable.garage_opened, RDActivity.SWITCHES_VIEW_ID, RDActivity.class, tstamp);
 				}
 			}
 		}
@@ -141,8 +142,8 @@ public class Doors {
 			// Client is notified of moving state only
 			// if it's not temporary. In that case, it's an
 			// anomaly !
-			service.showAlertNotification(service.getString(R.string.garage_moving),
-					                      PrefsNotif.NotifType.ALERT, R.drawable.garage_moving, RDActivity.SWITCHES_VIEW_ID, tstamp);
+            Notifications.showAlertNotification(service, service.getString(R.string.garage_moving),
+                    Notifications.NotifType.ALERT, R.drawable.garage_moving, RDActivity.SWITCHES_VIEW_ID, RDActivity.class, tstamp);
 		}
 	}
 	

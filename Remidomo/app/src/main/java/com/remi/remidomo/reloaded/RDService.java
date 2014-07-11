@@ -20,11 +20,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.google.android.gcm.GCMConstants;
+import com.remi.remidomo.common.Notifications;
 import com.remi.remidomo.reloaded.meteo.Meteo;
 import com.remi.remidomo.reloaded.meteo.MeteoVilles;
 import com.remi.remidomo.reloaded.prefs.PrefsGeneral;
 import com.remi.remidomo.reloaded.prefs.PrefsMeteo;
-import com.remi.remidomo.reloaded.prefs.PrefsNotif;
 import com.remi.remidomo.reloaded.prefs.PrefsService;
 import com.remi.remidomo.reloaded.prefs.PrefsTrain;
 import com.remi.remidomo.reloaded.widget.WidgetProvider;
@@ -43,12 +43,14 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
+
+
+
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.Spannable;
@@ -62,7 +64,7 @@ public class RDService extends Service {
 	private final static String TAG = RDService.class.getSimpleName();
 
 	private final static String SYSFS_LEDS = "/sys/power/leds";
-		
+
     private NotificationManager notificationMgr = null;
     
     /* Receiver for network state notifications */
@@ -387,47 +389,6 @@ public class RDService extends Service {
 
         // Send the notification.
         notificationMgr.notify(NOTIFICATION_START, builder.build());
-    }
-
-    /**
-     * Alert notifications
-     */
-    public void showAlertNotification(String text, PrefsNotif.NotifType soundId, int iconResId, int destinationView, Date tstamp) {
-
-        // The PendingIntent to launch our activity if the user selects this notification
-        Intent intent = new Intent(this, RDActivity.class);
-        intent.putExtra("view", destinationView);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-        														intent,
-        														PendingIntent.FLAG_UPDATE_CURRENT);
-
-    	NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-    		.setSmallIcon(R.drawable.app_icon)
-    		.setContentIntent(contentIntent)
-    		.setTicker(text)
-    		.setContentText(text)
-    		.setContentTitle(getText(R.string.service_alert))
-    		.setWhen(tstamp.getTime())
-    		.setAutoCancel(true);
-    	
-    	if (iconResId != 0) {
-    	    Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), iconResId);
-    	    builder.setLargeIcon(largeIcon);
-    	}
-
-        // Set sound if any (and if prefs allow)
-        if (prefs.getBoolean("notif_sound", true)) {
-        	String pref;
-        	if (soundId == PrefsNotif.NotifType.GARAGE) {
-        		pref = prefs.getString("sound_garage", PrefsNotif.DEFAULT_SOUND_GARAGE);
-        	} else {
-        		pref = prefs.getString("sound_alert", PrefsNotif.DEFAULT_SOUND_ALERT);
-        	}
-        	builder.setSound(Uri.parse(pref));
-        }
-
-        // Send the notification.
-        notificationMgr.notify(NOTIFICATION_ALERT++, builder.build());
     }
 	
 	public void forceRefresh() {
@@ -923,11 +884,11 @@ public class RDService extends Service {
 				doors.setFromPushedIntent(intent);
 			} else if (PushSender.LOWBAT.equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
-				showAlertNotification(getString(R.string.low_bat), PrefsNotif.NotifType.ALERT, R.drawable.battery_low, RDActivity.TEMP_VIEW_ID, tstamp);
+				Notifications.showAlertNotification(this, getString(R.string.low_bat), Notifications.NotifType.ALERT, R.drawable.battery_low, RDActivity.TEMP_VIEW_ID, RDActivity.class, tstamp);
 			} else if (PushSender.POWER_DROP.equals(target)) {
 				// In case the server still has connectivity...
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
-				showAlertNotification(getString(R.string.power_dropped), PrefsNotif.NotifType.ALERT, R.drawable.energy, RDActivity.DASHBOARD_VIEW_ID, tstamp);
+                Notifications.showAlertNotification(this, getString(R.string.power_dropped), Notifications.NotifType.ALERT, R.drawable.energy, RDActivity.DASHBOARD_VIEW_ID, RDActivity.class, tstamp);
 				energy.updatePowerStatus(false);
 				if (callback != null) {
 					callback.updateEnergy();
@@ -935,7 +896,7 @@ public class RDService extends Service {
 			} else if (PushSender.POWER_RESTORE.equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
 				String duration = intent.getStringExtra(PushSender.STATE);
-				showAlertNotification(String.format(getString(R.string.power_restored), duration), PrefsNotif.NotifType.ALERT, R.drawable.energy, RDActivity.DASHBOARD_VIEW_ID, tstamp);
+                Notifications.showAlertNotification(this, String.format(getString(R.string.power_restored), duration), Notifications.NotifType.ALERT, R.drawable.energy, RDActivity.DASHBOARD_VIEW_ID, RDActivity.class, tstamp);
 				energy.updatePowerStatus(true);
 				if (callback != null) {
 					callback.updateEnergy();
@@ -943,7 +904,7 @@ public class RDService extends Service {
 			} else if (PushSender.MISSING_SENSOR.equals(target)) {
 				Date tstamp = new Date(Long.parseLong(intent.getStringExtra(PushSender.TSTAMP)));
 				String sensorName = intent.getStringExtra(PushSender.STATE);
-				showAlertNotification(String.format(getString(R.string.missing_sensor), sensorName), PrefsNotif.NotifType.ALERT, R.drawable.temperature2, RDActivity.TEMP_VIEW_ID, tstamp);
+                Notifications.showAlertNotification(this, String.format(getString(R.string.missing_sensor), sensorName), Notifications.NotifType.ALERT, R.drawable.temperature2, RDActivity.TEMP_VIEW_ID, RDActivity.class, tstamp);
 			} else {
 				Log.e(TAG, "Unknown push target: " + target);
 				addLog("Cible push inconnue: " + target, LogLevel.HIGH);
