@@ -1,21 +1,18 @@
 package com.remi.remidomo.reloaded.prefs;
 
-import com.remi.remidomo.reloaded.*;
-import com.remi.remidomo.reloaded.views.CustomSpinnerPreference;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
+
+
+import com.remi.remidomo.common.R;
+import com.remi.remidomo.common.prefs.Defaults;
+import com.remi.remidomo.common.views.CustomSpinnerPreference;
 
 public class PrefsGeneral extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
-	public static final int DEFAULT_LOGLIMIT = 365;
-	public static final int DEFAULT_CLIENT_POLL = 30;
-
 	private CustomSpinnerPreference loglimit;
-	private CustomSpinnerPreference client_poll;
 
 	private SharedPreferences prefs;
 
@@ -25,10 +22,9 @@ public class PrefsGeneral extends PreferenceFragment implements OnSharedPreferen
 
         addPreferencesFromResource(R.xml.pref_general);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        prefs = getPreferenceManager().getDefaultSharedPreferences(this.getActivity());
 
         loglimit = (CustomSpinnerPreference) findPreference("loglimit");
-        client_poll = (CustomSpinnerPreference) findPreference("client_poll");
         updateTexts();
     }
     
@@ -69,20 +65,8 @@ public class PrefsGeneral extends PreferenceFragment implements OnSharedPreferen
     }
 
     private void updateTexts() {
-
-    	String mode_sel = prefs.getString("mode", PrefsService.DEFAULT_MODE);
-    	if ("Serveur".equals(mode_sel)) {
-    		client_poll.setEnabled(false);
-    	} else {
-    		client_poll.setEnabled(true);
-    	}
-
-    	int minutes = prefs.getInt("client_poll", DEFAULT_CLIENT_POLL);
-    	String msg = String.format(getString(R.string.pref_poll_summary), minutes);
-    	client_poll.setSummary(msg);
-
-    	int days = prefs.getInt("loglimit", DEFAULT_LOGLIMIT);
-    	msg = String.format(getString(R.string.pref_storelimit_summary), days);
+    	int days = prefs.getInt("loglimit", Defaults.DEFAULT_LOGLIMIT);
+    	String msg = String.format(getString(R.string.pref_storelimit_summary), days);
     	loglimit.setSummary(msg);
     }
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gares">
+        <item name="GOC">Goncelin</item>
+        <item name="GRE">Grenoble</item>
+    </string-array>
+
+    <string-array name="garesValues">
+        <item name="GOC">GOC</item>
+        <item name="GRE">GRE</item>
+    </string-array>
+</resources>

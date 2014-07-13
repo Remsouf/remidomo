@@ -12,14 +12,4 @@
         <item name="client">Client</item>
     </string-array>
     
-    <string-array name="gares">
-        <item name="GOC">Goncelin</item>
-        <item name="GRE">Grenoble</item>
-    </string-array>
-
-    <string-array name="garesValues">
-        <item name="GOC">GOC</item>
-        <item name="GRE">GRE</item>
-    </string-array>
-    
 </resources>

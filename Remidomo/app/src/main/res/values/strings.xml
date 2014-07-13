@@ -4,21 +4,9 @@
     <!-- Activity -->
     <string name="app_name">Remidomo</string>
     <string name="cmd_sent">Commande envoyée</string>
-    <string name="sdcard">Sauver sur carte SD</string>
-    <string name="settings">Paramètres</string>
-    <string name="interrogation">\?</string>
     <string name="clear_log_title">Effacer journal</string>
     <string name="clear_log_msg">Vraiment effacer le journal ?</string>
     <string name="rlog_failed">Impossible d\'obtenir le journal du serveur</string>
-
-    <!-- Service -->
-    <string name="service_started">Remidomo: service démarré</string>
-    <string name="service_label">Service Remidomo</string>
-    <string name="sensors_empty">Aucune donnée capteurs</string>
-    <string name="sensors_restore">Tenter une récupération depuis la carte SD ?</string>
-    <string name="save_complete">Sauvegarde terminée</string>
-	<string name="load_complete">Lecture terminée</string>
-	<string name="data_cleared">Données effacées</string>
 
     <!-- Preferences -->
     <string name="pref_mode_title">Mode</string>
@@ -32,27 +20,8 @@
     <string name="pref_reseau">Réseau</string>
     <string name="pref_general">Général</string>
     <string name="pref_service">Service</string>
-    <string name="pref_storelimit_title">Historique des données</string>
-    <string name="pref_storelimit_summary">Données conservées pendant %1$d jours</string>
-    <string name="pref_storelimit_dialog">Nombre de jours</string>
-    <string name="pref_poll_title">Période de mise à jour</string>
-    <string name="pref_poll_summary">Données mises à jour toutes les %1$d minutes</string>
-    <string name="pref_poll_dialog">Nombre de minutes</string>
     <string name="pref_client_poll_title">Période de mise à jour client</string>
-    <string name="pref_sncf">SNCF</string>
-    <string name="pref_gare_title">Gare</string>
-    <string name="pref_gare_summary">Gare pour prochains départs</string>
-    <string name="pref_meteo">Météo</string>
-    <string name="pref_meteo_title">Période de mise à jour</string>
-    <string name="pref_meteo_summary">Données mises à jour toutes les %1$d heures</string>
-    <string name="pref_meteo_dialog">Nombre d\'heures</string>
     <string name="pref_plots">Graphiques</string>
-    <string name="pref_boot_title">Démarrer au boot</string>
-    <string name="pref_boot_summary_on">Lance le service au démarrage du téléphone</string>
-    <string name="pref_boot_summary_off">Lance le service lorsqu\'il est requis</string>
-    <string name="pref_keepservice_title">Garder le service toujours actif</string>
-    <string name="pref_keepservice_summary_off">Arrete le service en quittant</string>
-    <string name="pref_keepservice_summary_on">Le service reste actif même en quittant</string>
     <string name="pref_night_title">Griser les nuits</string>
     <string name="pref_night_summary_on">Grise la courbe entre 20h et 8h</string>
     <string name="pref_night_summary_off">N\'indique pas les nuits sur les courbes</string>
@@ -79,40 +48,12 @@
     <string name="pref_energylimit_title">Historique des courbes</string>
     <string name="pref_energylimit_summary">Tracé des courbes %1$d jours en arrière</string>
     <string name="pref_energylimit_dialog">Nombre de jours</string>
-    <string name="invalid_url">Cette URL n\'est pas valide (http://...)</string>
-    <string name="invalid_int_lower">Doit être supérieur à %1$d</string>
-	<string name="invalid_int_higher">Doit être inférieur à %1$d</string>
-	<string name="invalid_int">Ce n\'est pas un entier valide</string>
-	<string name="pref_maintenance">Maintenance</string>
-	<string name="pref_reset">Effacer données</string>
-	<string name="pref_reset_summary">Effacer les données des capteurs</string>
 
     <!-- Vues -->
-    <string name="pool">Piscine</string>
-    <string name="outside">Extérieur</string>
-    <string name="veranda">Véranda</string>
     <string name="log">Messages</string>
     <string name="switches">Etats</string>
-    <string name="degC">°C</string>
     <string name="switch1_text">Prise 1</string>
     <string name="portail_text">Porte garage</string>
-    <string name="ilya">Il y a %1$s</string>
-    <string name="depuis">Depuis %1$s</string>
-    <string name="days">%1$d jours</string>
-    <string name="temperature">Température</string>
-	<string name="power">Puissance</string>
-
-    <!-- Trains -->
-    <string name="supprime">SUPPR.</string>
-
-    <!-- Etats -->
-    <string name="garage_opened">Garage ouvert</string>
-    <string name="garage_closed">Garage fermé</string>
-    <string name="garage_moving">Garage bloqué en cours de manoeuvre</string>
-    <string name="low_bat">Batterie du serveur faible</string>
-    <string name="missing_sensor">Le capteur \'%1$s\' n\'émet plus</string>
-    <string name="power_dropped">Plus d\'alimentation électrique</string>
-    <string name="power_restored">Alimentation électrique restaurée après %1$s</string>
 
     <!--  Energie -->
     <string name="kw">kW</string>

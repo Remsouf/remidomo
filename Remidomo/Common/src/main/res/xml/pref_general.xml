@@ -1,0 +1,17 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:icon="@drawable/pref_general"
+    android:title="@string/pref_general" >
+
+    <com.remi.remidomo.common.views.CustomSpinnerPreference
+        android:dialogTitle="@string/pref_storelimit_dialog"
+        android:key="loglimit"
+        android:persistent="true"
+        android:summary="@string/pref_storelimit_summary"
+        android:title="@string/pref_storelimit_title"
+        app:defaultVal="365"
+        app:max="1000"
+        app:min="30" />
+
+</PreferenceScreen>

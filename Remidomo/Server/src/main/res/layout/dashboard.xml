@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/dashboardView" >
+    
+    <!-- Line1 : Weather -->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/meteo_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="80px"
+            android:src="@drawable/weather"
+            android:layout_alignParentLeft="true" />
+                
+        <TextView
+            android:id="@+id/meteo_last_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14px"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/meteo_icon" />
+        
+        <include layout="@layout/meteo" />
+
+    </RelativeLayout>
+    <LinearLayout
+    	android:layout_width="fill_parent"
+    	android:layout_height="1dp"
+    	android:paddingBottom="2dp"
+    	android:paddingTop="2dp"
+    	android:layout_marginLeft="15dp"
+    	android:layout_marginRight="15dp"
+    	android:scaleType="fitXY"
+    	android:background="#333333"
+    	android:orientation="horizontal" />
+    
+    <!-- Line2 : SNCF -->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/train_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="80px"
+            android:src="@drawable/train"
+            android:layout_alignParentLeft="true" />
+        
+        <com.remi.remidomo.reloaded.views.TrainsView
+            android:id="@+id/trains"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+
+        <ImageView
+            android:id="@+id/train_unknown"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:paddingRight="10px"
+            android:paddingLeft="10px"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/meteo_unknown" />
+
+        <ImageButton
+            android:id="@+id/train_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/note_pin"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:visibility="gone" />
+        
+        <TextView
+            android:id="@+id/train_last_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14px"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/train_icon" />
+
+    </RelativeLayout>
+    <LinearLayout
+    	android:layout_width="fill_parent"
+    	android:layout_height="1dp"
+    	android:paddingBottom="2dp"
+    	android:paddingTop="2dp"
+    	android:layout_marginLeft="15dp"
+    	android:layout_marginRight="15dp"
+    	android:scaleType="fitXY"
+    	android:background="#333333"
+    	android:orientation="horizontal" />   
+    
+    <!-- Line3 : Thermo -->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/thermo_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="70px"
+            android:src="@drawable/temperature"
+            android:layout_alignParentLeft="true" />
+        
+        <TextView
+            android:id="@+id/thermo_last_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14px"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/thermo_icon" />
+        
+        <LinearLayout
+            android:id="@+id/temps_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal" >
+        
+        <RelativeLayout
+            android:id="@+id/pool_layout"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_centerVertical="true" >
+
+        	<TextView
+            	android:id="@+id/pool_temp"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:textSize="36px"
+            	android:includeFontPadding="false"
+            	android:layout_centerHorizontal="true"
+            	android:text="@string/interrogation" />
+
+        	<TextView
+        	    android:id="@+id/pool_humi"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:textSize="20px"
+            	android:layout_below="@id/pool_temp"
+            	android:text=""
+            	android:textColor="#5555FF"
+            	android:includeFontPadding="false"
+            	android:layout_centerHorizontal="true" />
+        	        		        
+        	<TextView
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:textSize="24px"
+            	android:layout_below="@id/pool_humi"
+            	android:text="@string/pool"
+            	android:textStyle="italic"
+            	android:layout_gravity="center"
+            	android:layout_centerHorizontal="true"
+            	android:paddingRight="30px"
+            	android:paddingLeft="30px" />
+        	
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ext_layout"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_centerVertical="true" >
+        	
+        	<TextView
+            	android:id="@+id/ext_temp"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:textSize="36px"
+            	android:includeFontPadding="false"
+            	android:layout_centerHorizontal="true"
+            	android:text="@string/interrogation" />
+
+        	<TextView
+        	    android:id="@+id/ext_humi"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:textSize="20px"
+            	android:layout_below="@id/ext_temp"
+            	android:text="@string/interrogation"
+            	android:textColor="#5555FF"
+            	android:includeFontPadding="false"
+            	android:layout_gravity="center"
+            	android:layout_centerHorizontal="true" />
+        	
+        	<TextView
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:textSize="24px"
+            	android:layout_below="@id/ext_humi"
+            	android:text="@string/outside"
+            	android:textStyle="italic"
+            	android:layout_gravity="center"
+            	android:layout_centerHorizontal="true"
+            	android:paddingRight="40px"
+            	android:paddingLeft="40px" />
+        	
+        </RelativeLayout>
+        
+        <RelativeLayout
+            android:id="@+id/veranda_layout"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_centerVertical="true" >
+        	
+        	<TextView
+            	android:id="@+id/veranda_temp"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:textSize="36px"
+            	android:includeFontPadding="false"
+            	android:layout_centerHorizontal="true"
+            	android:text="@string/interrogation" />
+
+        	<TextView
+        	    android:id="@+id/veranda_humi"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:textSize="20px"
+            	android:layout_below="@id/veranda_temp"
+            	android:text="@string/interrogation"
+            	android:textColor="#5555FF"
+            	android:includeFontPadding="false"
+            	android:layout_gravity="center"
+            	android:layout_centerHorizontal="true" />
+        	        	
+        	<TextView
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:textSize="24px"
+            	android:layout_below="@id/veranda_humi"
+            	android:text="@string/veranda"
+            	android:textStyle="italic"
+            	android:layout_gravity="center"
+            	android:layout_centerHorizontal="true"
+            	android:paddingRight="30px"
+            	android:paddingLeft="30px" />
+        	
+        </RelativeLayout>
+        
+        </LinearLayout>
+
+    </RelativeLayout>
+    <LinearLayout
+    	android:layout_width="fill_parent"
+    	android:layout_height="1dp"
+    	android:paddingBottom="2dp"
+    	android:paddingTop="2dp"
+    	android:layout_marginLeft="15dp"
+    	android:layout_marginRight="15dp"
+    	android:scaleType="fitXY"
+    	android:background="#333333"
+    	android:orientation="horizontal" />   
+    
+</LinearLayout>

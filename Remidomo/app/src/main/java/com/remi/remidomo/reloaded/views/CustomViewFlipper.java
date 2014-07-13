@@ -1,11 +1,11 @@
 package com.remi.remidomo.reloaded.views;
 
-import com.remi.remidomo.reloaded.*;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ViewFlipper;
+
+import com.remi.remidomo.reloaded.RDActivity;
 
 /*
  * Workaround crashes in ViewFlipper with Android >= 2.1
@@ -14,7 +14,7 @@ import android.widget.ViewFlipper;
  */
 public class CustomViewFlipper extends ViewFlipper {
 
-	private final static String TAG = RDService.class.getSimpleName();
+	private final static String TAG = RDActivity.class.getSimpleName();
 
 	public CustomViewFlipper(Context context) {
 		super(context);

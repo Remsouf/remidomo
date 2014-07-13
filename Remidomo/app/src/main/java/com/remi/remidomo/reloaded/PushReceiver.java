@@ -8,6 +8,8 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.android.gcm.GCMConstants;
+import com.remi.remidomo.common.PushSender;
+import com.remi.remidomo.common.prefs.Defaults;
 import com.remi.remidomo.reloaded.prefs.PrefsService;
 
 import android.content.BroadcastReceiver;
@@ -90,8 +92,8 @@ public class PushReceiver extends BroadcastReceiver {
 	public void syncWithServer(Context context, String key) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		
-		int port = prefs.getInt("port", PrefsService.DEFAULT_PORT);
-		String ipAddr = prefs.getString("ip_address", PrefsService.DEFAULT_IP);
+		int port = prefs.getInt("port", Defaults.DEFAULT_PORT);
+		String ipAddr = prefs.getString("ip_address", Defaults.DEFAULT_IP);
 		Log.d(TAG, "Client push registration connecting to " + ipAddr + ":" + port);
 		//service.addLog("Connexion au serveur " + ipAddr + ":" + port + " (Enregistrement Push)");
 

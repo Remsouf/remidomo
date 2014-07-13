@@ -51,7 +51,7 @@
             android:src="@drawable/train"
             android:layout_alignParentLeft="true" />
         
-        <com.remi.remidomo.reloaded.views.TrainsView
+        <com.remi.remidomo.common.views.TrainsView
             android:id="@+id/trains"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:src="@drawable/meteo_unknown" />
-                
+
         <ImageButton
             android:id="@+id/train_note"
             android:layout_width="wrap_content"

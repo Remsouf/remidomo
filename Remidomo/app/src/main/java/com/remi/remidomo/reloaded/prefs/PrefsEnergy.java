@@ -2,8 +2,9 @@ package com.remi.remidomo.reloaded.prefs;
 
 import java.text.DecimalFormat;
 
-import com.remi.remidomo.reloaded.views.CustomSpinnerPreference;
-import com.remi.remidomo.reloaded.views.CustomTimePickerPreference;
+import com.remi.remidomo.common.prefs.Defaults;
+import com.remi.remidomo.common.views.CustomSpinnerPreference;
+import com.remi.remidomo.common.views.CustomTimePickerPreference;
 import com.remi.remidomo.reloaded.R;
 
 import android.content.SharedPreferences;
@@ -14,12 +15,6 @@ import android.preference.PreferenceManager;
 
 public class PrefsEnergy extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
-	public static final int DEFAULT_HCHOUR = 23;
-	public static final int DEFAULT_HPHOUR = 7;
-	public static final int DEFAULT_ENERGYLIMIT = 2;
-	public static final boolean DEFAULT_ENERGY_GRAPH = true;
-	public static final boolean DEFAULT_TARIF_HIGHLIGHT = true;
-	
 	private CustomTimePickerPreference hchour;
 	private CustomTimePickerPreference hphour;
 	private CustomSpinnerPreference energylimit;
@@ -85,17 +80,17 @@ public class PrefsEnergy extends PreferenceFragment implements OnSharedPreferenc
     	DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
         decimalFormat.applyPattern("#00");
 
-        hours = prefs.getInt("hc_hour.hour", DEFAULT_HCHOUR);
+        hours = prefs.getInt("hc_hour.hour", Defaults.DEFAULT_HCHOUR);
         minutes = prefs.getInt("hc_hour.minute", 0);
         msg = String.format(getString(R.string.pref_hchour_summary), hours, decimalFormat.format(minutes));
         hchour.setSummary(msg);
 
-        hours = prefs.getInt("hp_hour.hour", DEFAULT_HPHOUR);
+        hours = prefs.getInt("hp_hour.hour", Defaults.DEFAULT_HPHOUR);
         minutes = prefs.getInt("hp_hour.minute", 0);
         msg = String.format(getString(R.string.pref_hphour_summary), hours, decimalFormat.format(minutes));
         hphour.setSummary(msg);
         
-        days = prefs.getInt("energy_limit", DEFAULT_ENERGYLIMIT);
+        days = prefs.getInt("energy_limit", Defaults.DEFAULT_ENERGYLIMIT);
         msg = String.format(getString(R.string.pref_energylimit_summary), days);
         energylimit.setSummary(msg);
     }

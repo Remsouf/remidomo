@@ -25,7 +25,7 @@
         android:summaryOn="@string/pref_days_summary_on"
         android:title="@string/pref_days_title" />
 
-    <com.remi.remidomo.reloaded.views.CustomSpinnerPreference
+    <com.remi.remidomo.common.views.CustomSpinnerPreference
         android:dialogTitle="@string/pref_plotlimit_dialog"
         android:key="plot_limit"
         android:persistent="true"

@@ -1,19 +1,16 @@
 package com.remi.remidomo.reloaded.prefs;
 
-import com.remi.remidomo.reloaded.*;
-import com.remi.remidomo.reloaded.views.CustomSpinnerPreference;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
+
+import com.remi.remidomo.common.R;
+import com.remi.remidomo.common.prefs.Defaults;
+import com.remi.remidomo.common.views.CustomSpinnerPreference;
 
 public class PrefsTrain extends PreferenceFragment implements OnSharedPreferenceChangeListener {
-
-	public static final int DEFAULT_SNCF_POLL = 15;
-	public static final String DEFAULT_GARE = "GOC";
 
 	private CustomSpinnerPreference sncf_poll;
 	private ListPreference gare;
@@ -27,7 +24,7 @@ public class PrefsTrain extends PreferenceFragment implements OnSharedPreference
 
         addPreferencesFromResource(R.xml.pref_train);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        prefs = getPreferenceManager().getDefaultSharedPreferences(this.getActivity());
 
         sncf_poll = (CustomSpinnerPreference) findPreference("sncf_poll");
         gare = (ListPreference) findPreference("gare");
@@ -71,11 +68,11 @@ public class PrefsTrain extends PreferenceFragment implements OnSharedPreference
     }
 
     private void updateTexts() {
-    	int minutes = prefs.getInt("sncf_poll", DEFAULT_SNCF_POLL);
+    	int minutes = prefs.getInt("sncf_poll", Defaults.DEFAULT_SNCF_POLL);
     	String msg = String.format(getString(R.string.pref_poll_summary), minutes);
     	sncf_poll.setSummary(msg);
     	
-    	String gare_sel = prefs.getString("gare", DEFAULT_GARE);
+    	String gare_sel = prefs.getString("gare", Defaults.DEFAULT_GARE);
     	gare.setSummary(gare_sel);
     }
 }

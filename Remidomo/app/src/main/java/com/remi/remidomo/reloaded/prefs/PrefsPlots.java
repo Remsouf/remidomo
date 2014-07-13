@@ -1,7 +1,8 @@
 package com.remi.remidomo.reloaded.prefs;
 
+import com.remi.remidomo.common.prefs.Defaults;
+import com.remi.remidomo.common.views.CustomSpinnerPreference;
 import com.remi.remidomo.reloaded.*;
-import com.remi.remidomo.reloaded.views.CustomSpinnerPreference;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -10,11 +11,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 public class PrefsPlots extends PreferenceFragment implements OnSharedPreferenceChangeListener {
-
-	public static final boolean DEFAULT_NIGHT_HIGHLIGHT = true;
-	public static final boolean DEFAULT_DOTS_HIGHLIGHT = true;
-	public static final boolean DEFAULT_DAY_LABELS = true;
-	public static final int DEFAULT_PLOTLIMIT = 10;
 
 	private CustomSpinnerPreference plotlimit;
 
@@ -71,7 +67,7 @@ public class PrefsPlots extends PreferenceFragment implements OnSharedPreference
 
     private void updateTexts() {
 
-    	int days = prefs.getInt("plot_limit", DEFAULT_PLOTLIMIT);
+    	int days = prefs.getInt("plot_limit", Defaults.DEFAULT_PLOTLIMIT);
     	String msg = String.format(getString(R.string.pref_plotlimit_summary), days);
     	plotlimit.setSummary(msg);
     	

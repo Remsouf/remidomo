@@ -40,10 +40,9 @@ import com.androidplot.xy.XYStepMode;
 import com.androidplot.xy.YLayoutStyle;
 import com.androidplot.xy.YPositionMetric;
 
-import com.remi.remidomo.reloaded.*;
-import com.remi.remidomo.reloaded.data.SensorData;
-import com.remi.remidomo.reloaded.prefs.PrefsEnergy;
-import com.remi.remidomo.reloaded.prefs.PrefsPlots;
+import com.remi.remidomo.common.prefs.Defaults;
+import com.remi.remidomo.common.data.SensorData;
+import com.remi.remidomo.reloaded.R;
 
 public class SensorPlot extends XYPlot implements OnTouchListener {
 	
@@ -229,9 +228,9 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 			int effDaysBack = daysBack;
 			if (effDaysBack == 0) {
 				if (tarifCompatible) {
-					effDaysBack = prefs.getInt("energy_limit", PrefsEnergy.DEFAULT_ENERGYLIMIT);
+					effDaysBack = prefs.getInt("energy_limit", Defaults.DEFAULT_ENERGYLIMIT);
 				} else {
-					effDaysBack = prefs.getInt("plot_limit", PrefsPlots.DEFAULT_PLOTLIMIT);
+					effDaysBack = prefs.getInt("plot_limit", Defaults.DEFAULT_PLOTLIMIT);
 				}
 			}
 
@@ -239,7 +238,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 			filteredSeries = series.filter(limit);
 
 			int dotsEffectiveColor = 0;
-			if (prefs.getBoolean("dots_highlight", PrefsPlots.DEFAULT_DOTS_HIGHLIGHT)) {
+			if (prefs.getBoolean("dots_highlight", Defaults.DEFAULT_DOTS_HIGHLIGHT)) {
 				dotsEffectiveColor = dotsColor;
 			} else {
 				dotsEffectiveColor = Color.argb(0, 0, 0, 0);
@@ -255,14 +254,14 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 			LineAndPointFormatter formatter  = new LineAndPointFormatter(curveEffectiveColor, dotsEffectiveColor, null);
 			XYRegionFormatter regionFormatter;
 			
-			if (!prefs.getBoolean("dots_highlight", PrefsPlots.DEFAULT_DOTS_HIGHLIGHT)) {
+			if (!prefs.getBoolean("dots_highlight", Defaults.DEFAULT_DOTS_HIGHLIGHT)) {
 				formatter.setVertexPaint(null);
 			}
 
 			// Get initial timestamp, and force 20:00 as starting point
 			if (nightsCompatible) {
 				regionFormatter = new XYRegionFormatter(nightsColor);
-				if (prefs.getBoolean("night_highlight", PrefsPlots.DEFAULT_NIGHT_HIGHLIGHT) &&
+				if (prefs.getBoolean("night_highlight", Defaults.DEFAULT_NIGHT_HIGHLIGHT) &&
 						(filteredSeries.size() > 0)) {
 
 					Calendar startDate = Calendar.getInstance();
@@ -280,7 +279,7 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 				}
 			}
 
-			if (prefs.getBoolean("day_labels", PrefsPlots.DEFAULT_DAY_LABELS) &&
+			if (prefs.getBoolean("day_labels", Defaults.DEFAULT_DAY_LABELS) &&
 					(filteredSeries.size() > 0)) {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("E", Locale.getDefault());
 				Calendar startDate = Calendar.getInstance();
@@ -304,15 +303,15 @@ public class SensorPlot extends XYPlot implements OnTouchListener {
 
 			if (tarifCompatible) {
 				regionFormatter = new XYRegionFormatter(tarifColor);
-				if (prefs.getBoolean("tarif_highlight", PrefsEnergy.DEFAULT_TARIF_HIGHLIGHT) &&
+				if (prefs.getBoolean("tarif_highlight", Defaults.DEFAULT_TARIF_HIGHLIGHT) &&
 						(filteredSeries.size() > 0)) {
 					Calendar startDate = Calendar.getInstance();
 					startDate.setTimeInMillis(filteredSeries.getX(0).longValue());
-					startDate.set(Calendar.HOUR_OF_DAY, prefs.getInt("hp_hour.hour", PrefsEnergy.DEFAULT_HPHOUR));
+					startDate.set(Calendar.HOUR_OF_DAY, prefs.getInt("hp_hour.hour", Defaults.DEFAULT_HPHOUR));
 					startDate.set(Calendar.MINUTE, prefs.getInt("hp_hour.minute", 0));
 					Calendar endDate = Calendar.getInstance();
 					endDate.setTimeInMillis(filteredSeries.getX(0).longValue());
-					endDate.set(Calendar.HOUR_OF_DAY, prefs.getInt("hc_hour.hour", PrefsEnergy.DEFAULT_HCHOUR));
+					endDate.set(Calendar.HOUR_OF_DAY, prefs.getInt("hc_hour.hour", Defaults.DEFAULT_HCHOUR));
 					endDate.set(Calendar.MINUTE, prefs.getInt("hc_hour.minute", 0));
 					long deltaTime = endDate.getTimeInMillis() - startDate.getTimeInMillis();
 					long currentX = startDate.getTimeInMillis();

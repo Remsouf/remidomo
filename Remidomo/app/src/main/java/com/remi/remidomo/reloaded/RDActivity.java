@@ -7,14 +7,19 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.remi.remidomo.common.BaseActivity;
+import com.remi.remidomo.common.BaseService;
+import com.remi.remidomo.common.IUpdateListener;
+import com.remi.remidomo.common.data.Doors;
+import com.remi.remidomo.common.data.SensorData;
+import com.remi.remidomo.common.data.Sensors;
+import com.remi.remidomo.common.prefs.Defaults;
+import com.remi.remidomo.common.views.TrainsView;
 import com.remi.remidomo.reloaded.prefs.PreferencesActivity;
 import com.remi.remidomo.reloaded.prefs.PrefsEnergy;
 import com.remi.remidomo.reloaded.prefs.PrefsService;
 import com.remi.remidomo.reloaded.views.SensorPlot;
-import com.remi.remidomo.reloaded.views.TrainsView;
-import com.remi.remidomo.reloaded.data.*;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
@@ -35,14 +40,12 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -62,21 +65,13 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.util.Log;
 
-public class RDActivity extends Activity implements OnGestureListener {
+public class RDActivity extends BaseActivity implements OnGestureListener {
 	
 	private final static String TAG = RDActivity.class.getSimpleName();
 
 	private static final int SWIPE_MIN_DISTANCE = 60;
     private static final int SWIPE_THRESHOLD_VELOCITY = 100;
-    
-    // Not an enum, because it also represents
-    // index into the flipper view
-    public static final int DASHBOARD_VIEW_ID = 0;
-    public static final int TEMP_VIEW_ID = 1;
-    public static final int POOL_VIEW_ID = 2;
-    public static final int SWITCHES_VIEW_ID = 3;
-    public static final int ENERGY_VIEW_ID = 4;
-    public static final int LOG_VIEW_ID = 5;
+
     private int currentView = DASHBOARD_VIEW_ID;
  
 	private ViewFlipper flipper;
@@ -191,7 +186,9 @@ public class RDActivity extends Activity implements OnGestureListener {
         ImageButton settings = (ImageButton) findViewById(R.id.settingsButton);
         settings.setOnClickListener(new ImageButton.OnClickListener() {
         	public void onClick(View v) {
-        		startActivity(new Intent(RDActivity.this, PreferencesActivity.class));
+                Intent intent = new Intent(RDActivity.this, PreferencesActivity.class);
+                intent.putExtra(BaseService.SERVICE_CLASS_EXTRA, RDService.class.getName());
+        		startActivity(intent);
         	}
         });
 
@@ -445,18 +442,9 @@ public class RDActivity extends Activity implements OnGestureListener {
         ImageButton switchesHistoryButton = (ImageButton) findViewById(R.id.history_clear);
         ImageButton resetEnergy = (ImageButton) findViewById(R.id.energyreset_button);
 
-    	String mode = prefs.getString("mode", PrefsService.DEFAULT_MODE);
-        if ("Serveur".equals(mode)) {
-        	refresh.setVisibility(View.GONE);
-        	serverLogButton.setVisibility(View.GONE);
-        	clientLogButton.setVisibility(View.GONE);
-        	switchesHistoryButton.setVisibility(View.VISIBLE);
-        	resetEnergy.setVisibility(View.VISIBLE);
-        } else {
-        	refresh.setVisibility(View.VISIBLE);
-        	switchesHistoryButton.setVisibility(View.GONE);
-        	resetEnergy.setVisibility(View.GONE);
-        }
+        refresh.setVisibility(View.VISIBLE);
+        switchesHistoryButton.setVisibility(View.GONE);
+        resetEnergy.setVisibility(View.GONE);
 
 		updateListener.startRefreshAnim();
     	updatePoolView();
@@ -478,7 +466,7 @@ public class RDActivity extends Activity implements OnGestureListener {
     @Override
     protected void onDestroy() {
 
-    	if (!prefs.getBoolean("keepservice", PrefsService.DEFAULT_KEEPSERVICE)) {
+    	if (!prefs.getBoolean("keepservice", Defaults.DEFAULT_KEEPSERVICE)) {
     		if (service != null) {
     			service.stopAtActivityRequest();
     		}
@@ -554,17 +542,6 @@ public class RDActivity extends Activity implements OnGestureListener {
 		return true;
 	}
 	
-	private void showSplash() {
-		LayoutInflater inflater = getLayoutInflater();
-		View layout = inflater.inflate(R.layout.splash,
-					(ViewGroup) findViewById(R.id.splash));
-		Toast toast = new Toast(this);
-		toast.setGravity(Gravity.CENTER, 0, 0);
-		toast.setDuration(Toast.LENGTH_LONG);
-		toast.setView(layout);
-		toast.show();
-	}
-	
 	private void clearLog() {
 		new AlertDialog.Builder(RDActivity.this)
         .setIcon(android.R.drawable.ic_delete)
@@ -637,8 +614,8 @@ public class RDActivity extends Activity implements OnGestureListener {
 
 		});
 
-		int port = prefs.getInt("port", PrefsService.DEFAULT_PORT);
-		String ipAddr = prefs.getString("ip_address", PrefsService.DEFAULT_IP);
+		int port = prefs.getInt("port", Defaults.DEFAULT_PORT);
+		String ipAddr = prefs.getString("ip_address", Defaults.DEFAULT_IP);
 
 		remoteContent.clearView();
 		remoteContent.loadUrl(ipAddr + ":" + port + "/log");
@@ -684,7 +661,7 @@ public class RDActivity extends Activity implements OnGestureListener {
 	private ServiceConnection serviceConnection = new ServiceConnection() {
 	      public void onServiceConnected(ComponentName className, IBinder serviceBind) {
 	    	  	RDService.LocalBinder binder = (RDService.LocalBinder) serviceBind;
-	    	  	service = binder.getService();
+	    	  	service = (RDService) binder.getService();
 	    	  	
 	    	  	binder.registerCallbacks(updateListener);
         	
@@ -939,11 +916,11 @@ public class RDActivity extends Activity implements OnGestureListener {
         }
 
 		Calendar hcHour = Calendar.getInstance();
-		hcHour.set(Calendar.HOUR_OF_DAY, prefs.getInt("hc_hour.hour", PrefsEnergy.DEFAULT_HCHOUR));
+		hcHour.set(Calendar.HOUR_OF_DAY, prefs.getInt("hc_hour.hour", Defaults.DEFAULT_HCHOUR));
 		hcHour.set(Calendar.MINUTE, prefs.getInt("hc_hour.minute", 0));
 
 		Calendar hpHour = Calendar.getInstance();
-		hpHour.set(Calendar.HOUR_OF_DAY, prefs.getInt("hp_hour.hour", PrefsEnergy.DEFAULT_HPHOUR));
+		hpHour.set(Calendar.HOUR_OF_DAY, prefs.getInt("hp_hour.hour", Defaults.DEFAULT_HPHOUR));
 		hpHour.set(Calendar.MINUTE, prefs.getInt("hp_hour.minute", 0));
 
 		Date now = new Date();
@@ -982,18 +959,6 @@ public class RDActivity extends Activity implements OnGestureListener {
         }
 
         updateEnergyLastUpdate();
-	}
-
-	public static String deltaToTimeString(long delta) {
-		int hours = (int) delta / 3600000;
-		int minutes = ((int)delta - (hours * 3600000)) / 60000;
-		String delai = "" + hours + ":" + String.format("%02d", minutes);
-		return delai;
-	}
-
-	public String deltaToDateString(long delta) {
-		int days = (int) (delta / 86400000);
-		return String.format(getString(R.string.days), days);
 	}
 
 	public void updateMeteoLastUpdate() {

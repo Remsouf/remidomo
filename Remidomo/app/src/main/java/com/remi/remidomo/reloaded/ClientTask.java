@@ -16,10 +16,7 @@ public class ClientTask extends TimerTask {
 			service.callback.startRefreshAnim();
 		}
 
-		service.getSwitches().syncWithServer();
-		service.getSensors().syncWithServer();
-		service.getDoors().syncWithServer();
-		service.getEnergy().syncWithServer();
+        service.forceRefresh();
 
 		if (service.callback != null) {
 			service.callback.stopRefreshAnim();

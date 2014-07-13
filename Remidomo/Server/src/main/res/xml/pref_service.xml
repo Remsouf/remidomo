@@ -1,0 +1,41 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/pref_service">
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="bootkick"
+        android:persistent="true"
+        android:title="@string/pref_boot_title" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="keepservice"
+        android:persistent="true"
+        android:title="@string/pref_keepservice_title" />
+
+    <PreferenceCategory
+        android:key="mode_screen"
+        android:title="@string/pref_reseau" >
+
+        <com.remi.remidomo.common.views.CustomSpinnerPreference
+            android:dialogTitle="@string/pref_port_rfxlan"
+            android:key="rfx_port"
+            android:persistent="true"
+            android:summary="@string/pref_port_summary"
+            android:title="@string/pref_port_rfxlan"
+            app:defaultVal="1234"
+            app:max="65535"
+            app:min="1024" />
+        <com.remi.remidomo.common.views.CustomSpinnerPreference
+            android:dialogTitle="@string/pref_port_serveur"
+            android:key="port"
+            android:persistent="true"
+            android:summary="@string/pref_port_summary"
+            android:title="@string/pref_port_serveur"
+            app:defaultVal="1234"
+            app:max="65535"
+            app:min="1024" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

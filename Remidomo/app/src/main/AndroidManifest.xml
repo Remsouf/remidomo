@@ -19,7 +19,7 @@
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:allowBackup="true"
-        android:backupAgent="Backup"
+        android:backupAgent="com.remi.remidomo.common.Backup"
         android:restoreAnyVersion="true" >
 
         <meta-data
@@ -52,17 +52,9 @@
 			</intent-filter>
         </service>
 
-    	<receiver android:name=".BootReceiver">
+    	<receiver android:name="com.remi.remidomo.common.BootReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
-			</intent-filter>
-		</receiver>
-
-    	<receiver android:name=".BatteryReceiver">
-			<intent-filter>
-			    <action android:name="android.intent.action.ACTION_BATTERY_LOW" />
-				<action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
-				<action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
 			</intent-filter>
 		</receiver>
 
