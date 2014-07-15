@@ -7,6 +7,8 @@
     <string name="interrogation">\?</string>
     <string name="sdcard">Sauver sur carte SD</string>
     <string name="settings">Paramètres</string>
+    <string name="clear_log_title">Effacer journal</string>
+    <string name="clear_log_msg">Vraiment effacer le journal ?</string>
 
     <!-- Service -->
     <string name="service_started">Remidomo: service démarré</string>
@@ -69,14 +71,19 @@
     <string name="power_restored">Alimentation électrique restaurée après %1$s</string>
 
     <!-- Vues/JSON -->
+    <string name="log">Messages</string>
     <string name="power">Puissance</string>
     <string name="pool">Piscine</string>
     <string name="outside">Extérieur</string>
     <string name="veranda">Véranda</string>
     <string name="temperature">Température</string>
+    <string name="switch1_text">Prise 1</string>
     <string name="degC">°C</string>
     <string name="ilya">Il y a %1$s</string>
     <string name="depuis">Depuis %1$s</string>
     <string name="days">%1$d jours</string>
+
+    <!--  Energie -->
+    <string name="kw">kW</string>
 
 </resources>

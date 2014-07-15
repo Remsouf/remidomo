@@ -36,6 +36,8 @@
 
         <activity android:name="com.remi.remidomo.server.prefs.PreferencesActivity" />
 
+        <activity android:name="com.remi.remidomo.server.LogActivity" />
+
         <service
             android:name=".RDService"
             android:label="@string/service_label"

@@ -10,15 +10,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.Timer;
 
-import com.google.android.gcm.GCMConstants;
 import com.remi.remidomo.common.BaseActivity;
 import com.remi.remidomo.common.BaseService;
 import com.remi.remidomo.common.PushSender;
+import com.remi.remidomo.common.data.Doors;
 import com.remi.remidomo.common.data.xPLMessage;
 import com.remi.remidomo.common.prefs.Defaults;
-import com.remi.remidomo.server.prefs.PrefsService;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +27,7 @@ import android.util.Log;
 
 public class RDService extends BaseService {
 
-    private final static String TAG = RDService.class.getSimpleName();
+    private final static String TAG = "Remidomo-" + RDService.class.getSimpleName();
 
     private final static String SYSFS_LEDS = "/sys/power/leds";
 
@@ -70,21 +68,10 @@ public class RDService extends BaseService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        try {
-            while (prefs == null) {
-                Thread.sleep(100);
-            }
-        } catch (java.lang.InterruptedException ignored) {}
+        int result = super.onStartCommand(intent, flags, startId);
 
         // In case of crash/restart, intent can be null
-        if ((intent != null) && ACTION_BOOTKICK.equals(intent.getAction())) {
-            boolean kickboot = prefs.getBoolean("bootkick", Defaults.DEFAULT_BOOTKICK);
-            if (!kickboot) {
-                Log.i(TAG, "Exit service to ignore boot event");
-                cleanObjects();
-                stopSelf();
-            }
-        } else if ((intent != null) && ACTION_BATTERYLOW.equals(intent.getAction())) {
+        if ((intent != null) && ACTION_BATTERYLOW.equals(intent.getAction())) {
             pushToClients(PushSender.LOWBAT, 0, "");
             Log.i(TAG, "Sending push for low battery !");
             addLog("Batterie faible", LogLevel.HIGH);
@@ -123,7 +110,7 @@ public class RDService extends BaseService {
             addLog("Service (re)démarré");
 
             if ((intent != null) && intent.getBooleanExtra("FORCE_RESTART", true)) {
-                // Do nothing
+                resetLeds();
             }
 
             // Stop all threads and clean everything
@@ -145,9 +132,7 @@ public class RDService extends BaseService {
             pusher = new PushSender(this);
         }
 
-        // We want this service to continue running until it is explicitly
-        // stopped, so return sticky.
-        return super.onStartCommand(intent, flags, startId);
+        return result;
     }
 
     protected void cleanObjects() {
@@ -172,6 +157,7 @@ public class RDService extends BaseService {
         Log.i(TAG, "Stop service");
 
         cleanObjects();
+        resetLeds();
 
         super.onDestroy();
     }
@@ -297,6 +283,9 @@ public class RDService extends BaseService {
                         if ("x10".equals(msg.getSchemaClass())) {
                             // AC
                             doors.syncWithHardware(msg);
+                            if (callback != null) {
+                                callback.updateDoors();
+                            }
                         }
                     } // x10
 
@@ -306,11 +295,17 @@ public class RDService extends BaseService {
                 Log.e(TAG, "Error parsing xPL message: " + e);
                 addLog("Erreur de parsing xPL: " + e, LogLevel.HIGH);
             }
-
-            if (callback != null) {
-                callback.updateThermo();
-            }
         }
+    }
+
+    /****************************** SWITCHESs ******************************/
+    public synchronized boolean toggleSwitch(int index) {
+        int rfxPort = prefs.getInt("rfx_port", Defaults.DEFAULT_RFX_PORT);
+        boolean result = switches.toggle(index, rfxPort, getRfxSocket());
+        if (callback != null) {
+            callback.updateSwitches();
+        }
+        return result;
     }
 
     /****************************** LEDs ******************************/

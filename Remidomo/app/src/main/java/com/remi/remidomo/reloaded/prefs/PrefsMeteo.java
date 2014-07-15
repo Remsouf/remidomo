@@ -1,7 +1,7 @@
 package com.remi.remidomo.reloaded.prefs;
 
 import com.remi.remidomo.common.BaseService;
-import com.remi.remidomo.common.R;
+import com.remi.remidomo.reloaded.R;
 import com.remi.remidomo.common.prefs.Defaults;
 import com.remi.remidomo.common.views.CustomSpinnerPreference;
 

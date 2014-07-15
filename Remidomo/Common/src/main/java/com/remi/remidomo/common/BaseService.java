@@ -96,6 +96,8 @@ public abstract class BaseService extends Service {
                 energy = new Energy(BaseService.this);
             }
         }).start();
+
+        resetLeds();
     }
 
     @Override
@@ -178,7 +180,6 @@ public abstract class BaseService extends Service {
 
         public void registerCallbacks(IUpdateListener callback) {
             BaseService.this.callback = callback;
-            resetLeds();
         }
     }
 

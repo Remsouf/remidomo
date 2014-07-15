@@ -41,11 +41,11 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 
+import com.remi.remidomo.common.BaseService;
 import com.remi.remidomo.common.data.Energy;
 import com.remi.remidomo.common.data.SensorData;
 import com.remi.remidomo.common.data.Sensors;
 import com.remi.remidomo.common.prefs.Defaults;
-import com.remi.remidomo.server.prefs.PrefsService;
 
 public class ServerThread implements Runnable {
 	
@@ -169,10 +169,10 @@ public class ServerThread implements Runnable {
 			}
 
 			if (counter == 0) {
-				service.addLog("Erreur serveur: impossible d'ouvrir le socket", RDService.LogLevel.HIGH);
-			    Log.e(TAG, "IO Error for server: Failed to create socket");
-			    service.errorLeds();
-			    return;
+                service.addLog("Erreur serveur: impossible d'ouvrir le socket", BaseService.LogLevel.HIGH);
+                Log.e(TAG, "IO Error for server: Failed to create socket");
+                service.errorLeds();
+                return;
 			} else {
 				Log.d(TAG, "Server Thread starting on port " + port);
 				service.addLog("Ecoute clients sur le port " + port);
@@ -193,15 +193,20 @@ public class ServerThread implements Runnable {
             	} catch (java.net.SocketException ignored) {
             	} catch (java.io.IOException e) {
             		Log.e(TAG, "IO Error for server: " + e);
-            		service.addLog("Erreur IO serveur: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
+            		service.addLog("Erreur IO serveur: " + e.getLocalizedMessage(), BaseService.LogLevel.HIGH);
             		service.errorLeds();
             		break;
             	} catch (org.apache.http.HttpException e) {
             		Log.e(TAG, "HTTP Error for server: " + e);
-            		service.addLog("Erreur HTTP serveur: " + e.getLocalizedMessage(), RDService.LogLevel.HIGH);
+            		service.addLog("Erreur HTTP serveur: " + e.getLocalizedMessage(), BaseService.LogLevel.HIGH);
             		service.errorLeds();
             		break;
-            	}
+            	} catch (NullPointerException e) {
+                    Log.e(TAG, "NPE when opening socket: no network ?");
+                    service.addLog("Erreur serveur: pas de réseau", BaseService.LogLevel.HIGH);
+                    service.errorLeds();
+                    return;
+                }
             }
 		} finally {
             if (serverSocket != null) {
@@ -522,7 +527,7 @@ public class ServerThread implements Runnable {
 					result = service.getSwitches().setState(Integer.parseInt(index), state, port, service.getRfxSocket());
 				} else {
 					Log.e(TAG, "Malformed URL: " + Uri);
-					service.addLog("Requete erronée reçue: " + Uri, RDService.LogLevel.HIGH);
+					service.addLog("Requete erronée reçue: " + Uri, BaseService.LogLevel.HIGH);
 				}
 
 				HttpEntity entity = new EntityTemplate(new ContentProducer() {

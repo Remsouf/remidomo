@@ -1023,6 +1023,7 @@ public class RDActivity extends BaseActivity implements OnGestureListener {
 				 }
 			 });
 		 }
+
 		 public void updateTrains() {
 			 runOnUiThread(new Runnable() {
 				 public void run() {

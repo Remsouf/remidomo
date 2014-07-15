@@ -4,6 +4,14 @@
 	    android:title="@string/sdcard"
 	    android:id="@+id/save_sdcard"
 	    android:icon="@drawable/sdcard" />
+    <item
+        android:title="@string/pref_reset"
+        android:id="@+id/clear_data"
+        android:icon="@drawable/trash" />
+    <item
+        android:title="@string/log"
+        android:id="@+id/show_log"
+        android:icon="@drawable/log" />
 	<item
 	    android:title="@string/settings"
 	    android:id="@+id/settings"

@@ -1,5 +1,6 @@
 <resources>
     <!-- Preferences -->
+    <string name="pref_title">Préférences</string>
     <string name="pref_port_serveur">Port serveur</string>
     <string name="pref_port_rfxlan">Port RFX-Lan</string>
     <string name="pref_port_summary">Numéro de port</string>

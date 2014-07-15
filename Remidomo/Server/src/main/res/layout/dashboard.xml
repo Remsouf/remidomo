@@ -51,7 +51,7 @@
             android:src="@drawable/train"
             android:layout_alignParentLeft="true" />
         
-        <com.remi.remidomo.reloaded.views.TrainsView
+        <com.remi.remidomo.common.views.TrainsView
             android:id="@+id/trains"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -260,6 +260,104 @@
     	android:layout_marginRight="15dp"
     	android:scaleType="fitXY"
     	android:background="#333333"
-    	android:orientation="horizontal" />   
-    
+    	android:orientation="horizontal" />
+
+    <!-- Line4 : Doors + Switches -->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal">
+
+        <ImageButton
+            android:id="@+id/garage_status"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:src="@drawable/meteo_unknown"
+            android:background="@null"
+            android:layout_gravity="center_vertical" />
+
+        <LinearLayout
+            android:id="@+id/garage_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="80dp"
+            android:paddingLeft="5px"
+            android:layout_toRightOf="@id/garage_status"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/garage_last_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20px"
+                android:textStyle="italic"
+                android:text=""/>
+
+            <TextView
+                android:id="@+id/garage_last_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20px"
+                android:textStyle="italic"
+                android:text=""/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/switch_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_toRightOf="@id/garage_layout"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:paddingRight="80dp">
+
+            <ImageButton
+                android:id="@+id/switch1_cmd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/inter_button"
+                android:background="@drawable/switched_off" />
+
+            <TextView
+                android:text="@string/switch1_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24px"
+                android:paddingLeft="20px"
+                android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+
+        <!-- Instant energy -->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/switch_layout"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/power"
+                android:text="@string/interrogation"
+                android:textSize="40px"
+                android:textColor="#FFFFFF"
+                android:includeFontPadding="false" />
+            <TextView
+                android:id="@+id/power_units"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kw"
+                android:textSize="30px"
+                android:textColor="#FFFFFF"
+                android:layout_toRightOf="@id/power"
+                android:layout_alignBottom="@id/power" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 </LinearLayout>

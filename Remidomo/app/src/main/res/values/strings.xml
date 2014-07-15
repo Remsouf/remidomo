@@ -4,8 +4,6 @@
     <!-- Activity -->
     <string name="app_name">Remidomo</string>
     <string name="cmd_sent">Commande envoyée</string>
-    <string name="clear_log_title">Effacer journal</string>
-    <string name="clear_log_msg">Vraiment effacer le journal ?</string>
     <string name="rlog_failed">Impossible d\'obtenir le journal du serveur</string>
 
     <!-- Preferences -->
@@ -50,13 +48,10 @@
     <string name="pref_energylimit_dialog">Nombre de jours</string>
 
     <!-- Vues -->
-    <string name="log">Messages</string>
     <string name="switches">Etats</string>
-    <string name="switch1_text">Prise 1</string>
     <string name="portail_text">Porte garage</string>
 
     <!--  Energie -->
-    <string name="kw">kW</string>
     <string name="kwh">kWh</string>
 
 </resources>

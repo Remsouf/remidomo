@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 
-import com.remi.remidomo.common.R;
+import com.remi.remidomo.reloaded.R;
 import com.remi.remidomo.common.prefs.Defaults;
 import com.remi.remidomo.common.views.CustomSpinnerPreference;
 
