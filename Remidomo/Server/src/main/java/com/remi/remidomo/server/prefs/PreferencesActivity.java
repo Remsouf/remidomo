@@ -81,9 +81,6 @@ public class PreferencesActivity extends PreferenceActivity implements SharedPre
             }
         });
 
-        Defaults.DEFAULT_SOUND_GARAGE = "android.resource://" + getPackageName() + "/" + com.remi.remidomo.common.R.raw.garage_ok;
-        Defaults.DEFAULT_SOUND_ALERT = "android.resource://" + getPackageName() + "/" + com.remi.remidomo.common.R.raw.garage_alert;
-
         updateTexts();
 	}
 

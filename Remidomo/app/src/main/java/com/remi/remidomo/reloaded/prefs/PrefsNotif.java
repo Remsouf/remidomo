@@ -58,9 +58,6 @@ public class PrefsNotif extends PreferenceFragment implements OnSharedPreference
             	return true;
             }
         });
-
-        Defaults.DEFAULT_SOUND_GARAGE = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.garage_ok;
-        Defaults.DEFAULT_SOUND_ALERT = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.garage_alert;
     }
 
     @Override

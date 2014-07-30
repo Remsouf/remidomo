@@ -80,6 +80,10 @@ public abstract class BaseService extends Service {
 
     @Override
     public void onCreate() {
+        // Initialize "dynamic defaults"
+        Defaults.DEFAULT_SOUND_GARAGE = "android.resource://" + getPackageName() + "/" + com.remi.remidomo.common.R.raw.garage_ok;
+        Defaults.DEFAULT_SOUND_ALERT = "android.resource://" + getPackageName() + "/" + com.remi.remidomo.common.R.raw.garage_alert;
+
         notificationMgr = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         if (notificationMgr == null) {
             Log.e(TAG, "Failed to get Notification Manager");
