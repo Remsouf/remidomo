@@ -103,7 +103,10 @@ public class Trains {
 
 		JSONObject gareGOC = getStationData(service, "GOC");
 		JSONObject gareGRE = getStationData(service, "GRE");
-		
+		if ((gareGOC.length() == 0) || (gareGRE.length() == 0)) {
+            return;
+        }
+
 		JSONObject filtered;
 		if ("GOC".equals(gare)) {
 			filtered = filterCommonData(gareGOC, gareGRE);
