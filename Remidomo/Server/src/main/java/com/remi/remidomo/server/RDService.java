@@ -181,54 +181,58 @@ public class RDService extends BaseService {
         public void run() {
             int port = prefs.getInt("rfx_port", Defaults.DEFAULT_RFX_PORT);
 
-            rfxSocket = null;
-
             // Needed for handler in doors
             Looper.prepare();
 
-            int counter = 10;
-            while (counter > 0) {
-                // Try until it works !
-                try {
-                    rfxSocket = new DatagramSocket(port);
-                    rfxSocket.setReuseAddress(true);
-                    break;
-                } catch (java.net.SocketException ignored) {
+            while (true) {
+                // Retry forever !
+                Log.d(TAG, "RFX Thread initializing...");
+
+                rfxSocket = null;
+
+                while (true) {
+                    // Try until it works !
                     try {
-                        Thread.sleep(3000);
-                    } catch (java.lang.InterruptedException e) {}
+                        rfxSocket = new DatagramSocket(port);
+                        rfxSocket.setReuseAddress(true);
+                        Log.d(TAG, "RFX Thread starting on port " + port);
+                        addLog("Ecoute RFX-Lan sur le port " + port);
+                        resetLeds();
+                        break;
+                    } catch (java.net.SocketException ignored) {
+                        addLog("Erreur RFX: impossible d'ouvrir le socket (rx). Nouvelle tentative.", LogLevel.HIGH);
+                        Log.e(TAG, "IO Error for RFX: Failed to create socket (rx). Retrying.");
+                        errorLeds();
+                        try {
+                            Thread.sleep(5000);
+                        } catch (java.lang.InterruptedException ignored2) {}
+                    }
                 }
-                counter = counter - 1;
-            }
 
-            if (counter == 0) {
-                addLog("Erreur RFX: impossible d'ouvrir le socket (rx)", LogLevel.HIGH);
-                Log.e(TAG, "IO Error for RFX: Failed to create socket (rx)");
-                errorLeds();
-                return;
-            } else {
-                Log.d(TAG, "RFX Thread starting on port " + port);
-                addLog("Ecoute RFX-Lan sur le port " + port);
-            }
+                runRfxThread = true;
 
-            runRfxThread = true;
+                byte[] buffer = new byte[1024];
+                while (runRfxThread) {
+                    try {
+                        final DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                        rfxSocket.receive(packet);
+                        readMessage(packet);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error receiving: ", e);
+                        addLog("Erreur socket RFX (rx): " + e.getLocalizedMessage(), LogLevel.HIGH);
+                        errorLeds();
+                        break;
+                    }
+                }
 
-            byte[] buffer = new byte[1024];
-            while (runRfxThread) {
-                try {
-                    final DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                    rfxSocket.receive(packet);
-                    readMessage(packet);
-                } catch (Exception e) {
-                    Log.e(TAG, "Error receiving: ", e);
-                    addLog("Erreur socket RFX (rx): " + e.getLocalizedMessage(), LogLevel.HIGH);
-                    errorLeds();
+                if (rfxSocket != null) {
+                    rfxSocket.close();
+                }
+
+                if (!runRfxThread) {
+                    // Requested to stop from the outside
                     break;
                 }
-            }
-
-            if (rfxSocket != null) {
-                rfxSocket.close();
             }
 
             Log.d(TAG, "RFX Thread ended.");
@@ -236,6 +240,8 @@ public class RDService extends BaseService {
 
         private void readMessage(DatagramPacket packet) {
             String received = new String(packet.getData(), 0, packet.getLength());
+
+           // Log.d("#RP", "Packet: " + received);
 
             try {
                 xPLMessage msg = new xPLMessage(received);
