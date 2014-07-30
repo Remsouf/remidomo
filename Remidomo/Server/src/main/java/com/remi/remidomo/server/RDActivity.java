@@ -7,10 +7,8 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.remi.remidomo.common.BaseService;
 import com.remi.remidomo.common.data.Doors;
 import com.remi.remidomo.common.prefs.Defaults;
-import com.remi.remidomo.server.R;
 import com.remi.remidomo.common.BaseActivity;
 import com.remi.remidomo.common.IUpdateListener;
 import com.remi.remidomo.common.data.SensorData;
@@ -32,7 +30,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -357,6 +354,9 @@ public class RDActivity extends BaseActivity {
         // Power
         if (service != null) {
             series = service.getEnergy().getPowerData();
+            final Animation anim = AnimationUtils.loadAnimation(this, R.anim.zoomin);
+            final RelativeLayout layout = (RelativeLayout) findViewById(R.id.power_layout);
+            layout.startAnimation(anim);
         }
 
         TextView power = (TextView) findViewById(R.id.power);
@@ -370,17 +370,35 @@ public class RDActivity extends BaseActivity {
             power.setText("?");
         }
 
-        Calendar hcHour = Calendar.getInstance();
-        hcHour.set(Calendar.HOUR_OF_DAY, prefs.getInt("hc_hour.hour", Defaults.DEFAULT_HCHOUR));
-        hcHour.set(Calendar.MINUTE, prefs.getInt("hc_hour.minute", 0));
+        Calendar hcDate = Calendar.getInstance();
+        int hcHour;
+        int hcMinute;
+        if (prefs != null) {
+            hcHour = prefs.getInt("hc_hour.hour", Defaults.DEFAULT_HCHOUR);
+            hcMinute = prefs.getInt("hc_hour.minute", 0);
+        } else {
+            hcHour = Defaults.DEFAULT_HCHOUR;
+            hcMinute = 0;
+        }
+        hcDate.set(Calendar.HOUR_OF_DAY, hcHour);
+        hcDate.set(Calendar.MINUTE, hcMinute);
 
-        Calendar hpHour = Calendar.getInstance();
-        hpHour.set(Calendar.HOUR_OF_DAY, prefs.getInt("hp_hour.hour", Defaults.DEFAULT_HPHOUR));
-        hpHour.set(Calendar.MINUTE, prefs.getInt("hp_hour.minute", 0));
+        Calendar hpDate = Calendar.getInstance();
+        int hpHour;
+        int hpMinute;
+        if (prefs != null) {
+            hpHour = prefs.getInt("hp_hour.hour", Defaults.DEFAULT_HPHOUR);
+            hpMinute = prefs.getInt("hp_hour.minute", 0);
+        } else {
+            hpHour = Defaults.DEFAULT_HPHOUR;
+            hpMinute = 0;
+        }
+        hpDate.set(Calendar.HOUR_OF_DAY, hpHour);
+        hpDate.set(Calendar.MINUTE, hpMinute);
 
         Date now = new Date();
-        if ((now.getTime() >= hpHour.getTimeInMillis()) &&
-                (now.getTime() < hcHour.getTimeInMillis())) {
+        if ((now.getTime() >= hpDate.getTimeInMillis()) &&
+                (now.getTime() < hcDate.getTimeInMillis())) {
             power.setTextColor(Color.parseColor("#FF5555"));
             units.setTextColor(Color.parseColor("#FF5555"));
         } else {
