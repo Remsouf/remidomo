@@ -100,10 +100,19 @@ public class RDService extends BaseService {
                         break;
                     }
                 }
-            } catch (java.lang.InterruptedException e) {}
+            } catch (java.lang.InterruptedException e) {
+            }
 
             if (callback != null) {
                 callback.updateEnergy();
+            }
+        } else if ((intent != null) && ACTION_BOOTKICK.equals(intent.getAction())) {
+            boolean kickboot = prefs.getBoolean("bootkick", Defaults.DEFAULT_BOOTKICK);
+            if (kickboot) {
+                // Start activity
+                Intent activityIntent = new Intent(this, RDActivity.class);
+                activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(activityIntent);
             }
         } else {
             Log.i(TAG, "Start service");
