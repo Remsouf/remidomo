@@ -36,4 +36,7 @@ public class Defaults {
     public static final int DEFAULT_HPHOUR = 7;
     public static final int DEFAULT_ENERGYLIMIT = 2;
     public static final boolean DEFAULT_TARIF_HIGHLIGHT = true;
+
+    // Push devices registration
+    public static final String DEFAULT_PUSH_DEVICES = "";
 }

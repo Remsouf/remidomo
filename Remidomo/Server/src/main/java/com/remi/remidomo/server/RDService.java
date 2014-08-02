@@ -20,9 +20,12 @@ import com.remi.remidomo.common.prefs.Defaults;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Looper;
 
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class RDService extends BaseService {
@@ -63,6 +66,8 @@ public class RDService extends BaseService {
 
         // Display a notification about us starting.  We put an icon in the status bar.
         showServiceNotification(RDActivity.class, BaseActivity.DASHBOARD_VIEW_ID);
+
+        restorePushDevicesList();
     }
 
     @Override
@@ -463,6 +468,7 @@ public class RDService extends BaseService {
     // For server
     public void addPushDevice(String key) {
         pushDevices.add(key);
+        persistPushDevicesList();
         addLog("Nouvel abonnement pour mode push. " + pushDevices.size() + " abonnés.");
     }
 
@@ -471,6 +477,26 @@ public class RDService extends BaseService {
         if (pusher != null) {
             pusher.pushMsg(new ArrayList<String>(pushDevices), target, index, data);
         }
+    }
+
+    private void persistPushDevicesList() {
+        // Persist the list of registered devices
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("push_devices", TextUtils.join(",", pushDevices));
+        editor.commit();
+    }
+
+    private void restorePushDevicesList() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String persistedString = prefs.getString("push_devices", Defaults.DEFAULT_PUSH_DEVICES);
+
+        String[] persistedArray = TextUtils.split(persistedString, ",");
+        for (String id: persistedArray) {
+            pushDevices.add(id);
+        }
+
+        addLog("" + pushDevices.size() + " abonnements pour mod push.");
+        Log.d(TAG, "Restored " + pushDevices.size() + " registered push devices");
     }
 
     /****************************** UPGRADE ******************************/
