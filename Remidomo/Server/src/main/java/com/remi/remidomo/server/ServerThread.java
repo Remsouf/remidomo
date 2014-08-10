@@ -153,32 +153,32 @@ public class ServerThread implements Runnable {
 	public void run() {
 		int port = prefs.getInt("port", Defaults.DEFAULT_PORT);
 
-		try {
-			int counter = 10;
-			while (counter > 0) {
+        while (true) {
+            // Retry forever !
+            Log.d(TAG, "Server Thread initializing...");
+
+            serverSocket = null;
+
+
+			while (true) {
 				// Try until it works !
 				try {
 					serverSocket = new ServerSocket(port);
+                    Log.d(TAG, "Server Thread starting on port " + port);
+                    service.addLog("Ecoute clients sur le port " + port);
 					break;
 				} catch (java.io.IOException ignored) {
+                    service.addLog("Erreur Serveur: impossible d'ouvrir le socket. Nouvelle tentative.", BaseService.LogLevel.HIGH);
+                    Log.e(TAG, "IO Error for Server: Failed to create socket. Retrying.");
+                    service.errorLeds();
 					try {
-						Thread.sleep(3000);
-					} catch (java.lang.InterruptedException e) {}
+						Thread.sleep(5000);
+					} catch (java.lang.InterruptedException ignored2) {}
 				}
-				counter = counter - 1;
-			}
-
-			if (counter == 0) {
-                service.addLog("Erreur serveur: impossible d'ouvrir le socket", BaseService.LogLevel.HIGH);
-                Log.e(TAG, "IO Error for server: Failed to create socket");
-                service.errorLeds();
-                return;
-			} else {
-				Log.d(TAG, "Server Thread starting on port " + port);
-				service.addLog("Ecoute clients sur le port " + port);
 			}
 
 			runThread = true;
+
             while (runThread){
             	try {
             		Socket socket = serverSocket.accept();
@@ -208,15 +208,21 @@ public class ServerThread implements Runnable {
                     return;
                 }
             }
-		} finally {
+
             if (serverSocket != null) {
             	try {
             		serverSocket.close();
             	} catch (java.io.IOException ignored) {}
-            	serverSocket = null;
+            }
+
+            if (!runThread) {
+                // Requested to stop from the outside
+                break;
             }
 		}
-		
+
+        Log.d(TAG, "Server Thread ended.");
+
 	} // end run
 
 	class HomePageHandler implements HttpRequestHandler {
